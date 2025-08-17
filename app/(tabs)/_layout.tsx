@@ -1,43 +1,81 @@
-import { Tabs } from 'expo-router';
-import React from 'react';
-import { Platform } from 'react-native';
+import { Colors } from "@/theme/colors";
+import { Ionicons } from "@expo/vector-icons";
+import { Tabs } from "expo-router";
+import { useColorScheme } from "react-native";
 
-import { HapticTab } from '@/components/HapticTab';
-import { IconSymbol } from '@/components/ui/IconSymbol';
-import TabBarBackground from '@/components/ui/TabBarBackground';
-import { Colors } from '@/constants/Colors';
-import { useColorScheme } from '@/hooks/useColorScheme';
-
-export default function TabLayout() {
-  const colorScheme = useColorScheme();
-
+export default function Layout() {
+  const scheme = useColorScheme();
+  const theme = scheme === "dark" ? Colors.dark : Colors.light;
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
-        headerShown: false,
-        tabBarButton: HapticTab,
-        tabBarBackground: TabBarBackground,
-        tabBarStyle: Platform.select({
-          ios: {
-            // Use a transparent background on iOS to show the blur effect
-            position: 'absolute',
-          },
-          default: {},
-        }),
-      }}>
+        tabBarActiveTintColor: theme.text,
+        headerStyle: { backgroundColor: theme.background },
+        headerTintColor: theme.text,
+        tabBarStyle: { backgroundColor: theme.background },
+      }}
+    >
       <Tabs.Screen
         name="index"
         options={{
-          title: 'Home',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="house.fill" color={color} />,
+          title: "ホーム",
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="home-outline" color={color} size={size} />
+          ),
         }}
       />
       <Tabs.Screen
-        name="explore"
+        name="Color"
         options={{
-          title: 'Explore',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="paperplane.fill" color={color} />,
+          title: "一覧",
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="list" color={color} size={size} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="SetColor"
+        options={{
+          title: "セット品表示",
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="albums" color={color} size={size} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="Purchased"
+        options={{
+          title: "購入済み表示",
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="checkmark-done" color={color} size={size} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="edit"
+        options={{
+          title: "データ編集",
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="create-outline" color={color} size={size} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="ColorForm"
+        options={{
+          title: "商品登録",
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="add-circle-outline" color={color} size={size} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="add-set-name"
+        options={{
+          title: "セット登録",
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="duplicate-outline" color={color} size={size} />
+          ),
         }}
       />
     </Tabs>

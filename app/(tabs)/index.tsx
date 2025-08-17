@@ -1,75 +1,169 @@
-import { Image } from 'expo-image';
-import { Platform, StyleSheet } from 'react-native';
+import { Ionicons } from "@expo/vector-icons";
+import { Link } from "expo-router";
+import {
+  StyleSheet as RNStyleSheet,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+  useWindowDimensions,
+} from "react-native";
+export default function Home() {
+  const { width } = useWindowDimensions();
+  const isDesktop = width >= 1024;
 
-import { HelloWave } from '@/components/HelloWave';
-import ParallaxScrollView from '@/components/ParallaxScrollView';
-import { ThemedText } from '@/components/ThemedText';
-import { ThemedView } from '@/components/ThemedView';
-
-export default function HomeScreen() {
+  const flattenStyle = (baseStyle: any, extraStyle?: any) =>
+    RNStyleSheet.flatten([baseStyle, extraStyle]);
   return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
-      headerImage={
-        <Image
-          source={require('@/assets/images/partial-react-logo.png')}
-          style={styles.reactLogo}
-        />
-      }>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome!</ThemedText>
-        <HelloWave />
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 1: Try it</ThemedText>
-        <ThemedText>
-          Edit <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> to see changes.
-          Press{' '}
-          <ThemedText type="defaultSemiBold">
-            {Platform.select({
-              ios: 'cmd + d',
-              android: 'cmd + m',
-              web: 'F12',
-            })}
-          </ThemedText>{' '}
-          to open developer tools.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 2: Explore</ThemedText>
-        <ThemedText>
-          {`Tap the Explore tab to learn more about what's included in this starter app.`}
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
-        <ThemedText>
-          {`When you're ready, run `}
-          <ThemedText type="defaultSemiBold">npm run reset-project</ThemedText> to get a fresh{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> directory. This will move the current{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> to{' '}
-          <ThemedText type="defaultSemiBold">app-example</ThemedText>.
-        </ThemedText>
-      </ThemedView>
-    </ParallaxScrollView>
+    <ScrollView contentContainerStyle={styles.container}>
+      <Text style={styles.title}>閲覧</Text>
+
+      <View style={[styles.grid, isDesktop && styles.gridDesktop]}>
+        <Link href="/Color" asChild>
+          <TouchableOpacity
+            style={flattenStyle(
+              styles.button,
+              isDesktop && styles.buttonDesktop
+            )}
+          >
+            <Ionicons
+              name="list"
+              size={isDesktop ? 48 : 32}
+              color="white"
+              style={flattenStyle({})}
+            />
+            <Text style={styles.buttonText}>一覧表示</Text>
+          </TouchableOpacity>
+        </Link>
+        <Link href="/SetColor" asChild>
+          <TouchableOpacity
+            style={flattenStyle(
+              styles.button,
+              isDesktop && styles.buttonDesktop
+            )}
+          >
+            <Ionicons
+              name="albums"
+              size={isDesktop ? 48 : 32}
+              color="white"
+              style={flattenStyle({})}
+            />
+            <Text style={styles.buttonText}>セット品表示</Text>
+          </TouchableOpacity>
+        </Link>
+        <Link href="/Purchased" asChild>
+          <TouchableOpacity
+            style={flattenStyle(
+              styles.button,
+              isDesktop && styles.buttonDesktop
+            )}
+          >
+            <Ionicons
+              name="checkmark-done"
+              size={isDesktop ? 48 : 32}
+              color="white"
+              style={flattenStyle({})}
+            />
+            <Text style={styles.buttonText}>購入済み表示</Text>
+          </TouchableOpacity>
+        </Link>
+      </View>
+      <Text style={styles.title}>編集・登録</Text>
+      <View style={[styles.grid, isDesktop && styles.gridDesktop]}>
+        <Link href="/edit" asChild>
+          <TouchableOpacity
+            style={flattenStyle(
+              styles.button,
+              isDesktop && styles.buttonDesktop
+            )}
+          >
+            <Ionicons
+              name="create-outline"
+              size={isDesktop ? 48 : 32}
+              color="white"
+              style={flattenStyle({})}
+            />
+            <Text style={styles.buttonText}>データ編集</Text>
+          </TouchableOpacity>
+        </Link>
+        <Link href="/ColorForm" asChild>
+          <TouchableOpacity
+            style={flattenStyle(
+              styles.button,
+              isDesktop && styles.buttonDesktop
+            )}
+          >
+            <Ionicons
+              name="add-circle-outline"
+              size={isDesktop ? 48 : 32}
+              color="white"
+              style={flattenStyle({})}
+            />
+            <Text style={styles.buttonText}>商品登録</Text>
+          </TouchableOpacity>
+        </Link>
+        <Link href="/add-set-name" asChild>
+          <TouchableOpacity
+            style={flattenStyle(
+              styles.button,
+              isDesktop && styles.buttonDesktop
+            )}
+          >
+            <Ionicons
+              name="duplicate-outline"
+              size={isDesktop ? 48 : 32}
+              color="white"
+              style={flattenStyle({})}
+            />
+            <Text style={styles.buttonText}>セット登録</Text>
+          </TouchableOpacity>
+        </Link>
+      </View>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
-  titleContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
+  container: {
+    paddingVertical: 20,
+    alignItems: "center",
+
+    backgroundColor: "white",
   },
-  stepContainer: {
-    gap: 8,
-    marginBottom: 8,
+  title: {
+    fontSize: 20,
+    fontWeight: "bold",
+    marginTop: 20,
+    marginBottom: 10,
   },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
-    position: 'absolute',
+  grid: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    justifyContent: "center",
+  },
+  gridDesktop: {
+    justifyContent: "flex-start",
+    gap: 20,
+    maxWidth: 900,
+  },
+  button: {
+    backgroundColor: "#3b82f6",
+    width: 102,
+    height: 102,
+    borderRadius: 12,
+    margin: 10,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  buttonDesktop: {
+    width: 150,
+    height: 150,
+  },
+  buttonText: {
+    color: "white",
+    fontSize: 14,
+    marginTop: 6,
+    textAlign: "center",
   },
 });

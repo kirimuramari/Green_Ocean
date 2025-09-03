@@ -157,8 +157,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   buttonDesktop: {
-    width: 317,
-    height: 466,
+    width: 150,
+    height: 150,
   },
   buttonText: {
     color: "#a7aabc",

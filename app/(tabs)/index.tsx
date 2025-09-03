@@ -30,7 +30,7 @@ export default function Home() {
             <Ionicons
               name="list"
               size={isDesktop ? 48 : 32}
-             color="#a7aabc"
+              color="#f7f9ff"
               style={flattenStyle({})}
             />
             <Text style={styles.buttonText}>一覧表示</Text>
@@ -46,7 +46,8 @@ export default function Home() {
             <Ionicons
               name="albums"
               size={isDesktop ? 48 : 32}
-color="#a7aabc"              style={flattenStyle({})}
+              color="#f7f9ff"
+              style={flattenStyle({})}
             />
             <Text style={styles.buttonText}>セット品表示</Text>
           </TouchableOpacity>
@@ -61,7 +62,7 @@ color="#a7aabc"              style={flattenStyle({})}
             <Ionicons
               name="checkmark-done"
               size={isDesktop ? 48 : 32}
-              color="#a7aabc"
+              color="#f7f9ff"
               style={flattenStyle({})}
             />
             <Text style={styles.buttonText}>購入済み表示</Text>
@@ -80,7 +81,7 @@ color="#a7aabc"              style={flattenStyle({})}
             <Ionicons
               name="create-outline"
               size={isDesktop ? 48 : 32}
-              color="#a7aabc"
+              color="#f7f9ff"
               style={flattenStyle({})}
             />
             <Text style={styles.buttonText}>データ編集</Text>
@@ -96,7 +97,7 @@ color="#a7aabc"              style={flattenStyle({})}
             <Ionicons
               name="add-circle-outline"
               size={isDesktop ? 48 : 32}
-              color="#a7aabc"
+              color="#f7f9ff"
               style={flattenStyle({})}
             />
             <Text style={styles.buttonText}>商品登録</Text>
@@ -112,7 +113,7 @@ color="#a7aabc"              style={flattenStyle({})}
             <Ionicons
               name="duplicate-outline"
               size={isDesktop ? 48 : 32}
-              color="#a7aabc"
+              color="#f7f9ff"
               style={flattenStyle({})}
             />
             <Text style={styles.buttonText}>セット登録</Text>
@@ -132,7 +133,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 20,
-    color:"#747575",
+    color: "#747575",
     fontWeight: "bold",
     marginTop: 20,
     marginBottom: 10,
@@ -156,8 +157,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   buttonDesktop: {
-    width: 150,
-    height: 150,
+    width: 317,
+    height: 466,
   },
   buttonText: {
     color: "#a7aabc",

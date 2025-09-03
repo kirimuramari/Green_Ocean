@@ -30,7 +30,7 @@ export default function Home() {
             <Ionicons
               name="list"
               size={isDesktop ? 48 : 32}
-              color="white"
+             color="#a7aabc"
               style={flattenStyle({})}
             />
             <Text style={styles.buttonText}>一覧表示</Text>
@@ -46,8 +46,7 @@ export default function Home() {
             <Ionicons
               name="albums"
               size={isDesktop ? 48 : 32}
-              color="white"
-              style={flattenStyle({})}
+color="#a7aabc"              style={flattenStyle({})}
             />
             <Text style={styles.buttonText}>セット品表示</Text>
           </TouchableOpacity>
@@ -62,7 +61,7 @@ export default function Home() {
             <Ionicons
               name="checkmark-done"
               size={isDesktop ? 48 : 32}
-              color="white"
+              color="#a7aabc"
               style={flattenStyle({})}
             />
             <Text style={styles.buttonText}>購入済み表示</Text>
@@ -81,7 +80,7 @@ export default function Home() {
             <Ionicons
               name="create-outline"
               size={isDesktop ? 48 : 32}
-              color="white"
+              color="#a7aabc"
               style={flattenStyle({})}
             />
             <Text style={styles.buttonText}>データ編集</Text>
@@ -97,7 +96,7 @@ export default function Home() {
             <Ionicons
               name="add-circle-outline"
               size={isDesktop ? 48 : 32}
-              color="white"
+              color="#a7aabc"
               style={flattenStyle({})}
             />
             <Text style={styles.buttonText}>商品登録</Text>
@@ -113,7 +112,7 @@ export default function Home() {
             <Ionicons
               name="duplicate-outline"
               size={isDesktop ? 48 : 32}
-              color="white"
+              color="#a7aabc"
               style={flattenStyle({})}
             />
             <Text style={styles.buttonText}>セット登録</Text>
@@ -149,7 +148,7 @@ const styles = StyleSheet.create({
     maxWidth: 900,
   },
   button: {
-    backgroundColor: "#3b82f6",
+    backgroundColor: "#a2d2ff",
     height: 102,
     borderRadius: 12,
     margin: 10,
@@ -161,7 +160,7 @@ const styles = StyleSheet.create({
     height: 150,
   },
   buttonText: {
-    color: "white",
+    color: "#a7aabc",
     fontSize: 14,
     marginTop: 6,
     textAlign: "center",

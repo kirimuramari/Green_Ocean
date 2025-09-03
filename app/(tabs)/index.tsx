@@ -161,7 +161,7 @@ const styles = StyleSheet.create({
     height: 150,
   },
   buttonText: {
-    color: "#a7aabc",
+    color: "#434656",
     fontSize: 14,
     marginTop: 6,
     textAlign: "center",

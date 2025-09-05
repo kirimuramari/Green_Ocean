@@ -46,6 +46,8 @@ export const tables = StyleSheet.create({
   dataCell: {
     flex: 1,
     fontSize: 13,
+        color: "#747575",
+    
     ...(isDesktop && {
       fontSize: 16,
 

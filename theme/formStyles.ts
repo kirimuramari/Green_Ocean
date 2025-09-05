@@ -34,7 +34,7 @@ export const formStyles = StyleSheet.create({
     textAlign: "center",
   },
   deleteButton: {
-    backgroundColor: "red",
+    backgroundColor: "#ff5159",
     paddingVertical: isDesktop ? 6 : 10,
     paddingHorizontal: isDesktop ? 12 : 16,
     borderRadius: 6,

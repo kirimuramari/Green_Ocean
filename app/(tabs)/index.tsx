@@ -1,6 +1,7 @@
+import { supabase } from "@/lib/supabaseClient";
 import { Ionicons } from "@expo/vector-icons";
-import {useEffect useState} from "react";
 import { Link } from "expo-router";
+import { useEffect, useState } from "react";
 import {
   StyleSheet as RNStyleSheet,
   ScrollView,
@@ -10,28 +11,29 @@ import {
   View,
   useWindowDimensions,
 } from "react-native";
-import { supabase } from "@/lib/supabaseClient";
+
+
 export default function Home() {
   const { width } = useWindowDimensions();
   const isDesktop = width >= 1024;
+  const [notices, setNotices] = useState([]);
 
   const flattenStyle = (baseStyle: any, extraStyle?: any) =>
     RNStyleSheet.flatten([baseStyle, extraStyle]);
-
-  const [notices, setNotices] = useState([]);
   useEffect(() => {
     const fetchNotices = async () => {
       const { data, error } = await supabase
       .from("notices")
       .select("*")
-      .order("created_at", {ascending: false})
+      .order("created_at", { ascending: false })
       .limit(3);
       if (!error) setNotices(data);
     };
-fetchNotices();
-
+  fetchNotices();
+  
   },[]);
-  }
+
+
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <Text style={styles.title}>閲覧</Text>

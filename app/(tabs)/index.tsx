@@ -1,4 +1,5 @@
 import { Ionicons } from "@expo/vector-icons";
+import {useEffect useState} from "react";
 import { Link } from "expo-router";
 import {
   StyleSheet as RNStyleSheet,
@@ -9,12 +10,28 @@ import {
   View,
   useWindowDimensions,
 } from "react-native";
+import { supabase } from "@/lib/supabaseClient";
 export default function Home() {
   const { width } = useWindowDimensions();
   const isDesktop = width >= 1024;
 
   const flattenStyle = (baseStyle: any, extraStyle?: any) =>
     RNStyleSheet.flatten([baseStyle, extraStyle]);
+
+  const [notices, setNotices] = useState([]);
+  useEffect(() => {
+    const fetchNotices = async () => {
+      const { data, error } = await supabase
+      .from("notices")
+      .select("*")
+      .order("created_at", {ascending: false})
+      .limit(3);
+      if (!error) setNotices(data);
+    };
+fetchNotices();
+
+  },[]);
+  }
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <Text style={styles.title}>閲覧</Text>
@@ -120,6 +137,24 @@ export default function Home() {
           </TouchableOpacity>
         </Link>
       </View>
+       <Text style={styles.title}>設定</Text>
+      <View style={[styles.grid, isDesktop && styles.gridDesktop]}>
+        <Link href="/NoticeForm" asChild>
+          <TouchableOpacity
+            style={flattenStyle(
+              styles.button,
+              isDesktop && styles.buttonDesktop
+            )}
+          >
+            <Ionicons
+              name="notice"
+              size={isDesktop ? 48 : 32}
+              color="#f7f9ff"
+              style={flattenStyle({})}
+            />
+            <Text style={styles.buttonText}>設定</Text>
+          </TouchableOpacity>
+        </Link>
     </ScrollView>
   );
 }

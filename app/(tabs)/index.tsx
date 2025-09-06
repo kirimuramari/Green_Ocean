@@ -12,7 +12,6 @@ import {
   useWindowDimensions,
 } from "react-native";
 
-
 export default function Home() {
   const { width } = useWindowDimensions();
   const isDesktop = width >= 1024;
@@ -23,27 +22,29 @@ export default function Home() {
   useEffect(() => {
     const fetchNotices = async () => {
       const { data, error } = await supabase
-      .from("notices")
-      .select("*")
-      .order("created_at", { ascending: false })
-      .limit(3);
+        .from("notices")
+        .select("*")
+        .order("created_at", { ascending: false })
+        .limit(3);
       if (!error) setNotices(data);
     };
-  fetchNotices();
+    fetchNotices();
   }, []);
 
   return (
-    <>
-    <div style={{ marginBottom: 16 }}>
-      {notices.map((n) => (
-        <div key={n.id} style={{ backgroundColor: "#fde047", padding: 8, marginBottom: 4 }}>
-          <strong>{n.title}</strong>
-          {n.content && <p>{n.content}</p>}
-        </div>
-      ))}
-
-    </div>
-    <ScrollView contentContainerStyle={styles.container}>
+    <View>
+      <div style={{ marginBottom: 16 }}>
+        {notices.map((n) => (
+          <div
+            key={n.id}
+            style={{ backgroundColor: "#fde047", padding: 8, marginBottom: 4 }}
+          >
+            <strong>{n.title}</strong>
+            {n.content && <p>{n.content}</p>}
+          </div>
+        ))}
+      </div>
+      <ScrollView contentContainerStyle={styles.container}>
         <Text style={styles.title}>閲覧</Text>
 
         <View style={[styles.grid, isDesktop && styles.gridDesktop]}>
@@ -58,7 +59,8 @@ export default function Home() {
                 name="list"
                 size={isDesktop ? 48 : 32}
                 color="#f7f9ff"
-                style={flattenStyle({})} />
+                style={flattenStyle({})}
+              />
               <Text style={styles.buttonText}>一覧表示</Text>
             </TouchableOpacity>
           </Link>
@@ -73,7 +75,8 @@ export default function Home() {
                 name="albums"
                 size={isDesktop ? 48 : 32}
                 color="#f7f9ff"
-                style={flattenStyle({})} />
+                style={flattenStyle({})}
+              />
               <Text style={styles.buttonText}>セット品表示</Text>
             </TouchableOpacity>
           </Link>
@@ -88,7 +91,8 @@ export default function Home() {
                 name="checkmark-done"
                 size={isDesktop ? 48 : 32}
                 color="#f7f9ff"
-                style={flattenStyle({})} />
+                style={flattenStyle({})}
+              />
               <Text style={styles.buttonText}>購入済み表示</Text>
             </TouchableOpacity>
           </Link>
@@ -106,7 +110,8 @@ export default function Home() {
                 name="create-outline"
                 size={isDesktop ? 48 : 32}
                 color="#f7f9ff"
-                style={flattenStyle({})} />
+                style={flattenStyle({})}
+              />
               <Text style={styles.buttonText}>データ編集</Text>
             </TouchableOpacity>
           </Link>
@@ -121,7 +126,8 @@ export default function Home() {
                 name="add-circle-outline"
                 size={isDesktop ? 48 : 32}
                 color="#f7f9ff"
-                style={flattenStyle({})} />
+                style={flattenStyle({})}
+              />
               <Text style={styles.buttonText}>商品登録</Text>
             </TouchableOpacity>
           </Link>
@@ -136,7 +142,8 @@ export default function Home() {
                 name="duplicate-outline"
                 size={isDesktop ? 48 : 32}
                 color="#f7f9ff"
-                style={flattenStyle({})} />
+                style={flattenStyle({})}
+              />
               <Text style={styles.buttonText}>セット登録</Text>
             </TouchableOpacity>
           </Link>
@@ -154,11 +161,14 @@ export default function Home() {
                 name="notice"
                 size={isDesktop ? 48 : 32}
                 color="#f7f9ff"
-                style={flattenStyle({})} />
+                style={flattenStyle({})}
+              />
               <Text style={styles.buttonText}>設定</Text>
             </TouchableOpacity>
           </Link>
-        </></ScrollView></>
+        </View>
+      </ScrollView>
+    </View>
   );
 }
 

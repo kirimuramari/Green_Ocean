@@ -16,9 +16,7 @@ export default function NoticeForm() {
 
   const handleAddNotice = async () => {
     setLoading(true);
-    const { error } = await supabase
-      .from("notices")
-      .insert([{ title, content }]);
+    const { error } = await supabase.from("notices").insert([{ title }]);
     setLoading(false);
 
     if (error) {
@@ -38,13 +36,6 @@ export default function NoticeForm() {
         placeholder="タイトル"
         value={title}
         onChange={(e) => setTitle(e.target.value)}
-        style={formStyles.input}
-      />
-      <Text style={styles.label}>内容</Text>
-      <TextInput
-        placeholder="内容"
-        value={content}
-        onChange={(e) => setContent(e.target.value)}
         style={formStyles.input}
       />
       <TouchableOpacity

@@ -157,7 +157,7 @@ export default function Home() {
             )}
           >
             <Ionicons
-              name="notices"
+              name="settings-outline"
               size={isDesktop ? 48 : 32}
               color="#f7f9ff"
               style={flattenStyle({})}

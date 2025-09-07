@@ -30,8 +30,9 @@ export default function NoticeForm() {
     }
   };
   return (
-    <ScrollView contentContainerStyle={styles}>
+    <ScrollView contentContainerStyle={styles.container}>
       <Text style={styles.label}>お知らせ追加</Text>
+      <Text style={styles.label}>タイトル</Text>
       <TextInput
         type="text"
         placeholder="タイトル"
@@ -39,7 +40,8 @@ export default function NoticeForm() {
         onChange={(e) => setTitle(e.target.value)}
         style={formStyles.input}
       />
-      <Text
+      <Text style={styles.label}>内容</Text>
+      <TextInput
         placeholder="内容"
         value={content}
         onChange={(e) => setContent(e.target.value)}
@@ -50,7 +52,9 @@ export default function NoticeForm() {
         disabled={loading}
         style={formStyles.button}
       >
-        {loading ? "登録中..." : "お知らせ登録"}
+        <Text style={formStyles.buttonText}>
+          {loading ? "登録中..." : "お知らせ登録"}
+        </Text>
       </TouchableOpacity>
     </ScrollView>
   );

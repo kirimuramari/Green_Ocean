@@ -40,7 +40,7 @@ export default function Home() {
             style={{ backgroundColor: "#fde047", padding: 8, marginBottom: 4 }}
           >
             <strong>{n.title}</strong>
-            {n.content && <p>{n.content}</p>}
+            {n.created_at && <p>{n.created_at}</p>}
           </div>
         ))}
       </div>

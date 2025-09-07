@@ -1,5 +1,13 @@
 import { supabase } from "@/lib/supabaseClient";
+import { formStyles } from "@/theme/formStyles";
 import { useState } from "react";
+import {
+  ScrollView,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+} from "react-native";
 
 export default function NoticeForm() {
   const [title, setTitle] = useState("");
@@ -22,21 +30,41 @@ export default function NoticeForm() {
     }
   };
   return (
-    <div>
-      <input
+    <ScrollView contentContainerStyle={styles}>
+      <Text style={styles.label}>お知らせ追加</Text>
+      <TextInput
         type="text"
         placeholder="タイトル"
         value={title}
         onChange={(e) => setTitle(e.target.value)}
+        style={formStyles.input}
       />
-      <textarea
+      <Text
         placeholder="内容"
         value={content}
         onChange={(e) => setContent(e.target.value)}
+        style={formStyles.input}
       />
-      <button onClick={handleAddNotice} disabled={loading}>
+      <TouchableOpacity
+        onPress={handleAddNotice}
+        disabled={loading}
+        style={formStyles.button}
+      >
         {loading ? "登録中..." : "お知らせ登録"}
-      </button>
-    </div>
+      </TouchableOpacity>
+    </ScrollView>
   );
 }
+const styles = StyleSheet.create({
+  container: {
+    padding: 20,
+    backgroundColor: "#fff",
+
+    gap: 12,
+  },
+  label: {
+    color: "#434656",
+
+    fontSize: 16,
+  },
+});

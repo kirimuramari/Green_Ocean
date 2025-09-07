@@ -32,7 +32,7 @@ export default function Home() {
   }, []);
 
   return (
-    <View>
+    <ScrollView contentContainerStyle={styles.container}>
       <div style={{ marginBottom: 16 }}>
         {notices.map((n) => (
           <div
@@ -44,131 +44,129 @@ export default function Home() {
           </div>
         ))}
       </div>
-      <ScrollView contentContainerStyle={styles.container}>
-        <Text style={styles.title}>閲覧</Text>
+      <Text style={styles.title}>閲覧</Text>
 
-        <View style={[styles.grid, isDesktop && styles.gridDesktop]}>
-          <Link href="/Color" asChild>
-            <TouchableOpacity
-              style={flattenStyle(
-                styles.button,
-                isDesktop && styles.buttonDesktop
-              )}
-            >
-              <Ionicons
-                name="list"
-                size={isDesktop ? 48 : 32}
-                color="#f7f9ff"
-                style={flattenStyle({})}
-              />
-              <Text style={styles.buttonText}>一覧表示</Text>
-            </TouchableOpacity>
-          </Link>
-          <Link href="/SetColor" asChild>
-            <TouchableOpacity
-              style={flattenStyle(
-                styles.button,
-                isDesktop && styles.buttonDesktop
-              )}
-            >
-              <Ionicons
-                name="albums"
-                size={isDesktop ? 48 : 32}
-                color="#f7f9ff"
-                style={flattenStyle({})}
-              />
-              <Text style={styles.buttonText}>セット品表示</Text>
-            </TouchableOpacity>
-          </Link>
-          <Link href="/Purchased" asChild>
-            <TouchableOpacity
-              style={flattenStyle(
-                styles.button,
-                isDesktop && styles.buttonDesktop
-              )}
-            >
-              <Ionicons
-                name="checkmark-done"
-                size={isDesktop ? 48 : 32}
-                color="#f7f9ff"
-                style={flattenStyle({})}
-              />
-              <Text style={styles.buttonText}>購入済み表示</Text>
-            </TouchableOpacity>
-          </Link>
-        </View>
-        <Text style={styles.title}>編集・登録</Text>
-        <View style={[styles.grid, isDesktop && styles.gridDesktop]}>
-          <Link href="/edit" asChild>
-            <TouchableOpacity
-              style={flattenStyle(
-                styles.button,
-                isDesktop && styles.buttonDesktop
-              )}
-            >
-              <Ionicons
-                name="create-outline"
-                size={isDesktop ? 48 : 32}
-                color="#f7f9ff"
-                style={flattenStyle({})}
-              />
-              <Text style={styles.buttonText}>データ編集</Text>
-            </TouchableOpacity>
-          </Link>
-          <Link href="/ColorForm" asChild>
-            <TouchableOpacity
-              style={flattenStyle(
-                styles.button,
-                isDesktop && styles.buttonDesktop
-              )}
-            >
-              <Ionicons
-                name="add-circle-outline"
-                size={isDesktop ? 48 : 32}
-                color="#f7f9ff"
-                style={flattenStyle({})}
-              />
-              <Text style={styles.buttonText}>商品登録</Text>
-            </TouchableOpacity>
-          </Link>
-          <Link href="/add-set-name" asChild>
-            <TouchableOpacity
-              style={flattenStyle(
-                styles.button,
-                isDesktop && styles.buttonDesktop
-              )}
-            >
-              <Ionicons
-                name="duplicate-outline"
-                size={isDesktop ? 48 : 32}
-                color="#f7f9ff"
-                style={flattenStyle({})}
-              />
-              <Text style={styles.buttonText}>セット登録</Text>
-            </TouchableOpacity>
-          </Link>
-        </View>
-        <Text style={styles.title}>設定</Text>
-        <View style={[styles.grid, isDesktop && styles.gridDesktop]}>
-          <Link href="/NoticeForm" asChild>
-            <TouchableOpacity
-              style={flattenStyle(
-                styles.button,
-                isDesktop && styles.buttonDesktop
-              )}
-            >
-              <Ionicons
-                name="notice"
-                size={isDesktop ? 48 : 32}
-                color="#f7f9ff"
-                style={flattenStyle({})}
-              />
-              <Text style={styles.buttonText}>設定</Text>
-            </TouchableOpacity>
-          </Link>
-        </View>
-      </ScrollView>
-    </View>
+      <View style={[styles.grid, isDesktop && styles.gridDesktop]}>
+        <Link href="/Color" asChild>
+          <TouchableOpacity
+            style={flattenStyle(
+              styles.button,
+              isDesktop && styles.buttonDesktop
+            )}
+          >
+            <Ionicons
+              name="list"
+              size={isDesktop ? 48 : 32}
+              color="#f7f9ff"
+              style={flattenStyle({})}
+            />
+            <Text style={styles.buttonText}>一覧表示</Text>
+          </TouchableOpacity>
+        </Link>
+        <Link href="/SetColor" asChild>
+          <TouchableOpacity
+            style={flattenStyle(
+              styles.button,
+              isDesktop && styles.buttonDesktop
+            )}
+          >
+            <Ionicons
+              name="albums"
+              size={isDesktop ? 48 : 32}
+              color="#f7f9ff"
+              style={flattenStyle({})}
+            />
+            <Text style={styles.buttonText}>セット品表示</Text>
+          </TouchableOpacity>
+        </Link>
+        <Link href="/Purchased" asChild>
+          <TouchableOpacity
+            style={flattenStyle(
+              styles.button,
+              isDesktop && styles.buttonDesktop
+            )}
+          >
+            <Ionicons
+              name="checkmark-done"
+              size={isDesktop ? 48 : 32}
+              color="#f7f9ff"
+              style={flattenStyle({})}
+            />
+            <Text style={styles.buttonText}>購入済み表示</Text>
+          </TouchableOpacity>
+        </Link>
+      </View>
+      <Text style={styles.title}>編集・登録</Text>
+      <View style={[styles.grid, isDesktop && styles.gridDesktop]}>
+        <Link href="/edit" asChild>
+          <TouchableOpacity
+            style={flattenStyle(
+              styles.button,
+              isDesktop && styles.buttonDesktop
+            )}
+          >
+            <Ionicons
+              name="create-outline"
+              size={isDesktop ? 48 : 32}
+              color="#f7f9ff"
+              style={flattenStyle({})}
+            />
+            <Text style={styles.buttonText}>データ編集</Text>
+          </TouchableOpacity>
+        </Link>
+        <Link href="/ColorForm" asChild>
+          <TouchableOpacity
+            style={flattenStyle(
+              styles.button,
+              isDesktop && styles.buttonDesktop
+            )}
+          >
+            <Ionicons
+              name="add-circle-outline"
+              size={isDesktop ? 48 : 32}
+              color="#f7f9ff"
+              style={flattenStyle({})}
+            />
+            <Text style={styles.buttonText}>商品登録</Text>
+          </TouchableOpacity>
+        </Link>
+        <Link href="/add-set-name" asChild>
+          <TouchableOpacity
+            style={flattenStyle(
+              styles.button,
+              isDesktop && styles.buttonDesktop
+            )}
+          >
+            <Ionicons
+              name="duplicate-outline"
+              size={isDesktop ? 48 : 32}
+              color="#f7f9ff"
+              style={flattenStyle({})}
+            />
+            <Text style={styles.buttonText}>セット登録</Text>
+          </TouchableOpacity>
+        </Link>
+      </View>
+      <Text style={styles.title}>設定</Text>
+      <View style={[styles.grid, isDesktop && styles.gridDesktop]}>
+        <Link href="/NoticeForm" asChild>
+          <TouchableOpacity
+            style={flattenStyle(
+              styles.button,
+              isDesktop && styles.buttonDesktop
+            )}
+          >
+            <Ionicons
+              name="notices"
+              size={isDesktop ? 48 : 32}
+              color="#f7f9ff"
+              style={flattenStyle({})}
+            />
+            <Text style={styles.buttonText}>設定</Text>
+          </TouchableOpacity>
+        </Link>
+      </View>
+    </ScrollView>
   );
 }
 

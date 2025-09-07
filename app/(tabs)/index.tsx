@@ -33,17 +33,17 @@ export default function Home() {
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <div style={{ marginBottom: 16 }}>
+      <View style={{ marginBottom: 16 }}>
         {notices.map((n) => (
           <div
             key={n.id}
             style={{ backgroundColor: "#fde047", padding: 8, marginBottom: 4 }}
           >
+            <Text>{n.created_at.split("T")[0]}</Text>
             <strong>{n.title}</strong>
-            {n.created_at && <p>{n.created_at}</p>}
           </div>
         ))}
-      </div>
+      </View>
       <Text style={styles.title}>閲覧</Text>
 
       <View style={[styles.grid, isDesktop && styles.gridDesktop]}>

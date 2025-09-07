@@ -35,12 +35,9 @@ export default function Home() {
     <ScrollView contentContainerStyle={styles.container}>
       <View style={{ marginBottom: 16 }}>
         {notices.map((n) => (
-          <div
-            key={n.id}
-            style={{ backgroundColor: "#fde047", padding: 8, marginBottom: 4 }}
-          >
-            <Text>{n.created_at.split("T")[0]}</Text>
-            <strong>{n.title}</strong>
+          <div key={n.id} style={{ padding: 8, marginBottom: 4 }}>
+            <Text style={styles.notices}>{n.created_at.split("T")[0]}</Text>
+            <Text style={styles.notices}>{n.title}</Text>
           </div>
         ))}
       </View>
@@ -176,6 +173,11 @@ const styles = StyleSheet.create({
     alignItems: "center",
 
     backgroundColor: "white",
+  },
+  notices: {
+    color: "#434656",
+    fontSize: 10,
+    marginTop: 10,
   },
   title: {
     fontSize: 20,

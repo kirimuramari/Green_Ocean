@@ -174,12 +174,12 @@ const styles = StyleSheet.create({
 
     backgroundColor: "white",
   },
-  noticeContainer:{
-    padding: 8, 
+  noticeContainer: {
+    padding: 8,
     marginBottom: 4,
-    border-style: dotted,
-    border-color: #747575,
-    border-radius: 12,
+    borderStyle: "dotted",
+    borderColor: "#747575",
+    borderRadius: 12,
   },
   noticesText: {
     color: "#434656",

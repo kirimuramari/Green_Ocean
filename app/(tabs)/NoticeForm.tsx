@@ -46,6 +46,7 @@ export default function NoticeForm() {
         <Text style={formStyles.buttonText}>
           {loading ? "登録中..." : "お知らせ登録"}
         </Text>
+        {/* お知らせの一覧を表示 */}
       </TouchableOpacity>
     </ScrollView>
   );

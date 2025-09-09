@@ -1,17 +1,3 @@
-import { supabase } from "@/lib/supabaseClient";
-import { Ionicons } from "@expo/vector-icons";
-import { Link } from "expo-router";
-import { useEffect, useState } from "react";
-import {
-  StyleSheet as RNStyleSheet,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-  useWindowDimensions,
-} from "react-native";
-
 export default function Home() {
   const { width } = useWindowDimensions();
   const isDesktop = width >= 1024;

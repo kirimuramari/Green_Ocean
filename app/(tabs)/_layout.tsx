@@ -14,7 +14,7 @@ export default function Layout() {
       screenOptions={{
         tabBarActiveTintColor: theme.text,
         headerStyle: { backgroundColor: theme.background },
-        headerShown: !isDesktop,
+        headerShown: false,
         headerTintColor: theme.text,
         tabBarStyle: {
           backgroundColor: theme.background,

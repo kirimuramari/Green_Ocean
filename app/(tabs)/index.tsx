@@ -182,9 +182,9 @@ const styles = StyleSheet.create({
     borderRadius: 12,
   },
   noticesText: {
-    color: "#434656",
-    textdecorationline: "underline",
     fontSize: 10,
+    textdecorationline: "underline",
+    color: "#434656",
     marginTop: 10,
   },
   title: {

@@ -183,7 +183,7 @@ const styles = StyleSheet.create({
   },
   noticesText: {
     fontSize: 10,
-    textdecoration: "underline",
+    textDecoration: "underline",
     color: "#434656",
     marginTop: 10,
   },

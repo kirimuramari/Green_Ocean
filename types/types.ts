@@ -13,3 +13,8 @@ export interface SetColorItem {
   フリガナ: string;
   値段: number;
 }
+export interface Notice {
+  id: number;
+  title:string;
+  created_at: timestamptz;
+}

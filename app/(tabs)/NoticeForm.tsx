@@ -114,7 +114,7 @@ export default function NoticeForm() {
               onPress={() => handleDelete(item.id)}
               style={formStyles.deleteButton}
               >
-                <Text style={formStyles.deleteButtonText}>削除</Text>
+                <Text style={formStyles.buttonText}>削除</Text>
               </TouchableOpacity>
             </View>
           )}

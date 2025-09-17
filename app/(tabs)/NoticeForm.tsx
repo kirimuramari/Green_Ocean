@@ -27,7 +27,7 @@ export default function NoticeForm() {
     const { data, error} = await supabase
       .from("notices")
       .select("*")
-      .order("created_at", { ascending: false });
+      .order("id", { ascending: true });
 
 
       if (error) {

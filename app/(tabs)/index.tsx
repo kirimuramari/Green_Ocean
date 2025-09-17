@@ -35,10 +35,10 @@ export default function Home() {
     <ScrollView contentContainerStyle={styles.container}>
       <View style={styles.noticeContainer}>
         {notices.map((n) => (
-          <div key={n.id} >
+          <View key={n.id}>
             <Text style={styles.noticesText}>{n.created_at.split("T")[0]}</Text>
             <Text style={styles.noticesText}>{n.title}</Text>
-          </div>
+          </View>
         ))}
       </View>
       <Text style={styles.title}>閲覧</Text>

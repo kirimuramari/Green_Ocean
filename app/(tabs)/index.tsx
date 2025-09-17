@@ -33,9 +33,9 @@ export default function Home() {
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <View style={{ marginBottom: 16 }}>
+      <View style={styles.noticeContainer}>
         {notices.map((n) => (
-          <div key={n.id} style={styles.noticeContainer}>
+          <div key={n.id} >
             <Text style={styles.noticesText}>{n.created_at.split("T")[0]}</Text>
             <Text style={styles.noticesText}>{n.title}</Text>
           </div>
@@ -175,6 +175,7 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
   },
   noticeContainer: {
+    marginBottom:16,
     padding: 8,
     marginBottom: 4,
     borderStyle: "dotted",

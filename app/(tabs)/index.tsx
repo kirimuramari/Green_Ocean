@@ -36,8 +36,7 @@ export default function Home() {
       <View style={styles.noticeContainer}>
         {notices.map((n) => (
           <View key={n.id}>
-            <Text style={styles.noticesText}>{n.created_at.split("T")[0]}</Text>
-            <Text style={styles.noticesText}>{n.title}</Text>
+            <Text style={styles.noticesText}>{n.created_at.split("T")[0]}{n.title}</Text>
           </View>
         ))}
       </View>

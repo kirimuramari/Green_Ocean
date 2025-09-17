@@ -177,6 +177,7 @@ const styles = StyleSheet.create({
     marginBottom:16,
     padding: 8,
     marginBottom: 4,
+    borderWidth:1,
     borderStyle: "dotted",
     borderColor: "#747575",
     borderRadius: 12,

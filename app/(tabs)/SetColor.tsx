@@ -3,6 +3,7 @@ import { tables } from "@/theme/tables";
 import { useEffect, useState } from "react";
 import { ActivityIndicator, FlatList, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { formStyles } from "@/theme/formStyles";
 
 export default function SetColor() {
   interface SetColorItem {
@@ -45,6 +46,7 @@ export default function SetColor() {
   }
   return (
     <SafeAreaView style={{ flex: 1 }}>
+      <Text style={formStyles.title}>セット品一覧</Text>
       <View style={tables.headerRow}>
         <Text style={tables.headerCell}>番号</Text>
         <Text style={tables.headerCell}>セット名</Text>

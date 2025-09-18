@@ -140,6 +140,7 @@ export default function Edit() {
         keyExtractor={(item) => item.番号.toString()}
         ListHeaderComponent={
           <View style={styles.container}>
+            <Text style={formStyles.title}>登録済み商品の編集</Text>
             <Text style={styles.label}>コード または 商品名で検索</Text>
             <TextInput
               value={query}
@@ -247,14 +248,14 @@ const styles = StyleSheet.create({
     gap: 12,
   },
   label: {
-        color: "#434656",
-    
+    color: "#434656",
+
     fontSize: 16,
     marginBottom: 4,
   },
   input: {
-        color: "#434656",
-    
+    color: "#434656",
+
     borderWidth: 1,
     borderColor: "#000",
     padding: 8,

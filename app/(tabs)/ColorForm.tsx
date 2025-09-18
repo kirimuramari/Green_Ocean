@@ -117,6 +117,7 @@ const ColorForm = () => {
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
+      <Text style={formStyles.title}>新規商品登録</Text>
       <Text style={styles.label}>番号: {nextNumber}</Text>
       <Text>コード</Text>
       <TextInput
@@ -180,13 +181,13 @@ const styles = StyleSheet.create({
     gap: 12,
   },
   label: {
-        color: "#434656",
-    
+    color: "#434656",
+
     fontSize: 16,
   },
   input: {
-        color: "#434656",
-    
+    color: "#434656",
+
     borderWidth: 1,
     borderColor: "#000",
     padding: 8,

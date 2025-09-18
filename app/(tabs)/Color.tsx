@@ -14,6 +14,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import { formStyles } from "@/theme/formStyles";
 
 export default function Color() {
   interface GreenOcean_Color {
@@ -129,6 +130,7 @@ export default function Color() {
       keyExtractor={(_, index) => index.toString()}
       ListHeaderComponent={
         <View style={flattenStyle(styles.container)}>
+          <Text style={formStyles.title}>商品一覧表示</Text>
           <Text style={flattenStyle(styles.title)}>データ検索</Text>
           <TextInput
             style={formStyles.input}
@@ -201,10 +203,10 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 20,
-        color: "#747575",
+    color: "#747575",
 
     fontWeight: "bold",
-        marginTop: 20,
+    marginTop: 20,
 
     marginBottom: 10,
   },

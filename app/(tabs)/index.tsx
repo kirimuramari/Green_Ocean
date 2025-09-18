@@ -181,9 +181,10 @@ const styles = StyleSheet.create({
     borderStyle: "dotted",
     borderColor: "#747575",
     borderRadius: 12,
+  
   },
   noticesText: {
-    fontSize: 10,
+    fontSize: 15,
     textDecoration: "underline",
     color: "#434656",
     marginTop: 10,

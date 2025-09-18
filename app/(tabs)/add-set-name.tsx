@@ -16,7 +16,10 @@ const AddSetName = () => {
   const [furigana, setFurigana] = useState("");
   const [price, setPrice] = useState<string>("");
   const [lastNumber, setLastNumber] = useState<number>(0);
-  const [message, setMessage] = useState<{ type: "success" | "error" | null; text:string }>({ type: null, text:""});
+  const [message, setMessage] = useState<{
+    type: "success" | "error" | null;
+    text: string;
+  }>({ type: null, text: "" });
 
   // 最大番号取得
   useEffect(() => {
@@ -67,6 +70,7 @@ const AddSetName = () => {
 
   return (
     <View style={styles.container}>
+      <Text style={styles.title}>セット名の追加</Text>
       <Text style={styles.label}>セット名</Text>
       <TextInput
         style={formStyles.input}
@@ -91,11 +95,17 @@ const AddSetName = () => {
       <TouchableOpacity onPress={handleRegister} style={formStyles.button}>
         <Text style={formStyles.buttonText}>追加</Text>
       </TouchableOpacity>
-        {message.type && (
-          <Text style={{ marginTop:12, color:message.type === "success" ? "green" :"red", fontSize:16}}>
-            {message.text}
-          </Text>
-        )}
+      {message.type && (
+        <Text
+          style={{
+            marginTop: 12,
+            color: message.type === "success" ? "green" : "red",
+            fontSize: 16,
+          }}
+        >
+          {message.text}
+        </Text>
+      )}
     </View>
   );
 };
@@ -107,8 +117,8 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   label: {
-        color: "#434656",
-    
+    color: "#434656",
+
     fontSize: 16,
     marginTop: 12,
   },

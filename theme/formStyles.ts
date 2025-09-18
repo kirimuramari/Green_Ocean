@@ -4,6 +4,14 @@ const isWeb = Platform.OS === "web";
 const isDesktop = isWeb && Dimensions.get("window").width >= 1024;
 
 export const formStyles = StyleSheet.create({
+title: {
+  fontSize:15,
+   color: "#747575",
+    fontWeight: "bold",
+    marginTop: 20,
+    marginBottom: 10,
+},
+
   input: {
     borderWidth: 1,
     borderColor: "#ccc",

@@ -7,13 +7,13 @@ import {
   ActivityIndicator,
   Button,
   FlatList,
-  StyleSheet as RNStyleSheet,
   StyleSheet,
   Text,
   TextInput,
   TouchableOpacity,
   View,
 } from "react-native";
+import { layout } from "@/theme/layout";
 
 export default function Color() {
   interface GreenOcean_Color {
@@ -35,9 +35,6 @@ export default function Color() {
   const [setNameList, setSetNameList] = useState<string[]>([]);
   const [selectedSetName, setSelectedSetName] = useState("");
   const [searchSetName, setSearchSetName] = useState("");
-
-  const flattenStyle = (base: any, extra?: any) =>
-    RNStyleSheet.flatten([base, extra]);
 
   // セット名一覧の取得（初回のみ）
   useEffect(() => {

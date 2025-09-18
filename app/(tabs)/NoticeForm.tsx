@@ -11,6 +11,7 @@ import {
   View,
   FlatList,
 } from "react-native";
+import { layout } from "@/theme/layout";
 
 import { tables } from "@/theme/tables";
 import { Notice } from "@/types/types";
@@ -103,15 +104,17 @@ export default function NoticeForm() {
           data={notices}
           keyExtractor={(item) => item.id.toString()}
           renderItem={({ item }) => (
-            <View style={tables.headerRow}>
-              <Text style={tables.cell}>{item.id}</Text>
-              <Text style={tables.cell}>{item.title}</Text>
-              <Text style={tables.cell}>{item.created_at.split("T")[0]}</Text>
+            <View style={flattenStyle(tables.headerRow)}>
+              <Text style={flattenStyle(tables.cell)}>{item.id}</Text>
+              <Text style={flattenStyle(tables.cell)}>{item.title}</Text>
+              <Text style={flattenStyle(tables.cell)}>
+                {item.created_at.split("T")[0]}
+              </Text>
               <TouchableOpacity
                 onPress={() => handleDelete(item.id)}
-                style={formStyles.deleteButton}
+                style={flattenStyle(formStyles.deleteButton)}
               >
-                <Text style={formStyles.buttonText}>削除</Text>
+                <Text style={flattenStyle(formStyles.buttonText)}>削除</Text>
               </TouchableOpacity>
             </View>
           )}

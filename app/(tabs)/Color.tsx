@@ -14,7 +14,6 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { formStyles } from "@/theme/formStyles";
 
 export default function Color() {
   interface GreenOcean_Color {

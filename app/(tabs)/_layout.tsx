@@ -3,10 +3,9 @@ import { Ionicons } from "@expo/vector-icons";
 import { Tabs } from "expo-router";
 import { Dimensions, Platform, useColorScheme } from "react-native";
 
-const isWeb = Platform.OS === "web";
-const isDesktop = isWeb && Dimensions.get("window").width >= 1024;
-
 export default function Layout() {
+  const isWeb = Platform.OS === "web";
+  const isDesktop = isWeb && Dimensions.get("window").width >= 1024;
   const scheme = useColorScheme();
   const theme = scheme === "dark" ? Colors.dark : Colors.light;
   return (

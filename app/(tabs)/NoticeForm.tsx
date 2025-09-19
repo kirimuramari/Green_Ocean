@@ -12,7 +12,6 @@ import {
   FlatList,
 } from "react-native";
 import { flattenStyle } from "@/theme/layout";
-
 import { tables } from "@/theme/tables";
 import { Notice } from "@/types/types";
 
@@ -77,7 +76,7 @@ export default function NoticeForm() {
     fetchNotices();
   }, []);
   return (
-    <ScrollView contentContainerStyle={styles.container}>
+    <ScrollView contentContainerStyle={flattenStyle(styles.container)}>
       <Text style={formStyles.title}>お知らせ設定</Text>
       <Text style={styles.label}>お知らせ追加</Text>
       <Text style={styles.label}>タイトル</Text>
@@ -98,7 +97,7 @@ export default function NoticeForm() {
         </Text>
       </TouchableOpacity>
       {/* お知らせの一覧を表示 */}
-      <View>
+      <View style={flattenStyle(styles.container)}>
         <Text style={styles.label}>一覧</Text>
         <FlatList
           data={notices}

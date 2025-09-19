@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Dimensions, Platform, useColorScheme } from "react-native";
 import { Tabs } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
-import Colors from "@/theme/colors";
+import { Colors } from "@/theme/colors";
 
 export default function Layout() {
   const scheme = useColorScheme();

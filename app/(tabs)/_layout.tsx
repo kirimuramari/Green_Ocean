@@ -18,7 +18,7 @@ export default function Layout() {
         headerTintColor: theme.text,
         tabBarStyle: {
           backgroundColor: theme.background,
-          ...(isDesktop ? { display: "none" } : {}),
+          ...(isDesktop ? { height: 0 } : {}),
         },
       }}
     >

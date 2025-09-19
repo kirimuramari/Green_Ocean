@@ -81,10 +81,9 @@ export default function NoticeForm() {
       <Text style={styles.label}>お知らせ追加</Text>
       <Text style={styles.label}>タイトル</Text>
       <TextInput
-        type="text"
         placeholder="タイトル"
         value={title}
-        onChange={(e) => setTitle(e.target.value)}
+        onChangeText={setTitle}
         style={formStyles.input}
       />
       <TouchableOpacity
@@ -103,17 +102,15 @@ export default function NoticeForm() {
           data={notices}
           keyExtractor={(item) => item.id.toString()}
           renderItem={({ item }) => (
-            <View style={flattenStyle(tables.headerRow)}>
-              <Text style={flattenStyle(tables.cell)}>{item.id}</Text>
-              <Text style={flattenStyle(tables.cell)}>{item.title}</Text>
-              <Text style={flattenStyle(tables.cell)}>
-                {item.created_at.split("T")[0]}
-              </Text>
+            <View style={{ flex: 1 }}>
+              <Text style={tables.cell}>{item.id}</Text>
+              <Text style={tables.cell}>{item.title}</Text>
+              <Text style={tables.cell}>{item.created_at.split("T")[0]}</Text>
               <TouchableOpacity
                 onPress={() => handleDelete(item.id)}
-                style={flattenStyle(formStyles.deleteButton)}
+                style={formStyles.deleteButton}
               >
-                <Text style={flattenStyle(formStyles.buttonText)}>削除</Text>
+                <Text style={formStyles.buttonText}>削除</Text>
               </TouchableOpacity>
             </View>
           )}

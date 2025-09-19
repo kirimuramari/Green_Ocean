@@ -1,13 +1,25 @@
-import { Colors } from "@/theme/colors";
-import { Ionicons } from "@expo/vector-icons";
-import { Tabs } from "expo-router";
+import { useState, useEffect } from "react";
 import { Dimensions, Platform, useColorScheme } from "react-native";
+import { Tabs } from "expo-router";
+import { Ionicons } from "@expo/vector-icons";
+import Colors from "@/theme/colors";
 
 export default function Layout() {
-  const isWeb = Platform.OS === "web";
-  const isDesktop = isWeb && Dimensions.get("window").width >= 1024;
   const scheme = useColorScheme();
   const theme = scheme === "dark" ? Colors.dark : Colors.light;
+
+  //初期判定
+  const [isDesktop, setIsDesktop] = useState(
+    Platform.OS === "web" && Dimensions.get("window").width >= 1024
+  );
+  //画面サイズが変わったら再計算
+  useEffect(() => {
+    const onChange = ({ window }: { window: any }) => {
+      setIsDesktop(Platform.OS === "web" && window.width >= 1024);
+    };
+    const subscription = Dimensions.addEventListener("change", onChange);
+    return () => subscription?.remove();
+  }, []);
   return (
     <Tabs
       screenOptions={{

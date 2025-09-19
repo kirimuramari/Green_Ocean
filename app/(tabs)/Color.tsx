@@ -13,7 +13,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { layout } from "@/theme/layout";
+import { flattenStyle } from "@/theme/layout";
 
 export default function Color() {
   interface GreenOcean_Color {

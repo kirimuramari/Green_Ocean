@@ -11,7 +11,7 @@ import {
   View,
   FlatList,
 } from "react-native";
-import { layout } from "@/theme/layout";
+import { flattenStyle } from "@/theme/layout";
 
 import { tables } from "@/theme/tables";
 import { Notice } from "@/types/types";

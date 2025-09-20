@@ -125,7 +125,7 @@ export default function Color() {
       data={colors}
       keyExtractor={(_, index) => index.toString()}
       ListHeaderComponent={
-        <View style={flattenStyle(formStyles.tcontainer)}>
+        <View style={flattenStyle(formStyles.container)}>
           <Text style={formStyles.title}>商品一覧表示</Text>
           <Text style={flattenStyle(styles.title)}>データ検索</Text>
           <TextInput

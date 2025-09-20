@@ -173,7 +173,7 @@ export default function Edit() {
         )}
         ListFooterComponent={
           selectedColor && (
-            <View style={(formStyles.center, styles.formSection)}>
+            <View style={(styles.formSection, formStyles.center)}>
               <Text style={styles.label}>番号: {selectedColor.番号}</Text>
               <Text style={styles.label}>コード</Text>
               <TextInput
@@ -245,7 +245,6 @@ const styles = StyleSheet.create({
   container: {
     padding: 16,
     alignItems: "center",
-
     backgroundColor: "#fff",
     gap: 12,
   },

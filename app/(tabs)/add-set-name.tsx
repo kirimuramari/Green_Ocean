@@ -69,7 +69,7 @@ const AddSetName = () => {
   };
 
   return (
-    <View style={styles.container}>
+    <View style={(styles.container, formStyles.container)}>
       <Text style={formStyles.title}>セット名の追加</Text>
       <Text style={styles.label}>セット名</Text>
       <TextInput

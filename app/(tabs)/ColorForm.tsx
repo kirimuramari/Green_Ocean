@@ -116,7 +116,9 @@ const ColorForm = () => {
   };
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
+    <ScrollView
+      contentContainerStyle={(styles.container, formStyles.container)}
+    >
       <Text style={formStyles.title}>新規商品登録</Text>
       <Text style={styles.label}>番号: {nextNumber}</Text>
       <Text>コード</Text>

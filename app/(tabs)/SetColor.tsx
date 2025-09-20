@@ -45,7 +45,7 @@ export default function SetColor() {
     );
   }
   return (
-    <SafeAreaView style={{ flex: 1 }}>
+    <SafeAreaView style={formStyles.container}>
       <Text style={formStyles.title}>セット品一覧</Text>
       <View style={tables.headerRow}>
         <Text style={tables.headerCell}>番号</Text>

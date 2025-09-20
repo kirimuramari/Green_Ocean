@@ -125,7 +125,7 @@ export default function Color() {
       data={colors}
       keyExtractor={(_, index) => index.toString()}
       ListHeaderComponent={
-        <View style={flattenStyle(styles.container)}>
+        <View style={flattenStyle(formStyles.tcontainer)}>
           <Text style={formStyles.title}>商品一覧表示</Text>
           <Text style={flattenStyle(styles.title)}>データ検索</Text>
           <TextInput
@@ -188,10 +188,6 @@ export default function Color() {
   );
 }
 const styles = StyleSheet.create({
-  container: {
-    margin: 20,
-    flex: 1,
-  },
   center: {
     flex: 1,
     justifyContent: "center",

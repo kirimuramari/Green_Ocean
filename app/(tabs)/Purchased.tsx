@@ -51,7 +51,7 @@ export default function Purchased() {
   }
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
+    <SafeAreaView style={formStyles.container}>
       <Text style={formStyles.title}>購入品</Text>
       <View style={tables.headerRow}>
         <Text style={tables.headerCell}>商品名</Text>

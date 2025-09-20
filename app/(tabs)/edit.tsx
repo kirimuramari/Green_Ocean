@@ -164,7 +164,7 @@ export default function Edit() {
         renderItem={({ item }) => (
           <TouchableOpacity
             onPress={() => handleSelectItem(item)}
-            style={styles.listItem}
+            style={(styles.listItem, formStyles.center)}
           >
             <Text>
               {item.番号} - {item.商品名}(コード: {item.コード})
@@ -173,7 +173,7 @@ export default function Edit() {
         )}
         ListFooterComponent={
           selectedColor && (
-            <View style={styles.formSection}>
+            <View style={(styles.formSection, formStyles.center)}>
               <Text style={styles.label}>番号: {selectedColor.番号}</Text>
               <Text style={styles.label}>コード</Text>
               <TextInput

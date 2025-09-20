@@ -116,7 +116,9 @@ const ColorForm = () => {
   };
 
   return (
-    <ScrollView contentContainerStyle={formStyles.container}>
+    <ScrollView
+      contentContainerStyle={(styles.container, formStyles.container)}
+    >
       <Text style={formStyles.title}>新規商品登録</Text>
       <Text style={styles.label}>番号: {nextNumber}</Text>
       <Text>コード</Text>
@@ -174,6 +176,12 @@ const ColorForm = () => {
   );
 };
 const styles = StyleSheet.create({
+  container: {
+    padding: 20,
+    backgroundColor: "#fff",
+
+    gap: 12,
+  },
   label: {
     color: "#434656",
 

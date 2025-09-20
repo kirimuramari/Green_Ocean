@@ -132,14 +132,14 @@ export default function Edit() {
 
   return (
     <KeyboardAvoidingView
-      style={formStyles.center}
+      style={{ flex: 1 }}
       behavior={Platform.select({ ios: "padding", android: undefined })}
     >
       <FlatList
         data={searchResults}
         keyExtractor={(item) => item.番号.toString()}
         ListHeaderComponent={
-          <View>
+          <View style={styles.container}>
             <Text style={formStyles.title}>登録済み商品の編集</Text>
             <Text style={styles.label}>コード または 商品名で検索</Text>
             <TextInput
@@ -242,6 +242,12 @@ export default function Edit() {
   );
 }
 const styles = StyleSheet.create({
+  container: {
+    padding: 16,
+    alignItems: "center",
+    backgroundColor: "#fff",
+    gap: 12,
+  },
   label: {
     color: "#434656",
 

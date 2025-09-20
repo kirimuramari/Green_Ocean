@@ -6,6 +6,8 @@ const isDesktop = isWeb && Dimensions.get("window").width >= 1024;
 export const formStyles = StyleSheet.create({
   container: {
     margin: 20,
+    alignItems: "center",
+
     flex: 1,
   },
 

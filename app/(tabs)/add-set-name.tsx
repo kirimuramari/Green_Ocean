@@ -69,7 +69,7 @@ const AddSetName = () => {
   };
 
   return (
-    <View style={(styles.container, formStyles.container)}>
+    <View style={formStyles.container}>
       <Text style={formStyles.title}>セット名の追加</Text>
       <Text style={styles.label}>セット名</Text>
       <TextInput
@@ -111,11 +111,6 @@ const AddSetName = () => {
 };
 export default AddSetName;
 const styles = StyleSheet.create({
-  container: {
-    padding: 16,
-    backgroundColor: "#fff",
-    flex: 1,
-  },
   label: {
     color: "#434656",
 

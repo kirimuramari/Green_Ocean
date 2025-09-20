@@ -244,6 +244,8 @@ export default function Edit() {
 const styles = StyleSheet.create({
   container: {
     padding: 16,
+    alignItems: "center",
+
     backgroundColor: "#fff",
     gap: 12,
   },

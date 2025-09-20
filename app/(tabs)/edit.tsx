@@ -173,7 +173,7 @@ export default function Edit() {
         )}
         ListFooterComponent={
           selectedColor && (
-            <View style={(styles.formSection, formStyles.center)}>
+            <View style={(formStyles.center, styles.formSection)}>
               <Text style={styles.label}>番号: {selectedColor.番号}</Text>
               <Text style={styles.label}>コード</Text>
               <TextInput

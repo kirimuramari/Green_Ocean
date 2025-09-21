@@ -1,0 +1,12 @@
+# .easignore
+.git
+node_modules
+*.mp4
+*.mov
+*.zip
+*.log
+.expo
+.expo-shared
+.env*
+.DS_Store
+*.psd

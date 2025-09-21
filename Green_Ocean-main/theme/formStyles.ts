@@ -7,7 +7,8 @@ export const formStyles = StyleSheet.create({
   container: {
     margin: 20,
     backgroundColor: "#fff",
-    alignItems: "center",
+    maxWidth: 1000,
+    marginHorizontal: "auto",
     flex: 1,
   },
 

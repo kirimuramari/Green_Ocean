@@ -36,7 +36,10 @@ export default function Home() {
       <View style={styles.noticeContainer}>
         {notices.map((n) => (
           <View key={n.id}>
-            <Text style={styles.noticesText}>{n.created_at.split("T")[0]}{n.title}</Text>
+            <Text style={styles.noticesText}>
+              {n.created_at.split("T")[0]}
+              {n.title}
+            </Text>
           </View>
         ))}
       </View>
@@ -174,14 +177,13 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
   },
   noticeContainer: {
-    marginBottom:16,
+    marginBottom: 16,
     padding: 8,
     marginBottom: 4,
-    borderWidth:1,
+    borderWidth: 1,
     borderStyle: "dotted",
     borderColor: "#747575",
     borderRadius: 12,
-  
   },
   noticesText: {
     fontSize: 15,
@@ -199,7 +201,6 @@ const styles = StyleSheet.create({
   grid: {
     flexDirection: "row",
     flexWrap: "wrap",
-    justifyContent: "center",
   },
   gridDesktop: {
     justifyContent: "flex-start",
@@ -212,8 +213,6 @@ const styles = StyleSheet.create({
     height: 102,
     borderRadius: 12,
     margin: 3.3,
-    justifyContent: "center",
-    alignItems: "center",
   },
   buttonDesktop: {
     width: 150,

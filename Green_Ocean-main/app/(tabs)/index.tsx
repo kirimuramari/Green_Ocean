@@ -179,7 +179,6 @@ const styles = StyleSheet.create({
   noticeContainer: {
     marginBottom: 16,
     padding: 8,
-    marginBottom: 4,
     borderWidth: 1,
     borderStyle: "dotted",
     borderColor: "#747575",
@@ -187,7 +186,7 @@ const styles = StyleSheet.create({
   },
   noticesText: {
     fontSize: 15,
-    textDecoration: "underline",
+    textDecorationLine: "underline",
     color: "#434656",
     marginTop: 10,
   },

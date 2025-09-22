@@ -121,6 +121,7 @@ export default function Color() {
     return <Text>データが存在しません</Text>;
   }
   return (
+    //テーブル
     <FlatList
       data={colors}
       keyExtractor={(_, index) => index.toString()}

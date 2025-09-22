@@ -11,7 +11,7 @@ export const tables = StyleSheet.create({
     borderColor: "#ddd",
     paddingBottom: 5,
     ...(isDesktop && {
-      marginHorizontal: 40,
+      paddingHorizontal: 10,
       fontSize: 18,
       paddingTop: 18,
     }),
@@ -33,7 +33,7 @@ export const tables = StyleSheet.create({
     borderBottomWidth: 1,
     borderColor: "#ddd",
     ...(isDesktop && {
-      marginHorizontal: 40,
+      paddingHorizontal: 10,
     }),
   },
   dataCell: {

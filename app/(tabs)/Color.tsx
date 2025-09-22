@@ -184,7 +184,7 @@ export default function Color() {
           <Text>データがありません</Text>
         </View>
       }
-      contentContainerStyle={flattenStyle({ paddingBottom: 80, flexGrow: 1 })}
+      contentContainerStyle={flattenStyle({ flexGrow: 1, paddingBottom: 20 })}
     />
   );
 }

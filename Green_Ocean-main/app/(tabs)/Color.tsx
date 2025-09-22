@@ -104,7 +104,7 @@ export default function Color() {
 
   if (loading) {
     return (
-      <View style={flattenStyle(styles.center)}>
+      <View style={flattenStyle(formStyles.container)}>
         <ActivityIndicator size="large" />
         <Text>読み込み中...</Text>
       </View>

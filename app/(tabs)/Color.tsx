@@ -112,7 +112,7 @@ export default function Color() {
   }
   if (error) {
     return (
-      <View style={flattenStyleformStyles.container}>
+      <View style={flattenStyle(formStyles.container)}>
         <Text style={flattenStyle({ color: "red" })}>エラー:{error}</Text>
       </View>
     );

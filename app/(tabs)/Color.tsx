@@ -104,7 +104,7 @@ export default function Color() {
 
   if (loading) {
     return (
-      <View style={flattenStyle(styles.center)}>
+      <View style={flattenStyle(formStyles.container)}>
         <ActivityIndicator size="large" />
         <Text>読み込み中...</Text>
       </View>
@@ -112,7 +112,7 @@ export default function Color() {
   }
   if (error) {
     return (
-      <View style={flattenStyle(styles.center)}>
+      <View style={flattenStyleformStyles.container)}>
         <Text style={flattenStyle({ color: "red" })}>エラー:{error}</Text>
       </View>
     );
@@ -188,11 +188,7 @@ export default function Color() {
   );
 }
 const styles = StyleSheet.create({
-  center: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-  },
+
   title: {
     fontSize: 20,
     color: "#747575",

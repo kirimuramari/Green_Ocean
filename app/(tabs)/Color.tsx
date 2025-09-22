@@ -112,7 +112,7 @@ export default function Color() {
   }
   if (error) {
     return (
-      <View style={flattenStyleformStyles.container)}>
+      <View style={flattenStyleformStyles.container}>
         <Text style={flattenStyle({ color: "red" })}>エラー:{error}</Text>
       </View>
     );
@@ -188,7 +188,6 @@ export default function Color() {
   );
 }
 const styles = StyleSheet.create({
-
   title: {
     fontSize: 20,
     color: "#747575",

@@ -1,0 +1,10 @@
+{
+  "extends": [
+    "plugin:@typescript-eslint/recommended",
+    "plugin:react/recommended",
+    "plugin:react-native/all"
+  ],
+  "rules": {
+    "no-undef": "error" // 未定義変数をエラー
+  }
+}

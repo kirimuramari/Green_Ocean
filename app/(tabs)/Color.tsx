@@ -112,7 +112,7 @@ export default function Color() {
   }
   if (error) {
     return (
-      <View style={flattenStyleformStyles.container}>
+      <View style={flattenStyle(formStyles.container)}>
         <Text style={flattenStyle({ color: "red" })}>エラー:{error}</Text>
       </View>
     );
@@ -121,6 +121,7 @@ export default function Color() {
     return <Text>データが存在しません</Text>;
   }
   return (
+    //テーブル
     <FlatList
       data={colors}
       keyExtractor={(_, index) => index.toString()}

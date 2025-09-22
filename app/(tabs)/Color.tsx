@@ -1,5 +1,6 @@
 import { supabase } from "@/lib/supabaseClient";
 import { formStyles } from "@/theme/formStyles";
+import { flattenStyle } from "@/theme/layout";
 import { tables } from "@/theme/tables";
 import { Picker } from "@react-native-picker/picker";
 import { useEffect, useState } from "react";
@@ -13,7 +14,6 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { flattenStyle } from "@/theme/layout";
 
 export default function Color() {
   interface GreenOcean_Color {
@@ -112,7 +112,7 @@ export default function Color() {
   }
   if (error) {
     return (
-      <View style={flattenStyle({ padding: 20 })}>
+      <View style={flattenStyle(styles.center)}>
         <Text style={flattenStyle({ color: "red" })}>エラー:{error}</Text>
       </View>
     );

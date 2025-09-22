@@ -5,11 +5,8 @@ const isDesktop = isWeb && Dimensions.get("window").width >= 1024;
 
 export const formStyles = StyleSheet.create({
   container: {
-    margin: 20,
+    padding: 20,
     backgroundColor: "#fff",
-    maxWidth: 1000,
-    margimright: "auto",
-    marginleft: "auto",
   },
 
   title: {

@@ -18,7 +18,6 @@ export const tables = StyleSheet.create({
     }),
   },
   headerCell: {
-    flex: 1,
     fontWeight: "bold",
     color: "#434656",
     ...(isDesktop && {
@@ -31,7 +30,6 @@ export const tables = StyleSheet.create({
   dataRow: {
     flexDirection: "row",
     justifyContent: "space-between",
-
     paddingHorizontal: 5,
     paddingVertical: 6,
     borderBottomWidth: 1,
@@ -45,10 +43,9 @@ export const tables = StyleSheet.create({
     }),
   },
   dataCell: {
-    flex: 1,
     fontSize: 13,
-        color: "#747575",
-    
+    color: "#747575",
+
     ...(isDesktop && {
       fontSize: 16,
 

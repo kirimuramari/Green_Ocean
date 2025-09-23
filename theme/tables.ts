@@ -6,19 +6,19 @@ const isDesktop = isWeb && Dimensions.get("window").width >= 1024;
 export const tables = StyleSheet.create({
   headerRow: {
     flexDirection: "row",
-    justifyContent: "space-between",
     marginBottom: 10,
     borderBottomWidth: 1,
     borderColor: "#ddd",
     paddingBottom: 5,
     ...(isDesktop && {
-      marginHorizontal: 40,
+      paddingHorizontal: 10,
       fontSize: 18,
       paddingTop: 18,
     }),
   },
   headerCell: {
     flex: 1,
+    textAlign: "center",
     fontWeight: "bold",
     color: "#434656",
     ...(isDesktop && {
@@ -30,28 +30,21 @@ export const tables = StyleSheet.create({
   },
   dataRow: {
     flexDirection: "row",
-    justifyContent: "space-between",
-
-    paddingHorizontal: 5,
-    paddingVertical: 6,
     borderBottomWidth: 1,
     borderColor: "#ddd",
     ...(isDesktop && {
-      marginHorizontal: 40,
-      paddingTop: 0,
-      paddingBottom: 0,
-      paddingRight: 0,
-      paddingLeft: 0,
+      paddingHorizontal: 10,
     }),
   },
   dataCell: {
     flex: 1,
+    textAlign: "center",
+    paddingVertical: 6,
     fontSize: 13,
-        color: "#747575",
-    
+    color: "#747575",
+
     ...(isDesktop && {
       fontSize: 16,
-
       padding: 8,
     }),
   },

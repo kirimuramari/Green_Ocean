@@ -282,7 +282,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#f9f9f9",
   },
   formSection: {
-    padding: 20,
+    padding: 10,
     backgroundColor: "#fff",
     gap: 12,
   },

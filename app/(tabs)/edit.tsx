@@ -14,7 +14,6 @@ import {
   TextInput,
   TouchableOpacity,
   View,
-  useWindowDimensions,
 } from "react-native";
 
 const initialForm: Omit<Color, "番号"> = {
@@ -32,8 +31,6 @@ export default function Edit() {
   const [form, setForm] = useState<Omit<Color, "番号">>(initialForm);
   const [loading, setLoading] = useState(false);
   const [updating, setUpdating] = useState(false);
-  const { width } = useWindowDimensions();
-  const isPC = width >= 1024;
 
   const handleSearch = async () => {
     if (!query.trim()) {
@@ -164,7 +161,7 @@ export default function Edit() {
         renderItem={({ item }) => (
           <TouchableOpacity
             onPress={() => handleSelectItem(item)}
-            style={(styles.listItem, formStyles.center)}
+            style={(styles.listItem, formStyles.container)}
           >
             <Text>
               {item.番号} - {item.商品名}(コード: {item.コード})
@@ -173,7 +170,7 @@ export default function Edit() {
         )}
         ListFooterComponent={
           selectedColor && (
-            <View style={(styles.formSection, formStyles.center)}>
+            <View style={(styles.formSection, formStyles.container)}>
               <Text style={styles.label}>番号: {selectedColor.番号}</Text>
               <Text style={styles.label}>コード</Text>
               <TextInput

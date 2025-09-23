@@ -163,7 +163,7 @@ export default function Edit() {
             onPress={() => handleSelectItem(item)}
             style={(styles.listItem, formStyles.container)}
           >
-            <Text>
+            <Text style={{ padding: 10 }}>
               {item.番号} - {item.商品名}(コード: {item.コード})
             </Text>
           </TouchableOpacity>
@@ -241,19 +241,16 @@ export default function Edit() {
 const styles = StyleSheet.create({
   container: {
     padding: 16,
-    alignItems: "center",
     backgroundColor: "#fff",
     gap: 12,
   },
   label: {
     color: "#434656",
-
     fontSize: 16,
     marginBottom: 4,
   },
   input: {
     color: "#434656",
-
     borderWidth: 1,
     borderColor: "#000",
     padding: 8,
@@ -282,7 +279,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#f9f9f9",
   },
   formSection: {
-    padding: 20,
+    padding: 10,
     backgroundColor: "#fff",
     gap: 12,
   },

@@ -1,5 +1,6 @@
 import { supabase } from "@/lib/supabaseClient";
 import { formStyles } from "@/theme/formStyles";
+import { tables } from "@/theme/tables";
 import { Color } from "@/types/types";
 import { useState } from "react";
 import {
@@ -163,7 +164,7 @@ export default function Edit() {
             onPress={() => handleSelectItem(item)}
             style={(styles.listItem, formStyles.container)}
           >
-            <Text style={{ padding: 10 }}>
+            <Text style={tables.dataCell}>
               {item.番号} - {item.商品名}(コード: {item.コード})
             </Text>
           </TouchableOpacity>

@@ -1,19 +1,19 @@
 import { supabase } from "@/lib/supabaseClient";
 import { formStyles } from "@/theme/formStyles";
-import { useState, useEffect } from "react";
+import { flattenStyle } from "@/theme/layout";
+import { tables } from "@/theme/tables";
+import { Notice } from "@/types/types";
+import { useEffect, useState } from "react";
 import {
+  Alert,
+  FlatList,
   ScrollView,
   StyleSheet,
   Text,
   TextInput,
   TouchableOpacity,
-  Alert,
   View,
-  FlatList,
 } from "react-native";
-import { flattenStyle } from "@/theme/layout";
-import { tables } from "@/theme/tables";
-import { Notice } from "@/types/types";
 
 export default function NoticeForm() {
   const [notices, setNotices] = useState<Notice[]>([]);
@@ -103,9 +103,11 @@ export default function NoticeForm() {
           keyExtractor={(item) => item.id.toString()}
           renderItem={({ item }) => (
             <View style={{ flex: 1 }}>
-              <Text style={tables.cell}>{item.id}</Text>
-              <Text style={tables.cell}>{item.title}</Text>
-              <Text style={tables.cell}>{item.created_at.split("T")[0]}</Text>
+              <Text style={tables.dataCell}>{item.id}</Text>
+              <Text style={tables.dataCell}>{item.title}</Text>
+              <Text style={tables.dataCell}>
+                {item.created_at.split("T")[0]}
+              </Text>
               <TouchableOpacity
                 onPress={() => handleDelete(item.id)}
                 style={formStyles.deleteButton}

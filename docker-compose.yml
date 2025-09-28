@@ -1,0 +1,11 @@
+services:
+  expo-web:
+    build: .
+    container_name: expo-web
+    ports:
+      - "8081:8081" # Expo Web
+    volumes:
+      - .:/app # ソースコードをマウント
+      - /app/node_modules # node_modules はコンテナ内だけで管理
+    stdin_open: true
+    tty: true

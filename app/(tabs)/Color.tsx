@@ -161,9 +161,10 @@ export default function Color() {
       }
       renderItem={({ item, index }) => (
         <View
-          style={flattenStyle(tables.dataRow, {
-            backgroundColor: index % 2 === 0 ? "#fff" : "#eee",
-          })}
+          style={[
+            flattenStyle(tables.dataRow),
+            { backgroundColor: index % 2 === 0 ? "#fff" : "#eee" },
+          ]}
         >
           <Text style={flattenStyle(tables.dataCell)}>{item.商品名}</Text>
           <Text style={flattenStyle(tables.dataCell)}>{item.フリガナ}</Text>

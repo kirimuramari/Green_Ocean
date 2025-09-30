@@ -1,5 +1,6 @@
 import { supabase } from "@/lib/supabaseClient";
 import { formStyles } from "@/theme/formStyles";
+import { flattenStyle } from "@/theme/layout";
 import { tables } from "@/theme/tables";
 import { Picker } from "@react-native-picker/picker";
 import { useEffect, useState } from "react";
@@ -13,7 +14,6 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { flattenStyle } from "@/theme/layout";
 
 export default function Color() {
   interface GreenOcean_Color {
@@ -104,7 +104,7 @@ export default function Color() {
 
   if (loading) {
     return (
-      <View style={flattenStyle(styles.center)}>
+      <View style={flattenStyle(formStyles.container)}>
         <ActivityIndicator size="large" />
         <Text>読み込み中...</Text>
       </View>
@@ -112,7 +112,7 @@ export default function Color() {
   }
   if (error) {
     return (
-      <View style={flattenStyle({ padding: 20 })}>
+      <View style={flattenStyle(formStyles.container)}>
         <Text style={flattenStyle({ color: "red" })}>エラー:{error}</Text>
       </View>
     );
@@ -121,6 +121,7 @@ export default function Color() {
     return <Text>データが存在しません</Text>;
   }
   return (
+    //テーブル
     <FlatList
       data={colors}
       keyExtractor={(_, index) => index.toString()}
@@ -160,9 +161,10 @@ export default function Color() {
       }
       renderItem={({ item, index }) => (
         <View
-          style={flattenStyle(tables.dataRow, {
-            backgroundColor: index % 2 === 0 ? "#fff" : "#eee",
-          })}
+          style={[
+            flattenStyle(tables.dataRow),
+            { backgroundColor: index % 2 === 0 ? "#fff" : "#eee" },
+          ]}
         >
           <Text style={flattenStyle(tables.dataCell)}>{item.商品名}</Text>
           <Text style={flattenStyle(tables.dataCell)}>{item.フリガナ}</Text>
@@ -183,16 +185,11 @@ export default function Color() {
           <Text>データがありません</Text>
         </View>
       }
-      contentContainerStyle={flattenStyle({ paddingBottom: 80, flexGrow: 1 })}
+      contentContainerStyle={flattenStyle({ flexGrow: 1, paddingBottom: 20 })}
     />
   );
 }
 const styles = StyleSheet.create({
-  center: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-  },
   title: {
     fontSize: 20,
     color: "#747575",

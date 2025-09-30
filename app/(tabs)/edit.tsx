@@ -14,7 +14,6 @@ import {
   TextInput,
   TouchableOpacity,
   View,
-  useWindowDimensions,
 } from "react-native";
 
 const initialForm: Omit<Color, "番号"> = {
@@ -32,34 +31,80 @@ export default function Edit() {
   const [form, setForm] = useState<Omit<Color, "番号">>(initialForm);
   const [loading, setLoading] = useState(false);
   const [updating, setUpdating] = useState(false);
-  const { width } = useWindowDimensions();
-  const isPC = width >= 1024;
+  const [message, setMessage] = useState<string>("");
 
   const handleSearch = async () => {
     if (!query.trim()) {
-      Alert.alert("検索ワードを入力してください");
+      setMessage("検索ワードを入力してください。");
+      setSearchResults([]);
+      setSelectedColor(null);
       return;
     }
     setLoading(true);
-    const isNumeric = /^\d+$/.test(query); // ← 数値判定
-    const { data, error } = await supabase
-      .from("GreenOcean_Color")
-      .select("*")
-      .or(
-        isNumeric
-          ? `コード.eq.${query},商品名.ilike.*${query}*`
-          : `商品名.ilike.*${query}*`
-      )
-      .order("番号", { ascending: true });
+    setMessage("");
+    try {
+      const q = query.trim();
+      const isNumeric = /^\d+$/.test(q); // ← 数値判定
+      const ilikePattern = `%${q}%`;
 
-    if (error || !data || data.length === 0) {
-      Alert.alert("一致するレコードが見つかりません");
+      let data: Color[] | null = null;
+      let error: any = null;
+
+      // まずコード完全一致を検索
+      if (isNumeric) {
+        const res = await supabase
+          .from("GreenOcean_Color")
+          .select("*")
+          .eq("コード", Number(q))
+          .order("番号", { ascending: true });
+
+        data = res.data;
+        error = res.error;
+        // コードでヒットしなかったら商品名検索に切り替え
+        if ((!data || data.length === 0) && !error) {
+          const res2 = await supabase
+            .from("GreenOcean_Color")
+            .select("*")
+            .ilike("商品名", ilikePattern)
+            .order("番号", { ascending: true });
+          data = res2.data;
+          error = res2.error;
+        }
+      } else {
+        // 商品名のみ検索
+        const res = await supabase
+          .from("GreenOcean_Color")
+          .select("*")
+          .ilike("商品名", ilikePattern)
+          .order("番号", { ascending: true });
+        data = res.data;
+        error = res.error;
+      }
+
+      if (error) {
+        setMessage("検索中にエラーが発生しました。");
+        setSearchResults([]);
+        setSelectedColor(null);
+        return;
+      }
+      // 配列であることを厳密にチェックしてから長さを判定
+      if (!data || data.length === 0) {
+        setMessage("データが存在しません。");
+        setSearchResults([]);
+        setSelectedColor(null);
+        return;
+      }
+      // 結果あり
+      setSearchResults(data);
+      setMessage("");
+    } catch (e) {
+      console.error("Unexpected error:", e);
+      setMessage("検索中にエラーが発生しました。");
       setSearchResults([]);
       setSelectedColor(null);
-    } else {
-      setSearchResults(data);
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   };
 
   const handleDelete = () => {
@@ -164,99 +209,100 @@ export default function Edit() {
         renderItem={({ item }) => (
           <TouchableOpacity
             onPress={() => handleSelectItem(item)}
-            style={(styles.listItem, formStyles.center)}
+            style={[styles.listItem, formStyles.container]}
           >
-            <Text>
+            <Text style={{ padding: 0 }}>
               {item.番号} - {item.商品名}(コード: {item.コード})
             </Text>
           </TouchableOpacity>
         )}
-        ListFooterComponent={
-          selectedColor && (
-            <View style={(styles.formSection, formStyles.center)}>
-              <Text style={styles.label}>番号: {selectedColor.番号}</Text>
-              <Text style={styles.label}>コード</Text>
-              <TextInput
-                value={String(form.コード)}
-                onChangeText={(text) => handleChange("コード", Number(text))}
-                keyboardType="numeric"
-                style={formStyles.input}
-              />
-              <Text style={styles.label}>商品名</Text>
-              <View style={styles.row}>
-                <TextInput
-                  value={form.商品名}
-                  onChangeText={(text) => handleChange("商品名", text)}
-                  style={formStyles.input}
-                />
-              </View>
-              <Text style={styles.label}>フリガナ</Text>
-              <TextInput
-                value={form.フリガナ}
-                onChangeText={(text) => handleChange("フリガナ", text)}
-                style={formStyles.input}
-              />
-              <Text style={styles.label}>値段</Text>
-              <TextInput
-                value={form.値段 !== null ? String(form.値段) : ""}
-                onChangeText={(text) =>
-                  handleChange("値段", text === "" ? null : Number(text))
-                }
-                keyboardType="numeric"
-                style={formStyles.input}
-              />
-              <Text style={styles.label}>セット名</Text>
-              <TextInput
-                value={form.セット名}
-                onChangeText={(text) => handleChange("セット名", text)}
-                style={formStyles.input}
-              />
-              <View style={styles.switchContainer}>
-                <Text style={styles.label}>購入済み</Text>
-                <Switch
-                  value={form.購入済み}
-                  onValueChange={(value) => handleChange("購入済み", value)}
-                />
-              </View>
-              <TouchableOpacity
-                onPress={handleUpdate}
-                disabled={updating}
-                style={formStyles.button}
-              >
-                <Text style={formStyles.buttonText}>
-                  {updating ? "更新中..." : "再登録"}
-                </Text>
-              </TouchableOpacity>
-
-              <TouchableOpacity
-                onPress={handleDelete}
-                style={formStyles.deleteButton}
-              >
-                <Text style={formStyles.buttonText}>削除</Text>
-              </TouchableOpacity>
-            </View>
-          )
-        }
+        //メッセージ表示
+        ListEmptyComponent={() => (
+          <View style={styles.container}>
+            <Text style={styles.label}>{message}</Text>
+          </View>
+        )}
       />
+      {selectedColor && (
+        <View style={(styles.formSection, formStyles.container)}>
+          <Text style={styles.label}>番号: {selectedColor.番号}</Text>
+          <Text style={styles.label}>コード</Text>
+          <TextInput
+            value={String(form.コード)}
+            onChangeText={(text) => handleChange("コード", Number(text))}
+            keyboardType="numeric"
+            style={formStyles.input}
+          />
+          <Text style={styles.label}>商品名</Text>
+          <View style={styles.row}>
+            <TextInput
+              value={form.商品名}
+              onChangeText={(text) => handleChange("商品名", text)}
+              style={formStyles.input}
+            />
+          </View>
+          <Text style={styles.label}>フリガナ</Text>
+          <TextInput
+            value={form.フリガナ}
+            onChangeText={(text) => handleChange("フリガナ", text)}
+            style={formStyles.input}
+          />
+          <Text style={styles.label}>値段</Text>
+          <TextInput
+            value={form.値段 !== null ? String(form.値段) : ""}
+            onChangeText={(text) =>
+              handleChange("値段", text === "" ? null : Number(text))
+            }
+            keyboardType="numeric"
+            style={formStyles.input}
+          />
+          <Text style={styles.label}>セット名</Text>
+          <TextInput
+            value={form.セット名}
+            onChangeText={(text) => handleChange("セット名", text)}
+            style={formStyles.input}
+          />
+          <View style={styles.switchContainer}>
+            <Text style={styles.label}>購入済み</Text>
+            <Switch
+              value={form.購入済み}
+              onValueChange={(value) => handleChange("購入済み", value)}
+            />
+          </View>
+          <TouchableOpacity
+            onPress={handleUpdate}
+            disabled={updating}
+            style={formStyles.button}
+          >
+            <Text style={formStyles.buttonText}>
+              {updating ? "更新中..." : "再登録"}
+            </Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            onPress={handleDelete}
+            style={formStyles.deleteButton}
+          >
+            <Text style={formStyles.buttonText}>削除</Text>
+          </TouchableOpacity>
+        </View>
+      )}
     </KeyboardAvoidingView>
   );
 }
 const styles = StyleSheet.create({
   container: {
     padding: 16,
-    alignItems: "center",
     backgroundColor: "#fff",
     gap: 12,
   },
   label: {
     color: "#434656",
-
     fontSize: 16,
     marginBottom: 4,
   },
   input: {
     color: "#434656",
-
     borderWidth: 1,
     borderColor: "#000",
     padding: 8,
@@ -285,7 +331,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#f9f9f9",
   },
   formSection: {
-    padding: 20,
+    padding: 10,
     backgroundColor: "#fff",
     gap: 12,
   },

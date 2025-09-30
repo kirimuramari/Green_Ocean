@@ -5,10 +5,8 @@ const isDesktop = isWeb && Dimensions.get("window").width >= 1024;
 
 export const formStyles = StyleSheet.create({
   container: {
-    margin: 20,
+    padding: 20,
     backgroundColor: "#fff",
-    alignItems: "center",
-    flex: 1,
   },
 
   title: {
@@ -41,6 +39,8 @@ export const formStyles = StyleSheet.create({
     backgroundColor: "#3b82f6",
     borderRadius: 6,
     width: isDesktop ? 200 : "100%",
+    marginTop: 5,
+    marginBottom: 5,
   },
 
   buttonText: {
@@ -54,5 +54,7 @@ export const formStyles = StyleSheet.create({
     paddingHorizontal: isDesktop ? 12 : 16,
     borderRadius: 6,
     width: isDesktop ? 200 : "100%",
+    marginTop: 5,
+    marginBottom: 5,
   },
 });

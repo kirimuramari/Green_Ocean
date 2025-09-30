@@ -38,25 +38,71 @@ export default function Edit() {
       return;
     }
     setLoading(true);
-    const isNumeric = /^\d+$/.test(query); // ← 数値判定
-    const { data, error } = await supabase
-      .from("GreenOcean_Color")
-      .select("*")
-      .or(
-        isNumeric
-          ? `コード.eq.${query},商品名.ilike.*${query}*`
-          : `商品名.ilike.*${query}*`
-      )
-      .order("番号", { ascending: true });
+    try {
+      const q = query.trim();
+      const isNumeric = /^\d+$/.test(q); // ← 数値判定
+      const ilikePattern = `%${q}%`;
 
-    if (error || !data || data.length === 0) {
-      Alert.alert("一致するレコードが見つかりません");
+      let data: Color[] | null = null;
+      let error: any = null;
+
+      // まずコード完全一致を検索
+      if (isNumeric) {
+        const res = await supabase
+          .from("GreenOcean_Color")
+          .select("*")
+          .eq("コード", Number(q))
+          .order("番号", { ascending: true });
+
+        data = res.data;
+        error = res.error;
+        // コードでヒットしなかったら商品名検索に切り替え
+        if ((!data || data.length === 0) && !error) {
+          const res2 = await supabase
+            .from("GreenOcean_Color")
+            .select("*")
+            .ilike("商品名", ilikePattern)
+            .order("番号", { ascending: true });
+          data = res2.data;
+          error = res2.error;
+        }
+      } else {
+        // 商品名のみ検索
+        const res = await supabase
+          .from("GreenOcean_Color")
+          .select("*")
+          .ilike("商品名", ilikePattern)
+          .order("番号", { ascending: true });
+        data = res.data;
+        error = res.error;
+      }
+      console.log(" search result:", { data, error });
+
+      if (error) {
+        console.error("Supabase error:", error);
+        Alert.alert("検索エラー", error.message);
+        setSearchResults([]);
+        setSelectedColor(null);
+        return;
+      }
+      // 配列であることを厳密にチェックしてから長さを判定
+      if (!data || data.length === 0) {
+        setSearchResults([]);
+        setSelectedColor(null);
+        Alert.alert("データがありません");
+        return;
+      }
+      // 結果あり
+
+      setSearchResults(data);
+    } catch (e) {
+      console.error("Unexpected error:", e);
+      Alert.alert("検索中にエラーが発生しました");
       setSearchResults([]);
       setSelectedColor(null);
-    } else {
-      setSearchResults(data);
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   };
 
   const handleDelete = () => {

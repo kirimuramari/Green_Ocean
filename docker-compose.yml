@@ -1,11 +1,14 @@
 services:
   expo-web:
+    environment:
+      CHOKIDAR_USEPOLLING: "true" # Windowsでのファイル変更検知のため
+      WATCHPACKER_POLLING: "true" # Windowsでのファイル変更検知のため
     build: .
     container_name: expo-web
     ports:
       - "8081:8081" # Expo Web
     volumes:
-      - .:/app # ソースコードをマウント
+      - .:/app:cached # ソースコードをマウント
       - /app/node_modules # node_modules はコンテナ内だけで管理
     stdin_open: true
     tty: true

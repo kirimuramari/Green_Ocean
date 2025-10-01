@@ -18,4 +18,4 @@ COPY . .
 EXPOSE 8081
 
 # Expo 開発サーバを起動
-CMD ["npx", "expo", "start", "--tunnel"]
+CMD ["npm", "run", "start:web"]

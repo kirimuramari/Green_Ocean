@@ -1,9 +1,8 @@
 import { supabase } from "@/lib/supabaseClient";
 import { formStyles } from "@/theme/formStyles";
 import { SetColorItem } from "@/types/types";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
-  Alert,
   StyleSheet,
   Text,
   TextInput,
@@ -16,10 +15,7 @@ const AddSetName = () => {
   const [furigana, setFurigana] = useState("");
   const [price, setPrice] = useState<string>("");
   const [lastNumber, setLastNumber] = useState<number>(0);
-  const [message, setMessage] = useState<{
-    type: "success" | "error" | null;
-    text: string;
-  }>({ type: null, text: "" });
+  const [message, setMessage] = useState("");
 
   // 最大番号取得
   useEffect(() => {
@@ -44,7 +40,7 @@ const AddSetName = () => {
 
   const handleRegister = async () => {
     if (!setName.trim() || !furigana.trim()) {
-      Alert.alert("エラー", "セット名とフリガナは必須項目です");
+      setMessage("セット名とフリガナは必須項目です");
       return;
     }
     const newItem: Omit<SetColorItem, "コード"> = {
@@ -59,9 +55,9 @@ const AddSetName = () => {
       .insert(newItem);
     if (error) {
       console.error("登録エラー:", error.message);
-      Alert.alert("登録失敗", "セット名の登録に失敗しました");
+      setMessage("セット名の登録に失敗しました");
     } else {
-      Alert.alert("登録成功", "セット名が登録されました");
+      setMessage("セット名が登録されました");
       setSetName("");
       setFurigana("");
       setPrice("");
@@ -95,17 +91,9 @@ const AddSetName = () => {
       <TouchableOpacity onPress={handleRegister} style={formStyles.button}>
         <Text style={formStyles.buttonText}>追加</Text>
       </TouchableOpacity>
-      {message.type && (
-        <Text
-          style={{
-            marginTop: 12,
-            color: message.type === "success" ? "green" : "red",
-            fontSize: 16,
-          }}
-        >
-          {message.text}
-        </Text>
-      )}
+      {message ? (
+        <Text style={{ color: "red", marginBottom: 10 }}>{message}</Text>
+      ) : null}
     </View>
   );
 };

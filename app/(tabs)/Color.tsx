@@ -3,7 +3,7 @@ import { formStyles } from "@/theme/formStyles";
 import { flattenStyle } from "@/theme/layout";
 import { tables } from "@/theme/tables";
 import { Picker } from "@react-native-picker/picker";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import {
   ActivityIndicator,
   Button,
@@ -53,10 +53,8 @@ export default function Color() {
     fetchSetNames();
   }, []);
   // データ取得（検索キーワード・セット名・ページが変わったとき）
-  useEffect(() => {
-    fetchData();
-  }, [searchKeyword, searchSetName, page]);
-  const fetchData = async () => {
+
+  const fetchData = useCallback(async () => {
     setLoading(true);
     const from = page * PAGE_SIZE;
     const to = from + PAGE_SIZE - 1;
@@ -85,7 +83,11 @@ export default function Color() {
     }
 
     setLoading(false);
-  };
+  }, [page, searchKeyword, searchSetName]);
+
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]);
 
   const handleSearch = () => {
     setPage(0);
@@ -161,9 +163,10 @@ export default function Color() {
       }
       renderItem={({ item, index }) => (
         <View
-          style={flattenStyle(tables.dataRow, {
-            backgroundColor: index % 2 === 0 ? "#fff" : "#eee",
-          })}
+          style={[
+            flattenStyle(tables.dataRow),
+            { backgroundColor: index % 2 === 0 ? "#fff" : "#eee" },
+          ]}
         >
           <Text style={flattenStyle(tables.dataCell)}>{item.商品名}</Text>
           <Text style={flattenStyle(tables.dataCell)}>{item.フリガナ}</Text>

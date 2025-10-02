@@ -1,25 +1,25 @@
 import { supabase } from "@/lib/supabaseClient";
 import { formStyles } from "@/theme/formStyles";
-import { useState, useEffect } from "react";
+import { flattenStyle } from "@/theme/layout";
+import { tables } from "@/theme/tables";
+import { Notice } from "@/types/types";
+import { useEffect, useState } from "react";
 import {
+  FlatList,
   ScrollView,
   StyleSheet,
   Text,
   TextInput,
   TouchableOpacity,
-  Alert,
   View,
-  FlatList,
 } from "react-native";
-import { flattenStyle } from "@/theme/layout";
-import { tables } from "@/theme/tables";
-import { Notice } from "@/types/types";
 
 export default function NoticeForm() {
   const [notices, setNotices] = useState<Notice[]>([]);
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState("");
 
   //一覧取得
   const fetchNotices = async () => {
@@ -30,7 +30,7 @@ export default function NoticeForm() {
 
     if (error) {
       console.error(error);
-      Alert.alert("エラー", "お知らせ一覧を取得できませんでした");
+      setMessage("お知らせ一覧を取得できませんでした");
     } else {
       setNotices(data as Notice[]);
     }
@@ -42,35 +42,25 @@ export default function NoticeForm() {
     setLoading(false);
 
     if (error) {
-      alert("登録に失敗しました: " + error.message);
+      setMessage("登録に失敗しました: " + error.message);
     } else {
-      alert("お知らせを登録しました");
+      setMessage("お知らせを登録しました");
       setTitle("");
       setContent("");
+      fetchNotices();
     }
   };
 
   const handleDelete = async (id: number) => {
-    Alert.alert("確認", "本当に削除しますか？", [
-      { text: "キャンセル" },
-      {
-        text: "削除",
-        style: "destructive",
-        onPress: async () => {
-          const { error } = await supabase
-            .from("notices")
-            .delete()
-            .eq("id", id);
+    const { error } = await supabase.from("notices").delete().eq("id", id);
 
-          if (error) {
-            console.error(error);
-            Alert.alert("エラー", "削除に失敗しました");
-          } else {
-            setNotices((prev) => prev.filter((n) => n.id !== id));
-          }
-        },
-      },
-    ]);
+    if (error) {
+      console.error(error);
+      setMessage("削除に失敗しました");
+    } else {
+      setNotices((prev) => prev.filter((n) => n.id !== id));
+      setMessage("お知らせを削除しました");
+    }
   };
   useEffect(() => {
     fetchNotices();
@@ -78,6 +68,9 @@ export default function NoticeForm() {
   return (
     <ScrollView contentContainerStyle={flattenStyle(styles.container)}>
       <Text style={formStyles.title}>お知らせ設定</Text>
+      {message ? (
+        <Text style={{ color: "red", marginBottom: 10 }}>{message}</Text>
+      ) : null}
       <Text style={styles.label}>お知らせ追加</Text>
       <Text style={styles.label}>タイトル</Text>
       <TextInput
@@ -102,10 +95,12 @@ export default function NoticeForm() {
           data={notices}
           keyExtractor={(item) => item.id.toString()}
           renderItem={({ item }) => (
-            <View style={{ flex: 1 }}>
-              <Text style={tables.cell}>{item.id}</Text>
-              <Text style={tables.cell}>{item.title}</Text>
-              <Text style={tables.cell}>{item.created_at.split("T")[0]}</Text>
+            <View style={{ flex: 1, flexDirection: "row" }}>
+              <Text style={tables.dataCell}>{item.id}</Text>
+              <Text style={tables.dataCell}>{item.title}</Text>
+              <Text style={tables.dataCell}>
+                {item.created_at.split("T")[0]}
+              </Text>
               <TouchableOpacity
                 onPress={() => handleDelete(item.id)}
                 style={formStyles.deleteButton}

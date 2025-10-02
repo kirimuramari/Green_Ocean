@@ -3,9 +3,8 @@ import { formStyles } from "@/theme/formStyles";
 import { Color } from "@/types/types";
 import { Picker } from "@react-native-picker/picker";
 import { Link } from "expo-router";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
-  Alert,
   ScrollView,
   StyleSheet,
   Switch,
@@ -24,6 +23,7 @@ const ColorForm = () => {
   const [selectedSetName, setSelectedSetName] = useState<string>("");
   const [isPurchased, setIsPurchased] = useState<boolean>(false);
   const [setList, setSetList] = useState<string[]>([]);
+  const [message, setMessage] = useState("");
   const lastNumber = data?.[0]?.番号 ?? 0;
   const nextNumber = lastNumber + 1;
 
@@ -66,14 +66,13 @@ const ColorForm = () => {
     const priceNumber = Number(price);
 
     console.log("handleRegister called");
-    Alert.alert("確認", "ボタンが押されました");
 
     if (isNaN(codeNumber)) {
-      Alert.alert("エラー", "コードは数値で入力してください");
+      setMessage("コードは数値で入力してください");
       return;
     }
     if (isNaN(priceNumber)) {
-      Alert.alert("エラー", "値段は数値で入力してください");
+      setMessage("値段は数値で入力してください");
       return;
     }
     // コードの重複チェック
@@ -83,7 +82,7 @@ const ColorForm = () => {
       .select("*")
       .eq("コード", codeNumber);
     if (existing && existing.length > 0) {
-      Alert.alert("エラー", "このコードはすでに使用されています");
+      setMessage("このコードはすでに使用されています");
       return;
     }
     console.log("コード:", code);
@@ -101,10 +100,10 @@ const ColorForm = () => {
     ]);
     if (error) {
       console.log("登録エラー:", error.message, error.details);
-      Alert.alert("登録失敗", error.message);
+      setMessage("登録失敗しました");
     } else {
       console.log("登録成功");
-      Alert.alert("登録成功", "商品を追加しました");
+      setMessage("商品を追加しました");
       // フォームクリアなど
       setCode("");
       setName("");
@@ -172,6 +171,9 @@ const ColorForm = () => {
       <TouchableOpacity onPress={handleRegister} style={formStyles.button}>
         <Text style={formStyles.buttonText}>登録する</Text>
       </TouchableOpacity>
+      {message ? (
+        <Text style={{ color: "red", marginBottom: 10 }}>{message}</Text>
+      ) : null}
     </ScrollView>
   );
 };

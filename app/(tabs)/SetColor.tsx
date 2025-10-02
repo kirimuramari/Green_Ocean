@@ -1,9 +1,15 @@
 import { supabase } from "@/lib/supabaseClient";
+import { formStyles } from "@/theme/formStyles";
 import { tables } from "@/theme/tables";
 import { useEffect, useState } from "react";
-import { ActivityIndicator, FlatList, Text, View } from "react-native";
+import {
+  ActivityIndicator,
+  FlatList,
+  ScrollView,
+  Text,
+  View,
+} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { formStyles } from "@/theme/formStyles";
 
 export default function SetColor() {
   interface SetColorItem {
@@ -45,32 +51,34 @@ export default function SetColor() {
     );
   }
   return (
-    <SafeAreaView style={formStyles.container}>
-      <Text style={formStyles.title}>セット品一覧</Text>
-      <View style={tables.headerRow}>
-        <Text style={tables.headerCell}>番号</Text>
-        <Text style={tables.headerCell}>セット名</Text>
-        <Text style={tables.headerCell}>フリガナ</Text>
-        <Text style={tables.headerCell}>値段</Text>
-      </View>
-      <FlatList
-        data={data}
-        keyExtractor={(item) => item.番号.toString()}
-        renderItem={({ item, index }) => (
-          <View
-            style={[
-              tables.dataRow,
-              { backgroundColor: index % 2 === 0 ? "#fff" : "#eee" },
-            ]}
-          >
-            <Text style={tables.dataCell}>{item.番号}</Text>
-            <Text style={tables.dataCell}>{item.セット名}</Text>
-            <Text style={tables.dataCell}>{item.フリガナ}</Text>
-            <Text style={tables.dataCell}>¥{item.値段}</Text>
-          </View>
-        )}
-        contentContainerStyle={{ paddingBottom: 80 }}
-      />
-    </SafeAreaView>
+    <ScrollView contentContainerStyle={formStyles.container}>
+      <SafeAreaView style={formStyles.container}>
+        <Text style={formStyles.title}>セット品一覧</Text>
+        <View style={tables.headerRow}>
+          <Text style={tables.headerCell}>番号</Text>
+          <Text style={tables.headerCell}>セット名</Text>
+          <Text style={tables.headerCell}>フリガナ</Text>
+          <Text style={tables.headerCell}>値段</Text>
+        </View>
+        <FlatList
+          data={data}
+          keyExtractor={(item) => item.番号.toString()}
+          renderItem={({ item, index }) => (
+            <View
+              style={[
+                tables.dataRow,
+                { backgroundColor: index % 2 === 0 ? "#fff" : "#eee" },
+              ]}
+            >
+              <Text style={tables.dataCell}>{item.番号}</Text>
+              <Text style={tables.dataCell}>{item.セット名}</Text>
+              <Text style={tables.dataCell}>{item.フリガナ}</Text>
+              <Text style={tables.dataCell}>¥{item.値段}</Text>
+            </View>
+          )}
+          contentContainerStyle={{ paddingBottom: 80 }}
+        />
+      </SafeAreaView>
+    </ScrollView>
   );
 }

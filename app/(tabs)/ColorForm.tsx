@@ -3,7 +3,7 @@ import { formStyles } from "@/theme/formStyles";
 import { Color } from "@/types/types";
 import { Picker } from "@react-native-picker/picker";
 import { Link } from "expo-router";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Alert,
   ScrollView,

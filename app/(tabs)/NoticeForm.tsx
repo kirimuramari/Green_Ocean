@@ -1,7 +1,6 @@
 import { supabase } from "@/lib/supabaseClient";
 import { formStyles } from "@/theme/formStyles";
 import { flattenStyle } from "@/theme/layout";
-import { tables } from "@/theme/tables";
 import { Notice } from "@/types/types";
 import { useEffect, useState } from "react";
 import {
@@ -95,12 +94,11 @@ export default function NoticeForm() {
           data={notices}
           keyExtractor={(item) => item.id.toString()}
           renderItem={({ item }) => (
-            <View style={{ flex: 1, flexDirection: "row" }}>
-              <Text style={tables.dataCell}>{item.id}</Text>
-              <Text style={tables.dataCell}>{item.title}</Text>
-              <Text style={tables.dataCell}>
-                {item.created_at.split("T")[0]}
+            <View style={[flattenStyle(styles.listItem)]}>
+              <Text style={styles.listText}>
+                {item.id}.{item.title}.{item.created_at.split("T")[0]}
               </Text>
+
               <TouchableOpacity
                 onPress={() => handleDelete(item.id)}
                 style={formStyles.deleteButton}
@@ -118,12 +116,25 @@ const styles = StyleSheet.create({
   container: {
     padding: 20,
     backgroundColor: "#fff",
-
     gap: 12,
   },
   label: {
     color: "#434656",
-
     fontSize: 16,
+  },
+  listItem: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    backgroundColor: "fff",
+    paddingVertical: 8,
+    paddingHorizontal: 12,
+    marginVertical: 4,
+    borderRadius: 8,
+  },
+  listText: {
+    flex: 1,
+    flexWrap: "wrap",
+    fontSize: 14,
   },
 });

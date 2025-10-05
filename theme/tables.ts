@@ -18,7 +18,7 @@ export const tables = StyleSheet.create({
   },
   headerCell: {
     flex: 1,
-    textAlign: "center",
+    textAlign: "left",
     fontWeight: "bold",
     color: "#434656",
     ...(isDesktop && {
@@ -38,7 +38,9 @@ export const tables = StyleSheet.create({
   },
   dataCell: {
     flex: 1,
-    textAlign: "center",
+    width: "auto",
+    marginLeft: 20,
+    textAlign: "left",
     paddingVertical: 6,
     fontSize: 13,
     color: "#747575",

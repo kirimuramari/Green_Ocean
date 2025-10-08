@@ -16,6 +16,11 @@ export const formStyles = StyleSheet.create({
     marginTop: 20,
     marginBottom: 10,
   },
+  message: {
+    fontSize: 15,
+    color: "red",
+    marginBottom: 10,
+  },
 
   input: {
     borderWidth: 1,
@@ -34,12 +39,13 @@ export const formStyles = StyleSheet.create({
     width: isDesktop ? 200 : "100%",
   },
   button: {
+    backgroundColor: "#3b82f6",
     paddingVertical: isDesktop ? 6 : 10,
     paddingHorizontal: isDesktop ? 12 : 16,
-    backgroundColor: "#3b82f6",
     borderRadius: 6,
     marginTop: 5,
     marginBottom: 5,
+    width: isDesktop ? 200 : "100%",
   },
 
   buttonText: {
@@ -48,6 +54,15 @@ export const formStyles = StyleSheet.create({
     textAlign: "center",
   },
   deleteButton: {
+    backgroundColor: "#ff5159",
+    paddingVertical: isDesktop ? 6 : 10,
+    paddingHorizontal: isDesktop ? 12 : 16,
+    borderRadius: 6,
+    marginTop: 5,
+    marginBottom: 5,
+    width: isDesktop ? 200 : "100%",
+  },
+  NoticeDeleteButton: {
     backgroundColor: "#ff5159",
     paddingVertical: isDesktop ? 6 : 10,
     paddingHorizontal: isDesktop ? 12 : 16,

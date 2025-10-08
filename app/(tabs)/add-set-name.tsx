@@ -91,9 +91,7 @@ const AddSetName = () => {
       <TouchableOpacity onPress={handleRegister} style={formStyles.button}>
         <Text style={formStyles.buttonText}>追加</Text>
       </TouchableOpacity>
-      {message ? (
-        <Text style={{ color: "red", marginBottom: 10 }}>{message}</Text>
-      ) : null}
+      {message ? <Text style={formStyles.message}>{message}</Text> : null}
     </View>
   );
 };

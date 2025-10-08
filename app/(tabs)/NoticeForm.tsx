@@ -67,9 +67,7 @@ export default function NoticeForm() {
   return (
     <ScrollView contentContainerStyle={flattenStyle(styles.container)}>
       <Text style={formStyles.title}>お知らせ設定</Text>
-      {message ? (
-        <Text style={{ color: "red", marginBottom: 10 }}>{message}</Text>
-      ) : null}
+      {message ? <Text style={formStyles.message}>{message}</Text> : null}
       <Text style={styles.label}>お知らせ追加</Text>
       <Text style={styles.label}>タイトル</Text>
       <TextInput
@@ -101,7 +99,7 @@ export default function NoticeForm() {
 
               <TouchableOpacity
                 onPress={() => handleDelete(item.id)}
-                style={formStyles.deleteButton}
+                style={formStyles.NoticeDeleteButton}
               >
                 <Text style={formStyles.buttonText}>削除</Text>
               </TouchableOpacity>

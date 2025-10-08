@@ -171,9 +171,7 @@ const ColorForm = () => {
       <TouchableOpacity onPress={handleRegister} style={formStyles.button}>
         <Text style={formStyles.buttonText}>登録する</Text>
       </TouchableOpacity>
-      {message ? (
-        <Text style={{ color: "red", marginBottom: 10 }}>{message}</Text>
-      ) : null}
+      {message ? <Text style={formStyles.message}>{message}</Text> : null}
     </ScrollView>
   );
 };

@@ -219,7 +219,7 @@ export default function Edit() {
         //メッセージ表示
         ListEmptyComponent={() => (
           <View style={styles.container}>
-            <Text style={styles.label}>{message}</Text>
+            <Text style={formStyles.message}>{message}</Text>
           </View>
         )}
       />

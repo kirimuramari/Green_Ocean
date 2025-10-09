@@ -1,8 +1,8 @@
-import { useState, useEffect } from "react";
-import { Dimensions, Platform, useColorScheme } from "react-native";
-import { Tabs, Stack } from "expo-router";
-import { Ionicons } from "@expo/vector-icons";
 import { Colors } from "@/theme/colors";
+import { Ionicons } from "@expo/vector-icons";
+import { Stack, Tabs } from "expo-router";
+import { useEffect, useState } from "react";
+import { Dimensions, Platform, useColorScheme } from "react-native";
 
 export default function Layout() {
   const scheme = useColorScheme();
@@ -31,6 +31,7 @@ export default function Layout() {
         <Stack.Screen name="edit" />
         <Stack.Screen name="ColorForm" />
         <Stack.Screen name="add-set-name" />
+        <Stack.Screen name="NoticeForm" />
       </Stack>
     );
   }
@@ -108,6 +109,15 @@ export default function Layout() {
           title: "セット登録",
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="duplicate-outline" color={color} size={size} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="NoticeForm"
+        options={{
+          title: "設定",
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="settings" color={color} size={size} />
           ),
         }}
       />

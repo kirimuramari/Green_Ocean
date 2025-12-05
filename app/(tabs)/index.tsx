@@ -183,6 +183,7 @@ const styles = StyleSheet.create({
     borderStyle: "dotted",
     borderColor: "#747575",
     borderRadius: 12,
+    boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
   },
   noticesText: {
     fontSize: 15,
@@ -215,6 +216,8 @@ const styles = StyleSheet.create({
     margin: 3.3,
     justifyContent: "center",
     alignItems: "center",
+    boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
+    cursor: "pointer",
   },
   buttonDesktop: {
     width: 150,

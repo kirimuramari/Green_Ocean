@@ -1,4 +1,4 @@
-//テーブルスマホ表示のデザイン崩れ防止
+//デザイン崩れ防止
 import { StyleSheet as RNStyleSheet, StyleProp } from "react-native";
 
 export const flattenStyle = <T>(

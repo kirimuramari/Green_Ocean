@@ -1,13 +1,13 @@
 import { supabase } from "@/lib/supabaseClient";
-import { formStyles } from "@/theme/formStyles";
-import { flattenStyle } from "@/theme/layout";
-import { tables } from "@/theme/tables";
+import { desktopFormStyles, formStyles } from "@/theme/formStyles";
+import { desktopTables, tables } from "@/theme/tables";
+import { useIsDesktop } from "@/theme/useIsDesktop";
 import { Picker } from "@react-native-picker/picker";
 import { useCallback, useEffect, useState } from "react";
 import {
   ActivityIndicator,
   Button,
-  FlatList,
+  ScrollView,
   StyleSheet,
   Text,
   TextInput,
@@ -35,6 +35,9 @@ export default function Color() {
   const [setNameList, setSetNameList] = useState<string[]>([]);
   const [selectedSetName, setSelectedSetName] = useState("");
   const [searchSetName, setSearchSetName] = useState("");
+
+  //ＰＣかスマホ判定
+  const isDesktop = useIsDesktop();
 
   // セット名一覧の取得（初回のみ）
   useEffect(() => {
@@ -106,7 +109,7 @@ export default function Color() {
 
   if (loading) {
     return (
-      <View style={flattenStyle(formStyles.container)}>
+      <View style={formStyles.container}>
         <ActivityIndicator size="large" />
         <Text>読み込み中...</Text>
       </View>
@@ -114,8 +117,8 @@ export default function Color() {
   }
   if (error) {
     return (
-      <View style={flattenStyle(formStyles.container)}>
-        <Text style={flattenStyle({ color: "red" })}>エラー:{error}</Text>
+      <View style={formStyles.container}>
+        <Text style={{ color: "red" }}>エラー:{error}</Text>
       </View>
     );
   }
@@ -123,72 +126,130 @@ export default function Color() {
     return <Text>データが存在しません</Text>;
   }
   return (
-    //テーブル
-    <FlatList
-      data={colors}
-      keyExtractor={(_, index) => index.toString()}
-      ListHeaderComponent={
-        <View style={flattenStyle(formStyles.container)}>
-          <Text style={formStyles.title}>商品一覧表示</Text>
-          <Text style={flattenStyle(styles.title)}>データ検索</Text>
+    <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+      <View
+        style={[
+          { width: "100%" },
+          isDesktop && { flexDirection: "row", gap: 20 },
+        ]}
+      >
+        <View style={[{ marginLeft: 20 }, !isDesktop && { marginBottom: 10 }]}>
+          <Text style={[formStyles.title]}>商品一覧表示</Text>
+          <Text style={styles.title}>データ検索</Text>
           <TextInput
-            style={formStyles.input}
+            style={[formStyles.input, isDesktop && desktopFormStyles.input]}
             placeholder="商品名で検索"
             value={searchKeywordInput}
             onChangeText={setSearchKeywordInput}
           />
-          <Text style={flattenStyle(styles.label)}>セット名でフィルター:</Text>
+          <Text style={styles.label}>セット名でフィルター:</Text>
           <Picker
             selectedValue={selectedSetName}
             onValueChange={(itemValue) => setSelectedSetName(itemValue)}
-            style={formStyles.picker}
+            style={[formStyles.picker, isDesktop && desktopFormStyles.picker]}
           >
             <Picker.Item label="すべて" value="" />
             {setNameList.map((name) => (
               <Picker.Item key={name} label={name} value={name} />
             ))}
           </Picker>
-          <TouchableOpacity onPress={handleSearch} style={formStyles.button}>
-            <Text style={formStyles.buttonText}>検索</Text>
+          <TouchableOpacity
+            onPress={handleSearch}
+            style={[formStyles.button, isDesktop && desktopFormStyles.button]}
+          >
+            <Text
+              style={[
+                formStyles.buttonText,
+                isDesktop && desktopFormStyles.buttonText,
+              ]}
+            >
+              検索
+            </Text>
           </TouchableOpacity>
-
-          <View style={flattenStyle(tables.headerRow)}>
-            <Text style={flattenStyle(tables.headerCell)}>商品名</Text>
-            <Text style={flattenStyle(tables.headerCell)}>フリガナ</Text>
-            <Text style={flattenStyle(tables.headerCell)}>コード</Text>
-            <Text style={flattenStyle(tables.headerCell)}>値段</Text>
-            <Text style={flattenStyle(tables.headerCell)}>セット名</Text>
+        </View>
+        {/* テーブル */}
+        <View style={{ flex: 2 }}>
+          <View
+            style={[tables.headerRow, isDesktop && desktopTables.headerRow]}
+          >
+            <Text
+              style={[tables.headerCell, isDesktop && desktopTables.headerCell]}
+            >
+              商品名
+            </Text>
+            <Text
+              style={[tables.headerCell, isDesktop && desktopTables.headerCell]}
+            >
+              フリガナ
+            </Text>
+            <Text
+              style={[tables.headerCell, isDesktop && desktopTables.headerCell]}
+            >
+              コード
+            </Text>
+            <Text
+              style={[tables.headerCell, isDesktop && desktopTables.headerCell]}
+            >
+              値段
+            </Text>
+            <Text
+              style={[tables.headerCell, isDesktop && desktopTables.headerCell]}
+            >
+              セット名
+            </Text>
           </View>
+          {colors.map((item, index) => (
+            <View
+              key={index}
+              style={[
+                tables.dataRow,
+                { backgroundColor: index % 2 === 0 ? "#fff" : "#eee" },
+              ]}
+            >
+              <Text
+                style={[tables.dataCell, isDesktop && desktopTables.dataCell]}
+              >
+                {item.商品名}
+              </Text>
+              <Text
+                style={[tables.dataCell, isDesktop && desktopTables.dataCell]}
+              >
+                {item.フリガナ}
+              </Text>
+              <Text
+                style={[tables.dataCell, isDesktop && desktopTables.dataCell]}
+              >
+                {item.コード}
+              </Text>
+              <Text
+                style={[tables.dataCell, isDesktop && desktopTables.dataCell]}
+              >
+                ¥{item.値段}
+              </Text>
+              <Text
+                style={[tables.dataCell, isDesktop && desktopTables.dataCell]}
+              >
+                {item.セット名}
+              </Text>
+            </View>
+          ))}
+          ListFooterComponent=
+          {
+            <View style={styles.pagination}>
+              <Button title="前へ" onPress={handlePrev} disabled={page === 0} />
+              <Text>ページ {page + 1}</Text>
+              <Button title="次へ" onPress={handleNext} disabled={!hasMore} />
+            </View>
+          }
+          ListEmptyComponent=
+          {
+            <View style={{ padding: 20 }}>
+              <Text>データがありません</Text>
+            </View>
+          }
         </View>
-      }
-      renderItem={({ item, index }) => (
-        <View
-          style={[
-            flattenStyle(tables.dataRow),
-            { backgroundColor: index % 2 === 0 ? "#fff" : "#eee" },
-          ]}
-        >
-          <Text style={flattenStyle(tables.dataCell)}>{item.商品名}</Text>
-          <Text style={flattenStyle(tables.dataCell)}>{item.フリガナ}</Text>
-          <Text style={flattenStyle(tables.dataCell)}>{item.コード}</Text>
-          <Text style={flattenStyle(tables.dataCell)}>¥{item.値段}</Text>
-          <Text style={flattenStyle(tables.dataCell)}>{item.セット名}</Text>
-        </View>
-      )}
-      ListFooterComponent={
-        <View style={flattenStyle(styles.pagination)}>
-          <Button title="前へ" onPress={handlePrev} disabled={page === 0} />
-          <Text>ページ {page + 1}</Text>
-          <Button title="次へ" onPress={handleNext} disabled={!hasMore} />
-        </View>
-      }
-      ListEmptyComponent={
-        <View style={flattenStyle({ padding: 20 })}>
-          <Text>データがありません</Text>
-        </View>
-      }
-      contentContainerStyle={flattenStyle({ flexGrow: 1, paddingBottom: 20 })}
-    />
+      </View>
+    </ScrollView>
   );
 }
 const styles = StyleSheet.create({
@@ -209,5 +270,10 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     marginTop: 10,
+  },
+  // PC で左右の余白を整える場合
+  sideContainer: {
+    flex: 1,
+    paddingRight: 20,
   },
 });

@@ -1,8 +1,5 @@
-import { Dimensions, Platform, StyleSheet } from "react-native";
-
-const isWeb = Platform.OS === "web";
-const isDesktop = isWeb && Dimensions.get("window").width >= 1024;
-
+import { StyleSheet } from "react-native";
+//モバイルスタイル
 export const formStyles = StyleSheet.create({
   container: {
     padding: 20,
@@ -26,48 +23,75 @@ export const formStyles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "#ccc",
     borderRadius: 8,
-    padding: isDesktop ? 6 : 10,
+    padding: 10,
     marginBottom: 15,
-    fontSize: isDesktop ? 14 : 16,
-    width: isDesktop ? 200 : "100%",
+    fontSize: 16,
+    width: "100%",
   },
   picker: {
     marginBottom: 10,
     backgroundColor: "#f0f0f0",
-    height: isDesktop ? 32 : 44,
-    fontSize: isDesktop ? 14 : 16,
-    width: isDesktop ? 200 : "100%",
+    height: 44,
+    fontSize: 16,
+    width: "100%",
   },
   button: {
     backgroundColor: "#3b82f6",
-    paddingVertical: isDesktop ? 6 : 10,
-    paddingHorizontal: isDesktop ? 12 : 16,
+    paddingVertical: 10,
+    paddingHorizontal: 16,
     borderRadius: 6,
     marginTop: 5,
     marginBottom: 5,
-    width: isDesktop ? 200 : "100%",
+    width: "100%",
   },
 
   buttonText: {
     color: "white",
-    fontSize: isDesktop ? 14 : 16,
+    fontSize: 16,
     textAlign: "center",
   },
   deleteButton: {
     backgroundColor: "#ff5159",
-    paddingVertical: isDesktop ? 6 : 10,
-    paddingHorizontal: isDesktop ? 12 : 16,
+    paddingVertical: 10,
+    paddingHorizontal: 16,
     borderRadius: 6,
     marginTop: 5,
     marginBottom: 5,
-    width: isDesktop ? 200 : "100%",
+    width: "100%",
   },
   NoticeDeleteButton: {
     backgroundColor: "#ff5159",
-    paddingVertical: isDesktop ? 6 : 10,
-    paddingHorizontal: isDesktop ? 12 : 16,
+    paddingVertical: 10,
+    paddingHorizontal: 16,
     borderRadius: 6,
     marginTop: 5,
     marginBottom: 5,
+  },
+});
+
+//デスクトップスタイル
+export const desktopFormStyles = StyleSheet.create({
+  input: {
+    width: 200,
+    padding: 6,
+    fontSize: 14,
+  },
+  picker: {
+    width: 200,
+    height: 32,
+    fontSize: 14,
+  },
+  button: {
+    width: 200,
+    paddingVertical: 6,
+    paddingHorizontal: 12,
+  },
+  buttonText: {
+    fontSize: 14,
+  },
+  deleteButton: {
+    width: 200,
+    paddingVertical: 6,
+    paddingHorizontal: 12,
   },
 });

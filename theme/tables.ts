@@ -1,8 +1,5 @@
-import { Dimensions, Platform, StyleSheet } from "react-native";
-
-const isWeb = Platform.OS === "web";
-const isDesktop = isWeb && Dimensions.get("window").width >= 1024;
-
+import { StyleSheet } from "react-native";
+//モバイルスタイル
 export const tables = StyleSheet.create({
   headerRow: {
     flexDirection: "row",
@@ -10,44 +7,47 @@ export const tables = StyleSheet.create({
     borderBottomWidth: 1,
     borderColor: "#ddd",
     paddingBottom: 5,
-    ...(isDesktop && {
-      paddingHorizontal: 10,
-      fontSize: 18,
-      paddingTop: 18,
-    }),
   },
   headerCell: {
     flex: 1,
     textAlign: "left",
     fontWeight: "bold",
     color: "#434656",
-    ...(isDesktop && {
-      fontSize: 18,
-      borderWidth: 1,
-      borderColor: "#ccc",
-      padding: 8,
-    }),
+    fontSize: 14,
+    paddingVertical: 6,
   },
   dataRow: {
     flexDirection: "row",
     borderBottomWidth: 1,
     borderColor: "#ddd",
-    ...(isDesktop && {
-      paddingHorizontal: 10,
-    }),
   },
   dataCell: {
     flex: 1,
-    width: "auto",
-    marginLeft: 20,
     textAlign: "left",
     paddingVertical: 6,
     fontSize: 13,
     color: "#747575",
+  },
+});
 
-    ...(isDesktop && {
-      fontSize: 16,
-      padding: 8,
-    }),
+//デスクトップスタイル
+export const desktopTables = StyleSheet.create({
+  headerRow: {
+    paddingHorizontal: 10,
+    paddingTop: 12,
+  },
+  headerCell: {
+    fontSize: 16,
+    paddingVertical: 8,
+    paddingHorizontal: 6,
+    borderColor: "#ccc",
+    borderWidth: 1,
+  },
+  dataRow: {
+    paddingHorizontal: 10,
+  },
+  dataCell: {
+    fontSize: 16,
+    paddingVertical: 8,
   },
 });

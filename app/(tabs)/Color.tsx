@@ -35,10 +35,15 @@ export default function Color() {
   const [setNameList, setSetNameList] = useState<string[]>([]);
   const [selectedSetName, setSelectedSetName] = useState("");
   const [searchSetName, setSearchSetName] = useState("");
-
+  const [searchOpen, setSearchOpen] = useState(false);
   //ＰＣかスマホ判定
   const isDesktop = useIsDesktop();
-
+  //スマホ向けアコーディオン切り替えロジック
+  const toggleSearch = () => {
+    if (!isDesktop) {
+      setSearchOpen((prev) => !prev);
+    }
+  };
   // セット名一覧の取得（初回のみ）
   useEffect(() => {
     const fetchSetNames = async () => {
@@ -129,124 +134,161 @@ export default function Color() {
     <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
       <View
         style={[
-          { width: "100%" },
+          { width: "100%", backgroundColor: "#fff" },
           isDesktop && { flexDirection: "row", gap: 20 },
         ]}
       >
-        <View style={[{ marginLeft: 20 }, !isDesktop && { marginBottom: 10 }]}>
+        <View
+          style={[
+            { marginLeft: 20, backgroundColor: "#fff" },
+            !isDesktop && { marginBottom: 10 },
+          ]}
+        >
           <Text style={[formStyles.title]}>商品一覧表示</Text>
-          <Text style={styles.title}>データ検索</Text>
-          <TextInput
-            style={[formStyles.input, isDesktop && desktopFormStyles.input]}
-            placeholder="商品名で検索"
-            value={searchKeywordInput}
-            onChangeText={setSearchKeywordInput}
-          />
-          <Text style={styles.label}>セット名でフィルター:</Text>
-          <Picker
-            selectedValue={selectedSetName}
-            onValueChange={(itemValue) => setSelectedSetName(itemValue)}
-            style={[formStyles.picker, isDesktop && desktopFormStyles.picker]}
-          >
-            <Picker.Item label="すべて" value="" />
-            {setNameList.map((name) => (
-              <Picker.Item key={name} label={name} value={name} />
-            ))}
-          </Picker>
-          <TouchableOpacity
-            onPress={handleSearch}
-            style={[formStyles.button, isDesktop && desktopFormStyles.button]}
-          >
-            <Text
-              style={[
-                formStyles.buttonText,
-                isDesktop && desktopFormStyles.buttonText,
-              ]}
-            >
-              検索
+
+          {/* スマホ：タップして開閉 */}
+          <TouchableOpacity disabled={isDesktop} onPress={toggleSearch}>
+            <Text style={styles.title}>
+              データ検索
+              {!isDesktop && (!searchOpen ? " ▼" : " ▲")}
             </Text>
           </TouchableOpacity>
+
+          {(isDesktop || searchOpen) && (
+            <View>
+              <TextInput
+                style={[formStyles.input, isDesktop && desktopFormStyles.input]}
+                placeholder="商品名で検索"
+                value={searchKeywordInput}
+                onChangeText={setSearchKeywordInput}
+              />
+              <Text style={styles.label}>セット名でフィルター:</Text>
+              <Picker
+                selectedValue={selectedSetName}
+                onValueChange={(itemValue) => setSelectedSetName(itemValue)}
+                style={[
+                  formStyles.picker,
+                  isDesktop && desktopFormStyles.picker,
+                ]}
+              >
+                <Picker.Item label="すべて" value="" />
+                {setNameList.map((name) => (
+                  <Picker.Item key={name} label={name} value={name} />
+                ))}
+              </Picker>
+              <TouchableOpacity
+                onPress={handleSearch}
+                style={[
+                  formStyles.button,
+                  isDesktop && desktopFormStyles.button,
+                ]}
+              >
+                <Text
+                  style={[
+                    formStyles.buttonText,
+                    isDesktop && desktopFormStyles.buttonText,
+                  ]}
+                >
+                  検索
+                </Text>
+              </TouchableOpacity>
+            </View>
+          )}
         </View>
+
         {/* テーブル */}
         <View style={{ flex: 2 }}>
-          <View
-            style={[tables.headerRow, isDesktop && desktopTables.headerRow]}
-          >
-            <Text
-              style={[tables.headerCell, isDesktop && desktopTables.headerCell]}
-            >
-              商品名
-            </Text>
-            <Text
-              style={[tables.headerCell, isDesktop && desktopTables.headerCell]}
-            >
-              フリガナ
-            </Text>
-            <Text
-              style={[tables.headerCell, isDesktop && desktopTables.headerCell]}
-            >
-              コード
-            </Text>
-            <Text
-              style={[tables.headerCell, isDesktop && desktopTables.headerCell]}
-            >
-              値段
-            </Text>
-            <Text
-              style={[tables.headerCell, isDesktop && desktopTables.headerCell]}
-            >
-              セット名
-            </Text>
-          </View>
-          {colors.map((item, index) => (
+          <View style={[desktopTables.tableContainerStyle]}>
             <View
-              key={index}
-              style={[
-                tables.dataRow,
-                { backgroundColor: index % 2 === 0 ? "#fff" : "#eee" },
-              ]}
+              style={[tables.headerRow, isDesktop && desktopTables.headerRow]}
             >
               <Text
-                style={[tables.dataCell, isDesktop && desktopTables.dataCell]}
+                style={[
+                  { width: "25%" },
+                  tables.headerCell,
+                  isDesktop && desktopTables.headerCell,
+                ]}
               >
-                {item.商品名}
+                商品名
               </Text>
               <Text
-                style={[tables.dataCell, isDesktop && desktopTables.dataCell]}
+                style={[
+                  { width: "20%" },
+                  tables.headerCell,
+                  isDesktop && desktopTables.headerCell,
+                ]}
               >
-                {item.フリガナ}
+                フリガナ
               </Text>
               <Text
-                style={[tables.dataCell, isDesktop && desktopTables.dataCell]}
+                style={[
+                  { width: "10%" },
+                  tables.headerCell,
+                  isDesktop && desktopTables.headerCell,
+                ]}
               >
-                {item.コード}
+                コード
               </Text>
               <Text
-                style={[tables.dataCell, isDesktop && desktopTables.dataCell]}
+                style={[
+                  { width: "15%" },
+                  tables.headerCell,
+                  isDesktop && desktopTables.headerCell,
+                ]}
               >
-                ¥{item.値段}
+                値段
               </Text>
               <Text
-                style={[tables.dataCell, isDesktop && desktopTables.dataCell]}
+                style={[
+                  { width: "30%" },
+                  tables.headerCell,
+                  isDesktop && desktopTables.headerCell,
+                ]}
               >
-                {item.セット名}
+                セット名
               </Text>
             </View>
-          ))}
-          ListFooterComponent=
-          {
+            {colors.map((item, index) => (
+              <View
+                key={index}
+                style={[
+                  tables.dataRow,
+                  { backgroundColor: index % 2 === 0 ? "#fff" : "#eee" },
+                ]}
+              >
+                <Text
+                  style={[tables.dataCell, isDesktop && desktopTables.dataCell]}
+                >
+                  {item.商品名}
+                </Text>
+                <Text
+                  style={[tables.dataCell, isDesktop && desktopTables.dataCell]}
+                >
+                  {item.フリガナ}
+                </Text>
+                <Text
+                  style={[tables.dataCell, isDesktop && desktopTables.dataCell]}
+                >
+                  {item.コード}
+                </Text>
+                <Text
+                  style={[tables.dataCell, isDesktop && desktopTables.dataCell]}
+                >
+                  ¥{item.値段}
+                </Text>
+                <Text
+                  style={[tables.dataCell, isDesktop && desktopTables.dataCell]}
+                >
+                  {item.セット名}
+                </Text>
+              </View>
+            ))}
             <View style={styles.pagination}>
               <Button title="前へ" onPress={handlePrev} disabled={page === 0} />
               <Text>ページ {page + 1}</Text>
               <Button title="次へ" onPress={handleNext} disabled={!hasMore} />
             </View>
-          }
-          ListEmptyComponent=
-          {
-            <View style={{ padding: 20 }}>
-              <Text>データがありません</Text>
-            </View>
-          }
+          </View>
         </View>
       </View>
     </ScrollView>
@@ -254,10 +296,8 @@ export default function Color() {
 }
 const styles = StyleSheet.create({
   title: {
-    fontSize: 20,
-    color: "#747575",
+    fontSize: 15,
 
-    fontWeight: "bold",
     marginTop: 20,
 
     marginBottom: 10,

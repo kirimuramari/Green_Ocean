@@ -32,6 +32,14 @@ export const tables = StyleSheet.create({
 
 //デスクトップスタイル
 export const desktopTables = StyleSheet.create({
+  tableContainerStyle: {
+    margin: 0,
+    padding: 20,
+    backgroundColor: "#fff",
+    borderRadius: 5,
+    boxShadow: "0 1px 3px 0 rgba(0,0,0,0.1)",
+    overflow: "hidden",
+  },
   headerRow: {
     paddingHorizontal: 10,
     paddingTop: 12,
@@ -40,14 +48,17 @@ export const desktopTables = StyleSheet.create({
     fontSize: 16,
     paddingVertical: 8,
     paddingHorizontal: 6,
-    borderColor: "#ccc",
+    borderColor: "#fff",
     borderWidth: 1,
+    textAlign: "left",
   },
   dataRow: {
     paddingHorizontal: 10,
   },
   dataCell: {
     fontSize: 16,
+    padding: 10,
     paddingVertical: 8,
+    textAlign: "left",
   },
 });

@@ -20,13 +20,14 @@ export const formStyles = StyleSheet.create({
   },
 
   input: {
-    borderWidth: 1,
-    borderColor: "#fff",
+    borderWidth: 2,
+    borderColor: "#d1d5db",
     borderRadius: 8,
     padding: 10,
     marginBottom: 15,
     fontSize: 16,
-    width: "100%",
+    width: "auto",
+    alignSelf: "flex-start",
   },
   picker: {
     marginBottom: 10,
@@ -42,7 +43,8 @@ export const formStyles = StyleSheet.create({
     borderRadius: 6,
     marginTop: 5,
     marginBottom: 5,
-    width: "100%",
+    width: "auto",
+    alignSelf: "flex-start",
   },
 
   buttonText: {
@@ -57,7 +59,8 @@ export const formStyles = StyleSheet.create({
     borderRadius: 6,
     marginTop: 5,
     marginBottom: 5,
-    width: "100%",
+    width: "auto",
+    alignSelf: "flex-start",
   },
   NoticeDeleteButton: {
     backgroundColor: "#ff5159",
@@ -82,9 +85,16 @@ export const desktopFormStyles = StyleSheet.create({
     fontSize: 14,
   },
   button: {
-    width: 200,
     paddingVertical: 6,
     paddingHorizontal: 12,
+    cursor: "pointer",
+    alignItems: "center",
+    display: "flex",
+    gap: 1,
+    minWidth: 200,
+    justifyContent: "center",
+    width: "auto",
+    alignSelf: "flex-start",
   },
   buttonText: {
     fontSize: 14,

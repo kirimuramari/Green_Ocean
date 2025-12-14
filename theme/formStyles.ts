@@ -9,7 +9,6 @@ export const formStyles = StyleSheet.create({
   title: {
     fontSize: 25,
     color: "#747575",
-    fontWeight: "bold",
     marginTop: 20,
     marginBottom: 10,
   },
@@ -34,7 +33,8 @@ export const formStyles = StyleSheet.create({
     backgroundColor: "#fff",
     height: 44,
     fontSize: 16,
-    width: "100%",
+    width: "auto",
+    alignSelf: "flex-start",
   },
   button: {
     backgroundColor: "#3b82f6",

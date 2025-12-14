@@ -12,28 +12,29 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function Purchased() {
-  interface Purchased {
+  interface Item {
     番号: number;
     コード: number;
     商品名: string;
     フリガナ: string;
     セット名: string;
-    備考: string;
+    購入済み: boolean;
   }
 
-  const [data, setData] = useState<Purchased[]>([]);
+  const [data, setData] = useState<Item[]>([]);
   const [loading, setLoading] = useState(true);
   useEffect(() => {
     (async () => {
       // 該当商品データを取得
       const { data, error } = await supabase
-        .from("GreenOcean_Purchased")
-        .select("*");
+        .from("GreenOcean_Color")
+        .select("*")
+        .eq("購入済み", true);
 
       if (error) {
         console.error("Supabaseエラー:", error);
       } else {
-        setData((data as unknown as Purchased[] | null) || []);
+        setData((data as Item[]) || []);
       }
       setLoading(false);
     })();
@@ -60,11 +61,10 @@ export default function Purchased() {
       <SafeAreaView style={formStyles.container}>
         <Text style={formStyles.title}>購入品</Text>
         <View style={tables.headerRow}>
+          <Text style={tables.headerCell}>コード</Text>
           <Text style={tables.headerCell}>商品名</Text>
           <Text style={tables.headerCell}>フリガナ</Text>
-          <Text style={tables.headerCell}>コード</Text>
           <Text style={tables.headerCell}>セット名</Text>
-          <Text style={tables.headerCell}>備考</Text>
         </View>
         <FlatList
           data={data}
@@ -76,11 +76,10 @@ export default function Purchased() {
                 { backgroundColor: index % 2 === 0 ? "#fff" : "#eee" },
               ]}
             >
+              <Text style={tables.dataCell}>{item.コード}</Text>
               <Text style={tables.dataCell}>{item.商品名}</Text>
               <Text style={tables.dataCell}>{item.フリガナ}</Text>
-              <Text style={tables.dataCell}>{item.コード}</Text>
               <Text style={tables.dataCell}>{item.セット名}</Text>
-              <Text style={tables.dataCell}>{item.備考}</Text>
             </View>
           )}
           contentContainerStyle={{ paddingBottom: 80 }}

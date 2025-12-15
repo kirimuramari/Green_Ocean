@@ -118,60 +118,66 @@ const ColorForm = () => {
     <ScrollView
       contentContainerStyle={(styles.container, formStyles.container)}
     >
-      <Text style={formStyles.title}>新規商品登録</Text>
-      <Text style={styles.label}>番号: {nextNumber}</Text>
-      <Text>コード</Text>
-      <TextInput
-        value={code}
-        onChangeText={setCode}
-        keyboardType="numeric"
-        placeholder="コードを入力"
-        style={formStyles.input}
-      />
+      <View style={styles.subContainer}>
+        <Text style={formStyles.title}>新規商品登録</Text>
+        <Text style={styles.label}>番号: {nextNumber}</Text>
+        <Text>コード</Text>
+        <TextInput
+          value={code}
+          onChangeText={setCode}
+          keyboardType="numeric"
+          placeholder="コードを入力"
+          style={formStyles.input}
+        />
 
-      <Text>商品名</Text>
-      <TextInput value={name} onChangeText={setName} style={formStyles.input} />
-      <Text style={styles.label}>フリガナ</Text>
-      <TextInput
-        value={furigana}
-        onChangeText={setFurigana}
-        style={formStyles.input}
-      />
-      <Text style={styles.label}>値段</Text>
-      <TextInput
-        value={price}
-        onChangeText={setPrice}
-        keyboardType="numeric"
-        style={formStyles.input}
-      />
+        <Text>商品名</Text>
+        <TextInput
+          value={name}
+          onChangeText={setName}
+          style={formStyles.input}
+        />
+        <Text style={styles.label}>フリガナ</Text>
+        <TextInput
+          value={furigana}
+          onChangeText={setFurigana}
+          style={formStyles.input}
+        />
+        <Text style={styles.label}>値段</Text>
+        <TextInput
+          value={price}
+          onChangeText={setPrice}
+          keyboardType="numeric"
+          style={formStyles.input}
+        />
 
-      <Text style={styles.label}>セット名</Text>
-      <Picker
-        selectedValue={selectedSetName}
-        onValueChange={(itemValue: string) => setSelectedSetName(itemValue)}
-        style={formStyles.picker}
-      >
-        <Picker.Item label="選択してください" value="" />
-        {setList.map((name) => (
-          <Picker.Item key={name} label={name} value={name} />
-        ))}
-      </Picker>
-      <View style={{ marginTop: 8 }}>
-        <Text>
-          登録したいセット名がない場合は{" "}
-          <Link href="/register/add-set-name" asChild>
-            <Text style={{ color: "blue" }}>コチラ</Text>
-          </Link>
-        </Text>
+        <Text style={styles.label}>セット名</Text>
+        <Picker
+          selectedValue={selectedSetName}
+          onValueChange={(itemValue: string) => setSelectedSetName(itemValue)}
+          style={formStyles.picker}
+        >
+          <Picker.Item label="選択してください" value="" />
+          {setList.map((name) => (
+            <Picker.Item key={name} label={name} value={name} />
+          ))}
+        </Picker>
+        <View style={{ marginTop: 8 }}>
+          <Text>
+            登録したいセット名がない場合は{" "}
+            <Link href="/register/add-set-name" asChild>
+              <Text style={{ color: "blue" }}>コチラ</Text>
+            </Link>
+          </Text>
+        </View>
+        <View style={styles.switchContainer}>
+          <Text style={styles.label}>購入済み</Text>
+          <Switch value={isPurchased} onValueChange={setIsPurchased} />
+        </View>
+        <TouchableOpacity onPress={handleRegister} style={formStyles.button}>
+          <Text style={formStyles.buttonText}>登録する</Text>
+        </TouchableOpacity>
+        {message ? <Text style={formStyles.message}>{message}</Text> : null}
       </View>
-      <View style={styles.switchContainer}>
-        <Text style={styles.label}>購入済み</Text>
-        <Switch value={isPurchased} onValueChange={setIsPurchased} />
-      </View>
-      <TouchableOpacity onPress={handleRegister} style={formStyles.button}>
-        <Text style={formStyles.buttonText}>登録する</Text>
-      </TouchableOpacity>
-      {message ? <Text style={formStyles.message}>{message}</Text> : null}
     </ScrollView>
   );
 };
@@ -181,6 +187,9 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
 
     gap: 12,
+  },
+  subContainer: {
+    marginHorizontal: "auto",
   },
   label: {
     color: "#434656",

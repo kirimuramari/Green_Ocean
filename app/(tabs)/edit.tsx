@@ -107,6 +107,12 @@ export default function Edit() {
     }
   };
 
+  const handleCancelEdit = () => {
+    setSelectedColor(null);
+    setForm(initialForm);
+    setMessage("");
+  };
+
   const handleDelete = () => {
     if (!selectedColor) return;
     Alert.alert(
@@ -262,22 +268,30 @@ export default function Edit() {
                     onValueChange={(value) => handleChange("購入済み", value)}
                   />
                 </View>
-                <TouchableOpacity
-                  onPress={handleUpdate}
-                  disabled={updating}
-                  style={formStyles.button}
-                >
-                  <Text style={formStyles.buttonText}>
-                    {updating ? "更新中..." : "再登録"}
-                  </Text>
-                </TouchableOpacity>
+                <View style={formStyles.buttonRow}>
+                  <TouchableOpacity
+                    onPress={handleUpdate}
+                    disabled={updating}
+                    style={[formStyles.button, formStyles.halfButton]}
+                  >
+                    <Text style={formStyles.buttonText}>
+                      {updating ? "更新中..." : "再登録"}
+                    </Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    onPress={handleCancelEdit}
+                    style={[formStyles.cancelButton, formStyles.halfButton]}
+                  >
+                    <Text style={formStyles.cancelButtonText}>キャンセル</Text>
+                  </TouchableOpacity>
 
-                <TouchableOpacity
-                  onPress={handleDelete}
-                  style={formStyles.deleteButton}
-                >
-                  <Text style={formStyles.buttonText}>削除</Text>
-                </TouchableOpacity>
+                  <TouchableOpacity
+                    onPress={handleDelete}
+                    style={formStyles.deleteButton}
+                  >
+                    <Text style={formStyles.buttonText}>削除</Text>
+                  </TouchableOpacity>
+                </View>
               </View>
             )}
             {/* メッセージ表示 */}

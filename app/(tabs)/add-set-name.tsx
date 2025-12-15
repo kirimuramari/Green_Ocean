@@ -1,6 +1,7 @@
 import { supabase } from "@/lib/supabaseClient";
-import { formStyles } from "@/theme/formStyles";
+import { desktopFormStyles, formStyles } from "@/theme/formStyles";
 import { SetColorItem } from "@/types/types";
+import { router } from "expo-router";
 import { useEffect, useState } from "react";
 import {
   StyleSheet,
@@ -66,31 +67,41 @@ const AddSetName = () => {
 
   return (
     <View style={(styles.container, formStyles.container)}>
-      <Text style={formStyles.title}>セット名の追加</Text>
-      <Text style={styles.label}>セット名</Text>
-      <TextInput
-        style={formStyles.input}
-        value={setName}
-        onChangeText={setSetName}
-        placeholder="セット名を入力"
-      />
-      <Text style={styles.label}>フリガナ</Text>
-      <TextInput
-        style={formStyles.input}
-        value={furigana}
-        onChangeText={setFurigana}
-        placeholder="フリガナを入力"
-      />
-      <Text style={styles.label}>値段（任意）</Text>
-      <TextInput
-        style={formStyles.input}
-        value={price ?? ""}
-        onChangeText={setPrice}
-        placeholder="値段を入力（空白でもOK）"
-      />
-      <TouchableOpacity onPress={handleRegister} style={formStyles.button}>
-        <Text style={formStyles.buttonText}>追加</Text>
-      </TouchableOpacity>
+      <View style={desktopFormStyles.subContainer}>
+        <Text style={formStyles.title}>セット名の追加</Text>
+        <Text style={styles.label}>セット名</Text>
+        <TextInput
+          style={formStyles.input}
+          value={setName}
+          onChangeText={setSetName}
+          placeholder="セット名を入力"
+        />
+        <Text style={styles.label}>フリガナ</Text>
+        <TextInput
+          style={formStyles.input}
+          value={furigana}
+          onChangeText={setFurigana}
+          placeholder="フリガナを入力"
+        />
+        <Text style={styles.label}>値段（任意）</Text>
+        <TextInput
+          style={formStyles.input}
+          value={price ?? ""}
+          onChangeText={setPrice}
+          placeholder="値段を入力（空白でもOK）"
+        />
+        <View style={formStyles.buttonRow}>
+          <TouchableOpacity onPress={handleRegister} style={formStyles.button}>
+            <Text style={formStyles.buttonText}>追加</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => router.replace("/")}
+            style={[formStyles.cancelButton, formStyles.halfButton]}
+          >
+            <Text style={formStyles.cancelButtonText}>キャンセル</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
       {message ? <Text style={formStyles.message}>{message}</Text> : null}
     </View>
   );

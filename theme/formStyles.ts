@@ -8,7 +8,7 @@ export const formStyles = StyleSheet.create({
 
   title: {
     fontSize: 25,
-    color: "#747575",
+    //color: "#747575",
     marginTop: 20,
     marginBottom: 10,
   },
@@ -36,6 +36,11 @@ export const formStyles = StyleSheet.create({
     width: "auto",
     alignSelf: "flex-start",
   },
+  buttonRow: {
+    flexDirection: "row",
+    gap: 12,
+    marginTop: 8,
+  },
   button: {
     backgroundColor: "#3b82f6",
     paddingVertical: 10,
@@ -46,9 +51,28 @@ export const formStyles = StyleSheet.create({
     width: "auto",
     alignSelf: "flex-start",
   },
-
+  halfButton: {
+    flex: 1,
+  },
   buttonText: {
     color: "white",
+    fontSize: 16,
+    textAlign: "center",
+  },
+  cancelButton: {
+    flex: 1,
+    backgroundColor: "#d1d5db",
+    paddingVertical: 10,
+    paddingHorizontal: 16,
+    borderRadius: 6,
+    marginTop: 5,
+    marginBottom: 5,
+    alignItems: "center",
+    justifyContent: "center",
+    width: "auto",
+    alignSelf: "flex-start",
+  },
+  cancelButtonText: {
     fontSize: 16,
     textAlign: "center",
   },
@@ -103,5 +127,8 @@ export const desktopFormStyles = StyleSheet.create({
     width: 200,
     paddingVertical: 6,
     paddingHorizontal: 12,
+  },
+  subContainer: {
+    marginHorizontal: "auto",
   },
 });

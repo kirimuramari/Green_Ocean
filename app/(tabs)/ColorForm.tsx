@@ -1,8 +1,8 @@
 import { supabase } from "@/lib/supabaseClient";
-import { formStyles } from "@/theme/formStyles";
+import { desktopFormStyles, formStyles } from "@/theme/formStyles";
 import { Color } from "@/types/types";
 import { Picker } from "@react-native-picker/picker";
-import { Link } from "expo-router";
+import { Link, router } from "expo-router";
 import { useEffect, useState } from "react";
 import {
   ScrollView,
@@ -118,7 +118,7 @@ const ColorForm = () => {
     <ScrollView
       contentContainerStyle={(styles.container, formStyles.container)}
     >
-      <View style={styles.subContainer}>
+      <View style={desktopFormStyles.subContainer}>
         <Text style={formStyles.title}>新規商品登録</Text>
         <Text style={styles.label}>番号: {nextNumber}</Text>
         <Text>コード</Text>
@@ -173,9 +173,17 @@ const ColorForm = () => {
           <Text style={styles.label}>購入済み</Text>
           <Switch value={isPurchased} onValueChange={setIsPurchased} />
         </View>
-        <TouchableOpacity onPress={handleRegister} style={formStyles.button}>
-          <Text style={formStyles.buttonText}>登録する</Text>
-        </TouchableOpacity>
+        <View style={formStyles.buttonRow}>
+          <TouchableOpacity onPress={handleRegister} style={formStyles.button}>
+            <Text style={formStyles.buttonText}>登録する</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => router.replace("/")}
+            style={[formStyles.cancelButton, formStyles.halfButton]}
+          >
+            <Text style={formStyles.cancelButtonText}>キャンセル</Text>
+          </TouchableOpacity>
+        </View>
         {message ? <Text style={formStyles.message}>{message}</Text> : null}
       </View>
     </ScrollView>
@@ -188,9 +196,7 @@ const styles = StyleSheet.create({
 
     gap: 12,
   },
-  subContainer: {
-    marginHorizontal: "auto",
-  },
+
   label: {
     color: "#434656",
 

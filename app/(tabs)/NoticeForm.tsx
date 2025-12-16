@@ -2,6 +2,8 @@ import { supabase } from "@/lib/supabaseClient";
 import { formStyles } from "@/theme/formStyles";
 import { flattenStyle } from "@/theme/layout";
 import { Notice } from "@/types/types";
+import { Ionicons } from "@expo/vector-icons";
+import { router } from "expo-router";
 import { useEffect, useState } from "react";
 import {
   FlatList,
@@ -66,7 +68,15 @@ export default function NoticeForm() {
   }, []);
   return (
     <ScrollView contentContainerStyle={flattenStyle(styles.container)}>
-      <Text style={formStyles.title}>お知らせ設定</Text>
+      <View style={formStyles.header}>
+        <TouchableOpacity
+          onPress={() => router.replace("/")}
+          style={formStyles.arrowButton}
+        >
+          <Ionicons name="arrow-back" size={24} />
+        </TouchableOpacity>
+        <Text style={formStyles.title}>お知らせ設定</Text>
+      </View>
       {message ? <Text style={formStyles.message}>{message}</Text> : null}
       <Text style={styles.label}>お知らせ追加</Text>
       <Text style={styles.label}>タイトル</Text>

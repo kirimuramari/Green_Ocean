@@ -1,8 +1,11 @@
 import { supabase } from "@/lib/supabaseClient";
+import { Ionicons } from "@expo/vector-icons";
+
 import { desktopFormStyles, formStyles } from "@/theme/formStyles";
 import { desktopTables, tables } from "@/theme/tables";
 import { useIsDesktop } from "@/theme/useIsDesktop";
 import { Picker } from "@react-native-picker/picker";
+import { router } from "expo-router";
 import { useCallback, useEffect, useState } from "react";
 import {
   ActivityIndicator,
@@ -144,8 +147,15 @@ export default function Color() {
             !isDesktop && { marginBottom: 10 },
           ]}
         >
-          <Text style={[formStyles.title]}>商品一覧表示</Text>
-
+          <View style={formStyles.header}>
+            <TouchableOpacity
+              onPress={() => router.replace("/")}
+              style={formStyles.arrowButton}
+            >
+              <Ionicons name="arrow-back" size={24} />
+            </TouchableOpacity>
+            <Text style={[formStyles.title]}>商品一覧表示</Text>
+          </View>
           {/* スマホ：タップして開閉 */}
           <TouchableOpacity disabled={isDesktop} onPress={toggleSearch}>
             <Text style={styles.title}>

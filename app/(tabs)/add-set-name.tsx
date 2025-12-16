@@ -1,4 +1,6 @@
 import { supabase } from "@/lib/supabaseClient";
+import { Ionicons } from "@expo/vector-icons";
+
 import { desktopFormStyles, formStyles } from "@/theme/formStyles";
 import { SetColorItem } from "@/types/types";
 import { router } from "expo-router";
@@ -68,7 +70,15 @@ const AddSetName = () => {
   return (
     <View style={(styles.container, formStyles.container)}>
       <View style={desktopFormStyles.subContainer}>
-        <Text style={formStyles.title}>セット名の追加</Text>
+        <View style={formStyles.header}>
+          <TouchableOpacity
+            onPress={() => router.replace("/")}
+            style={formStyles.arrowButton}
+          >
+            <Ionicons name="arrow-back" size={24} />
+          </TouchableOpacity>
+          <Text style={formStyles.title}>セット名の追加</Text>
+        </View>
         <Text style={styles.label}>セット名</Text>
         <TextInput
           style={formStyles.input}

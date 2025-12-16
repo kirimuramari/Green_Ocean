@@ -8,9 +8,9 @@ export const formStyles = StyleSheet.create({
 
   title: {
     fontSize: 25,
-    //color: "#747575",
-    marginTop: 20,
+    //marginTop: 20,
     marginBottom: 10,
+    display: "flex",
   },
   message: {
     fontSize: 15,
@@ -93,6 +93,16 @@ export const formStyles = StyleSheet.create({
     borderRadius: 6,
     marginTop: 5,
     marginBottom: 5,
+  },
+  header: {
+    flexDirection: "row",
+    paddingHorizontal: 8,
+    paddingVertical: 6,
+    marginTop: 20,
+  },
+  arrowButton: {
+    marginTop: 5,
+    marginRight: 4,
   },
 });
 

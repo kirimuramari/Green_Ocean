@@ -1,12 +1,15 @@
 import { supabase } from "@/lib/supabaseClient";
 import { formStyles } from "@/theme/formStyles";
 import { tables } from "@/theme/tables";
+import { Ionicons } from "@expo/vector-icons";
+import { router } from "expo-router";
 import { useEffect, useState } from "react";
 import {
   ActivityIndicator,
   FlatList,
   ScrollView,
   Text,
+  TouchableOpacity,
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -52,7 +55,15 @@ export default function SetColor() {
   return (
     <ScrollView contentContainerStyle={formStyles.container}>
       <SafeAreaView style={formStyles.container}>
-        <Text style={formStyles.title}>セット品一覧</Text>
+        <View style={formStyles.header}>
+          <TouchableOpacity
+            onPress={() => router.replace("/")}
+            style={formStyles.arrowButton}
+          >
+            <Ionicons name="arrow-back" size={24} />
+          </TouchableOpacity>
+          <Text style={formStyles.title}>セット品一覧</Text>
+        </View>
         <View style={tables.headerRow}>
           <Text style={tables.headerCell}>番号</Text>
           <Text style={tables.headerCell}>セット名</Text>

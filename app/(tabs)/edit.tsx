@@ -1,6 +1,8 @@
 import { supabase } from "@/lib/supabaseClient";
 import { formStyles } from "@/theme/formStyles";
 import { Color } from "@/types/types";
+import { Ionicons } from "@expo/vector-icons";
+import { router } from "expo-router";
 import { useState } from "react";
 import {
   ActivityIndicator,
@@ -208,7 +210,15 @@ export default function Edit() {
         keyExtractor={(item) => item.番号.toString()}
         ListHeaderComponent={
           <View style={styles.container}>
-            <Text style={formStyles.title}>登録済み商品の編集</Text>
+            <View style={formStyles.header}>
+              <TouchableOpacity
+                onPress={() => router.replace("/")}
+                style={formStyles.arrowButton}
+              >
+                <Ionicons name="arrow-back" size={24} />
+              </TouchableOpacity>
+              <Text style={formStyles.title}>登録済み商品の編集</Text>
+            </View>
             <Text style={styles.label}>コード または 商品名で検索</Text>
             <TextInput
               value={query}

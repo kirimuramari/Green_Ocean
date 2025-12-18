@@ -15,7 +15,7 @@ import {
 export default function Home() {
   const { width } = useWindowDimensions();
   const isDesktop = width >= 1024;
-  const [notices, setNotices] = useState([]);
+  const [notices, setNotices] = useState<any[]>([]);
 
   const flattenStyle = (baseStyle: any, extraStyle?: any) =>
     RNStyleSheet.flatten([baseStyle, extraStyle]);

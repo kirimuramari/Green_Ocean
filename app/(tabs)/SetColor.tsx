@@ -53,7 +53,7 @@ export default function SetColor() {
     );
   }
   return (
-    <ScrollView contentContainerStyle={formStyles.container}>
+    <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
       <SafeAreaView style={formStyles.container}>
         <View style={formStyles.header}>
           <TouchableOpacity

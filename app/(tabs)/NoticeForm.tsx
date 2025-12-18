@@ -67,7 +67,7 @@ export default function NoticeForm() {
     fetchNotices();
   }, []);
   return (
-    <ScrollView contentContainerStyle={flattenStyle(styles.container)}>
+    <ScrollView contentContainerStyle={formStyles.container}>
       <View style={formStyles.subContainer}>
         <View style={formStyles.header}>
           <TouchableOpacity

@@ -1,7 +1,7 @@
 import { supabase } from "@/lib/supabaseClient";
 import { Ionicons } from "@expo/vector-icons";
 
-import { desktopFormStyles, formStyles } from "@/theme/formStyles";
+import { formStyles } from "@/theme/formStyles";
 import { Color } from "@/types/types";
 import { Picker } from "@react-native-picker/picker";
 import { Link, router } from "expo-router";
@@ -120,7 +120,7 @@ const ColorForm = () => {
     <ScrollView
       contentContainerStyle={(styles.container, formStyles.container)}
     >
-      <View style={desktopFormStyles.subContainer}>
+      <View style={formStyles.subContainer}>
         <View style={formStyles.header}>
           <TouchableOpacity
             onPress={() => router.replace("/")}

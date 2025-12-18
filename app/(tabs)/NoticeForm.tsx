@@ -68,61 +68,64 @@ export default function NoticeForm() {
   }, []);
   return (
     <ScrollView contentContainerStyle={flattenStyle(styles.container)}>
-      <View style={formStyles.header}>
-        <TouchableOpacity
-          onPress={() => router.replace("/")}
-          style={formStyles.arrowButton}
-        >
-          <Ionicons name="arrow-back" size={24} />
-        </TouchableOpacity>
-        <Text style={formStyles.title}>お知らせ設定</Text>
-      </View>
-      {message ? <Text style={formStyles.message}>{message}</Text> : null}
-      <Text style={styles.label}>お知らせ追加</Text>
-      <Text style={styles.label}>タイトル</Text>
-      <TextInput
-        placeholder="タイトル"
-        value={title}
-        onChangeText={setTitle}
-        style={formStyles.input}
-      />
-      <TouchableOpacity
-        onPress={handleAddNotice}
-        disabled={loading}
-        style={formStyles.button}
-      >
-        <Text style={formStyles.buttonText}>
-          {loading ? "登録中..." : "お知らせ登録"}
-        </Text>
-      </TouchableOpacity>
-      {/* お知らせの一覧を表示 */}
-      <View style={flattenStyle(styles.container)}>
-        <Text style={styles.label}>一覧</Text>
-        <FlatList
-          data={notices}
-          keyExtractor={(item) => item.id.toString()}
-          renderItem={({ item }) => (
-            <View style={[flattenStyle(styles.listItem)]}>
-              <Text style={styles.listText}>
-                {item.id}.{item.title}.{item.created_at.split("T")[0]}
-              </Text>
-
-              <TouchableOpacity
-                onPress={() => handleDelete(item.id)}
-                style={formStyles.NoticeDeleteButton}
-              >
-                <Text style={formStyles.buttonText}>削除</Text>
-              </TouchableOpacity>
-            </View>
-          )}
+      <View style={formStyles.subContainer}>
+        <View style={formStyles.header}>
+          <TouchableOpacity
+            onPress={() => router.replace("/")}
+            style={formStyles.arrowButton}
+          >
+            <Ionicons name="arrow-back" size={24} />
+          </TouchableOpacity>
+          <Text style={formStyles.title}>お知らせ設定</Text>
+        </View>
+        {message ? <Text style={formStyles.message}>{message}</Text> : null}
+        <Text style={styles.label}>お知らせ追加</Text>
+        <Text style={styles.label}>タイトル</Text>
+        <TextInput
+          placeholder="タイトル"
+          value={title}
+          onChangeText={setTitle}
+          style={formStyles.input}
         />
+        <TouchableOpacity
+          onPress={handleAddNotice}
+          disabled={loading}
+          style={formStyles.button}
+        >
+          <Text style={formStyles.buttonText}>
+            {loading ? "登録中..." : "お知らせ登録"}
+          </Text>
+        </TouchableOpacity>
+        {/* お知らせの一覧を表示 */}
+        <View style={flattenStyle(styles.container)}>
+          <Text style={styles.label}>一覧</Text>
+          <FlatList
+            data={notices}
+            keyExtractor={(item) => item.id.toString()}
+            renderItem={({ item }) => (
+              <View style={[flattenStyle(styles.listItem)]}>
+                <Text style={styles.listText}>
+                  {item.id}.{item.title}.{item.created_at.split("T")[0]}
+                </Text>
+
+                <TouchableOpacity
+                  onPress={() => handleDelete(item.id)}
+                  style={formStyles.NoticeDeleteButton}
+                >
+                  <Text style={formStyles.buttonText}>削除</Text>
+                </TouchableOpacity>
+              </View>
+            )}
+          />
+        </View>
       </View>
     </ScrollView>
   );
 }
 const styles = StyleSheet.create({
   container: {
-    padding: 20,
+    paddingTop: 20,
+    paddingBottom: 10,
     backgroundColor: "#fff",
     gap: 12,
   },
@@ -139,10 +142,13 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     marginVertical: 4,
     borderRadius: 8,
+    borderBottomWidth: 1,
+    borderBottomColor: "#d1d5db",
   },
   listText: {
     flex: 1,
     flexWrap: "wrap",
-    fontSize: 14,
+    fontSize: 16,
+    marginRight: 10,
   },
 });

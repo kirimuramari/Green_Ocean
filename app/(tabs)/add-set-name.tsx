@@ -1,7 +1,7 @@
 import { supabase } from "@/lib/supabaseClient";
 import { Ionicons } from "@expo/vector-icons";
 
-import { desktopFormStyles, formStyles } from "@/theme/formStyles";
+import { formStyles } from "@/theme/formStyles";
 import { SetColorItem } from "@/types/types";
 import { router } from "expo-router";
 import { useEffect, useState } from "react";
@@ -69,7 +69,7 @@ const AddSetName = () => {
 
   return (
     <View style={(styles.container, formStyles.container)}>
-      <View style={desktopFormStyles.subContainer}>
+      <View style={formStyles.subContainer}>
         <View style={formStyles.header}>
           <TouchableOpacity
             onPress={() => router.replace("/")}

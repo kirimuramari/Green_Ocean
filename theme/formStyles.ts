@@ -5,10 +5,11 @@ export const formStyles = StyleSheet.create({
     padding: 20,
     backgroundColor: "#fff",
   },
-
+  subContainer: {
+    marginHorizontal: "auto",
+  },
   title: {
     fontSize: 25,
-    //marginTop: 20,
     marginBottom: 10,
     display: "flex",
   },
@@ -137,8 +138,5 @@ export const desktopFormStyles = StyleSheet.create({
     width: 200,
     paddingVertical: 6,
     paddingHorizontal: 12,
-  },
-  subContainer: {
-    marginHorizontal: "auto",
   },
 });

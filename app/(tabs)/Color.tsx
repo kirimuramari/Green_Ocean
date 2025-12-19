@@ -1,6 +1,15 @@
 import { supabase } from "@/lib/supabaseClient";
+import { Color } from "@/types/types";
 import { Ionicons } from "@expo/vector-icons";
 
+import { QuickActions } from "@/components/common/QuickAction";
+import { SortSelector } from "@/components/common/SortSelector";
+import {
+  deleteItem,
+  togglePurchased,
+} from "@/features/itemActions/itemActions";
+import { sortItems } from "@/features/sort/sortItems";
+import { SortKey } from "@/features/sort/sortTypes";
 import { desktopFormStyles, formStyles } from "@/theme/formStyles";
 import { desktopTables, tables } from "@/theme/tables";
 import { useIsDesktop } from "@/theme/useIsDesktop";
@@ -18,17 +27,9 @@ import {
   View,
 } from "react-native";
 
-export default function Color() {
-  interface GreenOcean_Color {
-    番号: number;
-    コード: number;
-    商品名: string;
-    フリガナ: string;
-    値段: number;
-    セット名: string;
-  }
+export default function ColorScreen() {
   const PAGE_SIZE = 30;
-  const [colors, setColors] = useState<GreenOcean_Color[]>([]);
+  const [colors, setColors] = useState<Color[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchKeyword, setSearchKeyword] = useState("");
   const [searchKeywordInput, setSearchKeywordInput] = useState("");
@@ -39,6 +40,8 @@ export default function Color() {
   const [selectedSetName, setSelectedSetName] = useState("");
   const [searchSetName, setSearchSetName] = useState("");
   const [searchOpen, setSearchOpen] = useState(false);
+  const [sortKey, setSortKey] = useState<SortKey>("numberAsc");
+
   //ＰＣかスマホ判定
   const isDesktop = useIsDesktop();
   //スマホ向けアコーディオン切り替えロジック
@@ -71,9 +74,7 @@ export default function Color() {
     const to = from + PAGE_SIZE - 1;
     let query = supabase
       .from("GreenOcean_Color")
-      .select("*", { count: "exact" })
-      .order("番号", { ascending: true })
-      .range(from, to);
+      .select("*", { count: "exact" });
 
     if (searchKeyword) {
       query = query.ilike("商品名", `%${searchKeyword}%`);
@@ -81,6 +82,22 @@ export default function Color() {
     if (searchSetName) {
       query = query.eq("セット名", searchSetName);
     }
+    switch (sortKey) {
+      case "numberAsc":
+        query = query.order("番号", { ascending: true });
+        break;
+      case "numberDsc":
+        query = query.order("番号", { ascending: false });
+        break;
+      case "codeAsc":
+        query = query.order("コード", { ascending: true });
+        break;
+      case "codeDsc":
+        query = query.order("コード", { ascending: false });
+        break;
+    }
+    query = query.range(from, to);
+
     const { data, error, count } = await query;
 
     if (error) {
@@ -94,7 +111,7 @@ export default function Color() {
     }
 
     setLoading(false);
-  }, [page, searchKeyword, searchSetName]);
+  }, [page, searchKeyword, searchSetName, sortKey]);
 
   useEffect(() => {
     fetchData();
@@ -112,6 +129,8 @@ export default function Color() {
   const handlePrev = () => {
     if (page > 0) setPage((prev) => prev - 1);
   };
+
+  const sortedColors = sortItems(colors, sortKey);
 
   // ロード中の表示
 
@@ -202,6 +221,7 @@ export default function Color() {
                   検索
                 </Text>
               </TouchableOpacity>
+              <SortSelector value={sortKey} onChange={setSortKey} />
             </View>
           )}
         </View>
@@ -212,6 +232,15 @@ export default function Color() {
             <View
               style={[tables.headerRow, isDesktop && desktopTables.headerRow]}
             >
+              <Text
+                style={[
+                  { width: "10%" },
+                  tables.headerCell,
+                  isDesktop && desktopTables.headerCell,
+                ]}
+              >
+                番号
+              </Text>
               <Text
                 style={[
                   { width: "25%" },
@@ -257,15 +286,29 @@ export default function Color() {
               >
                 セット名
               </Text>
+              <Text
+                style={[
+                  { width: "10%" },
+                  tables.headerCell,
+                  isDesktop && desktopTables.headerCell,
+                ]}
+              >
+                操作
+              </Text>
             </View>
-            {colors.map((item, index) => (
+            {sortedColors.map((item, index) => (
               <View
-                key={index}
+                key={item.コード ?? index}
                 style={[
                   tables.dataRow,
                   { backgroundColor: index % 2 === 0 ? "#fff" : "#eee" },
                 ]}
               >
+                <Text
+                  style={[tables.dataCell, isDesktop && desktopTables.dataCell]}
+                >
+                  {item.番号}
+                </Text>
                 <Text
                   style={[tables.dataCell, isDesktop && desktopTables.dataCell]}
                 >
@@ -291,6 +334,27 @@ export default function Color() {
                 >
                   {item.セット名}
                 </Text>
+                <View style={{ width: "10%", flexDirection: "row" }}>
+                  <QuickActions
+                    purchased={item.購入済み}
+                    onTogglePurchased={async () => {
+                      await togglePurchased(item.コード, !item.購入済み);
+                      setColors((prev) =>
+                        prev.map((c) =>
+                          c.コード === item.コード
+                            ? { ...c, 購入済み: !c.購入済み }
+                            : c
+                        )
+                      );
+                    }}
+                    onDelete={async () => {
+                      await deleteItem(item.コード);
+                      setColors((prev) =>
+                        prev.filter((c) => c.コード !== item.コード)
+                      );
+                    }}
+                  />
+                </View>
               </View>
             ))}
             <View style={styles.pagination}>
@@ -304,6 +368,7 @@ export default function Color() {
     </ScrollView>
   );
 }
+
 const styles = StyleSheet.create({
   title: {
     fontSize: 15,

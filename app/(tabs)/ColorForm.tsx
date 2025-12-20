@@ -78,7 +78,7 @@ const ColorForm = () => {
       return;
     }
     // コードの重複チェック
-    const { data: existing, error: existError } = await supabase
+    const { data: existing } = await supabase
 
       .from("Greenocean_Color")
       .select("*")

@@ -54,7 +54,7 @@ export default function ColorScreen() {
   useEffect(() => {
     const fetchSetNames = async () => {
       const { data, error } = await supabase
-        .from("GreenOcean_Color")
+        .from("GreenOcean_SetColor")
         .select("セット名");
 
       if (!error && data) {

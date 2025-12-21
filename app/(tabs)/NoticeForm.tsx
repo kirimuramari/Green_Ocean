@@ -1,6 +1,7 @@
 import { supabase } from "@/lib/supabaseClient";
 import { formStyles } from "@/theme/formStyles";
 import { flattenStyle } from "@/theme/layout";
+import { SnackbarType, getSnackbarStyle } from "@/theme/snackbarStyles";
 import { Notice } from "@/types/types";
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
@@ -14,27 +15,21 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import { Snackbar } from "react-native-paper";
 
 export default function NoticeForm() {
   const [notices, setNotices] = useState<Notice[]>([]);
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [loading, setLoading] = useState(false);
-  const [message, setMessage] = useState("");
+  const [snackbarVisible, setSnackbarVisible] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
+  const [snackbarType, setSnackbarType] = useState<SnackbarType>("success");
 
-  //一覧取得
-  const fetchNotices = async () => {
-    const { data, error } = await supabase
-      .from("notices")
-      .select("*")
-      .order("id", { ascending: true });
-
-    if (error) {
-      console.error(error);
-      setMessage("お知らせ一覧を取得できませんでした");
-    } else {
-      setNotices(data as Notice[]);
-    }
+  const showSnackbar = (msg: string, type: SnackbarType = "success") => {
+    setSnackbarMessage(msg);
+    setSnackbarType(type);
+    setSnackbarVisible(true);
   };
 
   const handleAddNotice = async () => {
@@ -43,12 +38,19 @@ export default function NoticeForm() {
     setLoading(false);
 
     if (error) {
-      setMessage("登録に失敗しました: " + error.message);
+      showSnackbar("登録に失敗しました: ", "error");
     } else {
-      setMessage("お知らせを登録しました");
+      showSnackbar("お知らせを登録しました", "success");
       setTitle("");
       setContent("");
-      fetchNotices();
+      // Fetch notices after adding
+      const { data } = await supabase
+        .from("notices")
+        .select("*")
+        .order("id", { ascending: true });
+      if (data) {
+        setNotices(data as Notice[]);
+      }
     }
   };
 
@@ -57,13 +59,29 @@ export default function NoticeForm() {
 
     if (error) {
       console.error(error);
-      setMessage("削除に失敗しました");
+      showSnackbar("削除に失敗しました", "error");
     } else {
       setNotices((prev) => prev.filter((n) => n.id !== id));
-      setMessage("お知らせを削除しました");
+      showSnackbar("お知らせを削除しました", "success");
     }
   };
+
   useEffect(() => {
+    //一覧取得
+    const fetchNotices = async () => {
+      const { data, error } = await supabase
+        .from("notices")
+        .select("*")
+        .order("id", { ascending: true });
+
+      if (error) {
+        console.error(error);
+        showSnackbar("お知らせ一覧を取得できませんでした", "error");
+      } else {
+        setNotices(data as Notice[]);
+      }
+    };
+
     fetchNotices();
   }, []);
   return (
@@ -78,7 +96,6 @@ export default function NoticeForm() {
           </TouchableOpacity>
           <Text style={formStyles.title}>お知らせ設定</Text>
         </View>
-        {message ? <Text style={formStyles.message}>{message}</Text> : null}
         <Text style={styles.label}>お知らせ追加</Text>
         <Text style={styles.label}>タイトル</Text>
         <TextInput
@@ -119,6 +136,14 @@ export default function NoticeForm() {
           />
         </View>
       </View>
+      <Snackbar
+        visible={snackbarVisible}
+        onDismiss={() => setSnackbarVisible(false)}
+        duration={3000}
+        style={getSnackbarStyle(snackbarType)}
+      >
+        {snackbarMessage}
+      </Snackbar>
     </ScrollView>
   );
 }

@@ -1,9 +1,12 @@
 import { supabase } from "@/lib/supabaseClient";
 import { formStyles } from "@/theme/formStyles";
+import { SnackbarType, getSnackbarStyle } from "@/theme/snackbarStyles";
 import { Color } from "@/types/types";
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import { useState } from "react";
+import { Snackbar } from "react-native-paper";
+
 import {
   ActivityIndicator,
   Alert,
@@ -33,17 +36,26 @@ export default function Edit() {
   const [form, setForm] = useState<Omit<Color, "番号">>(initialForm);
   const [loading, setLoading] = useState(false);
   const [updating, setUpdating] = useState(false);
-  const [message, setMessage] = useState<string>("");
+
+  const [snackbarVisible, setSnackbarVisible] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
+  const [snackbarType, setSnackbarType] = useState<SnackbarType>("success");
+
+  const showSnackbar = (msg: string, type: SnackbarType = "success") => {
+    setSnackbarMessage(msg);
+    setSnackbarType(type);
+    setSnackbarVisible(true);
+  };
 
   const handleSearch = async () => {
     if (!query.trim()) {
-      setMessage("検索ワードを入力してください。");
+      showSnackbar("検索ワードを入力してください。", "error");
       setSearchResults([]);
       setSelectedColor(null);
       return;
     }
     setLoading(true);
-    setMessage("");
+    showSnackbar("");
     try {
       const q = query.trim();
       const isNumeric = /^\d+$/.test(q); // ← 数値判定
@@ -84,24 +96,24 @@ export default function Edit() {
       }
 
       if (error) {
-        setMessage("検索中にエラーが発生しました。");
+        showSnackbar("検索中にエラーが発生しました。", "error");
         setSearchResults([]);
         setSelectedColor(null);
         return;
       }
       // 配列であることを厳密にチェックしてから長さを判定
       if (!data || data.length === 0) {
-        setMessage("データが存在しません。");
+        showSnackbar("データが存在しません。", "error");
         setSearchResults([]);
         setSelectedColor(null);
         return;
       }
       // 結果あり
       setSearchResults(data);
-      setMessage("");
+      showSnackbar("");
     } catch (e) {
       console.error("Unexpected error:", e);
-      setMessage("検索中にエラーが発生しました。");
+      showSnackbar("検索中にエラーが発生しました。", "error");
       setSearchResults([]);
       setSelectedColor(null);
     } finally {
@@ -112,7 +124,7 @@ export default function Edit() {
   const handleCancelEdit = () => {
     setSelectedColor(null);
     setForm(initialForm);
-    setMessage("");
+    showSnackbar("");
   };
 
   const handleDelete = () => {
@@ -132,11 +144,9 @@ export default function Edit() {
               .eq("番号", selectedColor.番号);
 
             if (error) {
-              Alert.alert("削除に失敗しました", error.message);
-              setMessage("削除に失敗しました");
+              showSnackbar("削除に失敗しました", "error");
             } else {
-              Alert.alert("削除が完了しました");
-              setMessage("削除が完了しました");
+              showSnackbar("削除が完了しました", "success");
               setSelectedColor(null);
               setForm(initialForm);
               setSearchResults((prev) =>
@@ -166,19 +176,16 @@ export default function Edit() {
   const handleUpdate = async () => {
     if (!selectedColor) return;
     if (!form.商品名.trim()) {
-      Alert.alert("商品名を入力してください");
-      setMessage("商品名を入力してください");
+      showSnackbar("商品名を入力してください", "error");
       return;
     }
     if (form.値段 !== null && isNaN(Number(form.値段))) {
-      Alert.alert("値段は数値で入力してください");
-      setMessage("値段は数値で入力してください");
+      showSnackbar("値段は数値で入力してください", "error");
 
       return;
     }
     if (!form.セット名.trim()) {
-      Alert.alert("セット名を入力してください");
-      setMessage("セット名を入力してください");
+      showSnackbar("セット名を選択してください", "error");
 
       return;
     }
@@ -192,11 +199,9 @@ export default function Edit() {
     setUpdating(false);
 
     if (error) {
-      Alert.alert("更新に失敗しました", error.message);
-      setMessage("更新に失敗しました");
+      showSnackbar("更新に失敗しました", "error");
     } else {
-      Alert.alert("更新が完了しました");
-      setMessage("更新が完了しました");
+      showSnackbar("更新が完了しました", "success");
     }
   };
 
@@ -304,10 +309,6 @@ export default function Edit() {
                 </View>
               </View>
             )}
-            {/* メッセージ表示 */}
-            <View style={styles.container}>
-              <Text style={formStyles.message}>{message}</Text>
-            </View>
 
             {searchResults.length > 0 && (
               <Text style={[styles.label, { marginTop: 24 }]}>
@@ -327,6 +328,15 @@ export default function Edit() {
           </TouchableOpacity>
         )}
       />
+      {/* メッセージ表示 */}
+      <Snackbar
+        visible={snackbarVisible}
+        onDismiss={() => setSnackbarVisible(false)}
+        duration={3000}
+        style={getSnackbarStyle(snackbarType)}
+      >
+        {snackbarMessage}
+      </Snackbar>
     </KeyboardAvoidingView>
   );
 }

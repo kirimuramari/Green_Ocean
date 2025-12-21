@@ -1,5 +1,6 @@
 import { supabase } from "@/lib/supabaseClient";
 import { formStyles } from "@/theme/formStyles";
+import { SnackbarType, getSnackbarStyle } from "@/theme/snackbarStyles";
 import { Color } from "@/types/types";
 import { Ionicons } from "@expo/vector-icons";
 import { Picker } from "@react-native-picker/picker";
@@ -27,9 +28,11 @@ const ColorForm = () => {
   const [setList, setSetList] = useState<string[]>([]);
   const [snackbarVisible, setSnackbarVisible] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
+  const [snackbarType, setSnackbarType] = useState<SnackbarType>("success");
 
-  const showSnackbar = (msg: string) => {
+  const showSnackbar = (msg: string, type: SnackbarType = "success") => {
     setSnackbarMessage(msg);
+    setSnackbarType(type);
     setSnackbarVisible(true);
   };
   const lastNumber = data?.[0]?.番号 ?? 0;
@@ -76,19 +79,19 @@ const ColorForm = () => {
     console.log("handleRegister called");
 
     if (isNaN(codeNumber)) {
-      showSnackbar("コードは数値で入力してください");
+      showSnackbar("コードは数値で入力してください", "error");
       return;
     }
     if (isNaN(priceNumber)) {
-      showSnackbar("値段は数値で入力してください");
+      showSnackbar("値段は数値で入力してください", "error");
       return;
     }
     if (!selectedSetName) {
-      showSnackbar("セット名を選択してください");
+      showSnackbar("セット名を選択してください", "error");
       return;
     }
     if (!name) {
-      showSnackbar("商品名を入力してください");
+      showSnackbar("商品名を入力してください", "error");
       return;
     }
 
@@ -99,7 +102,7 @@ const ColorForm = () => {
       .select("*")
       .eq("コード", codeNumber);
     if (existing && existing.length > 0) {
-      showSnackbar("このコードはすでに使用されています");
+      showSnackbar("このコードはすでに使用されています", "error");
       return;
     }
     console.log("コード:", code);
@@ -117,10 +120,10 @@ const ColorForm = () => {
     ]);
     if (error) {
       console.log("登録エラー:", error.message, error.details);
-      showSnackbar("登録失敗しました");
+      showSnackbar("登録失敗しました", "error");
     } else {
       console.log("登録成功");
-      showSnackbar("商品を追加しました");
+      showSnackbar("商品を追加しました", "success");
       // フォームクリアなど
       setCode("");
       setName("");
@@ -219,6 +222,7 @@ const ColorForm = () => {
         visible={snackbarVisible}
         onDismiss={() => setSnackbarVisible(false)}
         duration={3000}
+        style={getSnackbarStyle(snackbarType)}
       >
         {snackbarMessage}
       </Snackbar>

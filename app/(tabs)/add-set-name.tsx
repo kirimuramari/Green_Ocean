@@ -1,5 +1,8 @@
 import { supabase } from "@/lib/supabaseClient";
 import { Ionicons } from "@expo/vector-icons";
+import { Snackbar } from "react-native-paper";
+
+import { SnackbarType, getSnackbarStyle } from "@/theme/snackbarStyles";
 
 import { formStyles } from "@/theme/formStyles";
 import { SetColorItem } from "@/types/types";
@@ -18,8 +21,15 @@ const AddSetName = () => {
   const [furigana, setFurigana] = useState("");
   const [price, setPrice] = useState<string>("");
   const [lastNumber, setLastNumber] = useState<number>(0);
-  const [message, setMessage] = useState("");
+  const [snackbarVisible, setSnackbarVisible] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
+  const [snackbarType, setSnackbarType] = useState<SnackbarType>("success");
 
+  const showSnackbar = (msg: string, type: SnackbarType = "success") => {
+    setSnackbarMessage(msg);
+    setSnackbarType(type);
+    setSnackbarVisible(true);
+  };
   // 最大番号取得
   useEffect(() => {
     const fetchLastNumber = async () => {
@@ -43,7 +53,7 @@ const AddSetName = () => {
 
   const handleRegister = async () => {
     if (!setName.trim() || !furigana.trim()) {
-      setMessage("セット名とフリガナは必須項目です");
+      showSnackbar("セット名とフリガナは必須項目です", "error");
       return;
     }
     const newItem: Omit<SetColorItem, "コード"> = {
@@ -58,9 +68,9 @@ const AddSetName = () => {
       .insert(newItem);
     if (error) {
       console.error("登録エラー:", error.message);
-      setMessage("セット名の登録に失敗しました");
+      showSnackbar("セット名の登録に失敗しました", "error");
     } else {
-      setMessage("セット名が登録されました");
+      showSnackbar("セット名が登録されました", "success");
       setSetName("");
       setFurigana("");
       setPrice("");
@@ -112,7 +122,14 @@ const AddSetName = () => {
           </TouchableOpacity>
         </View>
       </View>
-      {message ? <Text style={formStyles.message}>{message}</Text> : null}
+      <Snackbar
+        visible={snackbarVisible}
+        onDismiss={() => setSnackbarVisible(false)}
+        duration={3000}
+        style={getSnackbarStyle(snackbarType)}
+      >
+        {snackbarMessage}
+      </Snackbar>
     </View>
   );
 };

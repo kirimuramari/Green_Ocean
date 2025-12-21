@@ -1,8 +1,7 @@
 import { supabase } from "@/lib/supabaseClient";
-import { Ionicons } from "@expo/vector-icons";
-
 import { formStyles } from "@/theme/formStyles";
 import { Color } from "@/types/types";
+import { Ionicons } from "@expo/vector-icons";
 import { Picker } from "@react-native-picker/picker";
 import { Link, router } from "expo-router";
 import { useEffect, useState } from "react";
@@ -15,6 +14,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import { Snackbar } from "react-native-paper";
 
 const ColorForm = () => {
   const [data, setData] = useState<Color[]>([]);
@@ -25,7 +25,13 @@ const ColorForm = () => {
   const [selectedSetName, setSelectedSetName] = useState<string>("");
   const [isPurchased, setIsPurchased] = useState<boolean>(false);
   const [setList, setSetList] = useState<string[]>([]);
-  const [message, setMessage] = useState("");
+  const [snackbarVisible, setSnackbarVisible] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
+
+  const showSnackbar = (msg: string) => {
+    setSnackbarMessage(msg);
+    setSnackbarVisible(true);
+  };
   const lastNumber = data?.[0]?.番号 ?? 0;
   const nextNumber = lastNumber + 1;
 
@@ -70,19 +76,19 @@ const ColorForm = () => {
     console.log("handleRegister called");
 
     if (isNaN(codeNumber)) {
-      setMessage("コードは数値で入力してください");
+      showSnackbar("コードは数値で入力してください");
       return;
     }
     if (isNaN(priceNumber)) {
-      setMessage("値段は数値で入力してください");
+      showSnackbar("値段は数値で入力してください");
       return;
     }
     if (!selectedSetName) {
-      setMessage("セット名を選択してください");
+      showSnackbar("セット名を選択してください");
       return;
     }
     if (!name) {
-      setMessage("商品名を入力してください");
+      showSnackbar("商品名を入力してください");
       return;
     }
 
@@ -93,7 +99,7 @@ const ColorForm = () => {
       .select("*")
       .eq("コード", codeNumber);
     if (existing && existing.length > 0) {
-      setMessage("このコードはすでに使用されています");
+      showSnackbar("このコードはすでに使用されています");
       return;
     }
     console.log("コード:", code);
@@ -111,10 +117,10 @@ const ColorForm = () => {
     ]);
     if (error) {
       console.log("登録エラー:", error.message, error.details);
-      setMessage("登録失敗しました");
+      showSnackbar("登録失敗しました");
     } else {
       console.log("登録成功");
-      setMessage("商品を追加しました");
+      showSnackbar("商品を追加しました");
       // フォームクリアなど
       setCode("");
       setName("");
@@ -126,86 +132,97 @@ const ColorForm = () => {
   };
 
   return (
-    <ScrollView
-      contentContainerStyle={(styles.container, formStyles.container)}
-    >
-      <View style={formStyles.subContainer}>
-        <View style={formStyles.header}>
-          <TouchableOpacity
-            onPress={() => router.replace("/")}
-            style={formStyles.arrowButton}
-          >
-            <Ionicons name="arrow-back" size={24} />
-          </TouchableOpacity>
-          <Text style={formStyles.title}>新規商品登録</Text>
-        </View>
-        <Text style={styles.label}>番号: {nextNumber}</Text>
-        <Text>コード</Text>
-        <TextInput
-          value={code}
-          onChangeText={setCode}
-          keyboardType="numeric"
-          placeholder="コードを入力"
-          style={formStyles.input}
-        />
+    <View>
+      <ScrollView
+        contentContainerStyle={(styles.container, formStyles.container)}
+      >
+        <View style={formStyles.subContainer}>
+          <View style={formStyles.header}>
+            <TouchableOpacity
+              onPress={() => router.replace("/")}
+              style={formStyles.arrowButton}
+            >
+              <Ionicons name="arrow-back" size={24} />
+            </TouchableOpacity>
+            <Text style={formStyles.title}>新規商品登録</Text>
+          </View>
+          <Text style={styles.label}>番号: {nextNumber}</Text>
+          <Text>コード</Text>
+          <TextInput
+            value={code}
+            onChangeText={setCode}
+            keyboardType="numeric"
+            placeholder="コードを入力"
+            style={formStyles.input}
+          />
 
-        <Text>商品名</Text>
-        <TextInput
-          value={name}
-          onChangeText={setName}
-          style={formStyles.input}
-        />
-        <Text style={styles.label}>フリガナ</Text>
-        <TextInput
-          value={furigana}
-          onChangeText={setFurigana}
-          style={formStyles.input}
-        />
-        <Text style={styles.label}>値段</Text>
-        <TextInput
-          value={price}
-          onChangeText={setPrice}
-          keyboardType="numeric"
-          style={formStyles.input}
-        />
+          <Text>商品名</Text>
+          <TextInput
+            value={name}
+            onChangeText={setName}
+            style={formStyles.input}
+          />
+          <Text style={styles.label}>フリガナ</Text>
+          <TextInput
+            value={furigana}
+            onChangeText={setFurigana}
+            style={formStyles.input}
+          />
+          <Text style={styles.label}>値段</Text>
+          <TextInput
+            value={price}
+            onChangeText={setPrice}
+            keyboardType="numeric"
+            style={formStyles.input}
+          />
 
-        <Text style={styles.label}>セット名</Text>
-        <Picker
-          selectedValue={selectedSetName}
-          onValueChange={(itemValue: string) => setSelectedSetName(itemValue)}
-          style={formStyles.picker}
-        >
-          <Picker.Item label="選択してください" value="" />
-          {setList.map((name) => (
-            <Picker.Item key={name} label={name} value={name} />
-          ))}
-        </Picker>
-        <View style={{ marginTop: 8 }}>
-          <Text>
-            登録したいセット名がない場合は{" "}
-            <Link href="/register/add-set-name" asChild>
-              <Text style={{ color: "blue" }}>コチラ</Text>
-            </Link>
-          </Text>
-        </View>
-        <View style={styles.switchContainer}>
-          <Text style={styles.label}>購入済み</Text>
-          <Switch value={isPurchased} onValueChange={setIsPurchased} />
-        </View>
-        <View style={formStyles.buttonRow}>
-          <TouchableOpacity onPress={handleRegister} style={formStyles.button}>
-            <Text style={formStyles.buttonText}>登録する</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => router.replace("/")}
-            style={[formStyles.cancelButton, formStyles.halfButton]}
+          <Text style={styles.label}>セット名</Text>
+          <Picker
+            selectedValue={selectedSetName}
+            onValueChange={(itemValue: string) => setSelectedSetName(itemValue)}
+            style={formStyles.picker}
           >
-            <Text style={formStyles.cancelButtonText}>キャンセル</Text>
-          </TouchableOpacity>
+            <Picker.Item label="選択してください" value="" />
+            {setList.map((name) => (
+              <Picker.Item key={name} label={name} value={name} />
+            ))}
+          </Picker>
+          <View style={{ marginTop: 8 }}>
+            <Text>
+              登録したいセット名がない場合は{" "}
+              <Link href="/register/add-set-name" asChild>
+                <Text style={{ color: "blue" }}>コチラ</Text>
+              </Link>
+            </Text>
+          </View>
+          <View style={styles.switchContainer}>
+            <Text style={styles.label}>購入済み</Text>
+            <Switch value={isPurchased} onValueChange={setIsPurchased} />
+          </View>
+          <View style={formStyles.buttonRow}>
+            <TouchableOpacity
+              onPress={handleRegister}
+              style={formStyles.button}
+            >
+              <Text style={formStyles.buttonText}>登録する</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => router.replace("/")}
+              style={[formStyles.cancelButton, formStyles.halfButton]}
+            >
+              <Text style={formStyles.cancelButtonText}>キャンセル</Text>
+            </TouchableOpacity>
+          </View>
         </View>
-        {message ? <Text style={formStyles.message}>{message}</Text> : null}
-      </View>
-    </ScrollView>
+      </ScrollView>
+      <Snackbar
+        visible={snackbarVisible}
+        onDismiss={() => setSnackbarVisible(false)}
+        duration={3000}
+      >
+        {snackbarMessage}
+      </Snackbar>
+    </View>
   );
 };
 const styles = StyleSheet.create({

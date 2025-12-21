@@ -77,10 +77,19 @@ const ColorForm = () => {
       setMessage("値段は数値で入力してください");
       return;
     }
+    if (!selectedSetName) {
+      setMessage("セット名を選択してください");
+      return;
+    }
+    if (!name) {
+      setMessage("商品名を入力してください");
+      return;
+    }
+
     // コードの重複チェック
     const { data: existing } = await supabase
 
-      .from("Greenocean_Color")
+      .from("GreenOcean_Color")
       .select("*")
       .eq("コード", codeNumber);
     if (existing && existing.length > 0) {
@@ -96,7 +105,7 @@ const ColorForm = () => {
         商品名: name,
         フリガナ: furigana,
         値段: Number(price),
-        セット名: setName,
+        セット名: selectedSetName,
         購入済み: isPurchased,
       },
     ]);

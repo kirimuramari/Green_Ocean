@@ -15,6 +15,6 @@ export interface SetColorItem {
 }
 export interface Notice {
   id: number;
-  title:string;
+  title: string;
   created_at: string;
 }

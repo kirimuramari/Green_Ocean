@@ -1,3 +1,4 @@
+//操作ボタン
 import { IconButton } from "react-native-paper";
 
 type Props = {

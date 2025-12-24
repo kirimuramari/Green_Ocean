@@ -5,7 +5,10 @@ export type SortKey =
   | "codeDsc"
   | "PriceAsc"
   | "priceDsc"
-  | "nameAsc";
+  | "nameAsc"
+  | "nameDsc"
+  | "setNameAsc"
+  | "setNameDsc";
 
 export const SORT_LABEL: Record<SortKey, string> = {
   numberAsc: "番号(昇順)",
@@ -15,4 +18,7 @@ export const SORT_LABEL: Record<SortKey, string> = {
   PriceAsc: "価格(昇順)",
   priceDsc: "価格(降順)",
   nameAsc: "商品名(50音順)",
+  nameDsc: "商品名(逆50音順)",
+  setNameAsc: "セット名(50音順)",
+  setNameDsc: "セット名(逆50音順)",
 };

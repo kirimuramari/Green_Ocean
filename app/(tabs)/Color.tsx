@@ -1,18 +1,21 @@
-import { supabase } from "@/lib/supabaseClient";
-import { Color } from "@/types/types";
-import { Ionicons } from "@expo/vector-icons";
+import { AppSnackbar } from "@/components/common/AppSnackbar";
 
+import { DeleteConfirmDialog } from "@/components/common/DeleteConfirmDialog";
 import { QuickActions } from "@/components/common/QuickAction";
 import { SortSelector } from "@/components/common/SortSelector";
 import {
-  deleteItem,
+  deleteColor,
   togglePurchased,
 } from "@/features/itemActions/itemActions";
 import { sortItems } from "@/features/sort/sortItems";
 import { SortKey } from "@/features/sort/sortTypes";
+import { supabase } from "@/lib/supabaseClient";
 import { desktopFormStyles, formStyles } from "@/theme/formStyles";
+import { SnackbarType } from "@/theme/snackbarStyles";
 import { desktopTables, tables } from "@/theme/tables";
 import { useIsDesktop } from "@/theme/useIsDesktop";
+import { Color } from "@/types/types";
+import { Ionicons } from "@expo/vector-icons";
 import { Picker } from "@react-native-picker/picker";
 import { router } from "expo-router";
 import { useCallback, useEffect, useState } from "react";
@@ -41,7 +44,17 @@ export default function ColorScreen() {
   const [searchSetName, setSearchSetName] = useState("");
   const [searchOpen, setSearchOpen] = useState(false);
   const [sortKey, setSortKey] = useState<SortKey>("numberAsc");
+  const [deleteTarget, setDeleteTarget] = useState<Color | null>(null);
 
+  const [snackbarVisible, setSnackbarVisible] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
+  const [snackbarType, setSnackbarType] = useState<SnackbarType>("success");
+
+  const showSnackbar = (msg: string, type: SnackbarType = "success") => {
+    setSnackbarMessage(msg);
+    setSnackbarType(type);
+    setSnackbarVisible(true);
+  };
   //ＰＣかスマホ判定
   const isDesktop = useIsDesktop();
   //スマホ向けアコーディオン切り替えロジック
@@ -347,11 +360,30 @@ export default function ColorScreen() {
                         )
                       );
                     }}
-                    onDelete={async () => {
-                      await deleteItem(item.コード);
-                      setColors((prev) =>
-                        prev.filter((c) => c.コード !== item.コード)
-                      );
+                    onDelete={() => setDeleteTarget(item)}
+                  />
+                  <DeleteConfirmDialog
+                    visible={!!deleteTarget}
+                    onCancel={() => setDeleteTarget(null)}
+                    onConfirm={async () => {
+                      if (!deleteTarget) return;
+                      try {
+                        await deleteColor(deleteTarget.コード);
+                        setColors((prev) =>
+                          prev.filter(
+                            (item) => item.コード !== deleteTarget.コード
+                          )
+                        );
+                        setSnackbarMessage("データを削除しました。");
+                        setSnackbarVisible(true);
+                      } catch (e) {
+                        console.error(e);
+
+                        setSnackbarMessage("削除に失敗しました。");
+                        setSnackbarVisible(true);
+                      } finally {
+                        setDeleteTarget(null);
+                      }
                     }}
                   />
                 </View>
@@ -365,6 +397,11 @@ export default function ColorScreen() {
           </View>
         </View>
       </View>
+      <AppSnackbar
+        visible={snackbarVisible}
+        message={snackbarMessage}
+        onDismiss={() => setSnackbarVisible(false)}
+      />
     </ScrollView>
   );
 }

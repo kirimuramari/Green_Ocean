@@ -1,97 +1,103 @@
+import { ColorFormView } from "@/components/common/ColorFormView";
+import { validateColorForm } from "@/features/form/validateColorForm";
 import { supabase } from "@/lib/supabaseClient";
 import { formStyles } from "@/theme/formStyles";
 import { SnackbarType, getSnackbarStyle } from "@/theme/snackbarStyles";
-import { Color } from "@/types/types";
+import { Colorform } from "@/types/types";
+
 import { Ionicons } from "@expo/vector-icons";
-import { Picker } from "@react-native-picker/picker";
-import { Link, router } from "expo-router";
+import { router } from "expo-router";
 import { useEffect, useState } from "react";
 import {
   ScrollView,
   StyleSheet,
-  Switch,
   Text,
-  TextInput,
   TouchableOpacity,
   View,
 } from "react-native";
 import { Snackbar } from "react-native-paper";
 
 const ColorForm = () => {
-  const [data, setData] = useState<Color[]>([]);
-  const [code, setCode] = useState<string>("");
-  const [name, setName] = useState<string>("");
-  const [furigana, setFurigana] = useState<string>("");
-  const [price, setPrice] = useState<string>("");
-  const [selectedSetName, setSelectedSetName] = useState<string>("");
-  const [isPurchased, setIsPurchased] = useState<boolean>(false);
   const [setList, setSetList] = useState<string[]>([]);
   const [snackbarVisible, setSnackbarVisible] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
   const [snackbarType, setSnackbarType] = useState<SnackbarType>("success");
+  const [nextNumber, setNextNumber] = useState<number>(1);
+
+  const [form, setForm] = useState<Colorform>({
+    コード: "",
+    商品名: "",
+    フリガナ: "",
+    値段: null,
+    セット名: "",
+    購入済み: false,
+  });
 
   const showSnackbar = (msg: string, type: SnackbarType = "success") => {
     setSnackbarMessage(msg);
     setSnackbarType(type);
     setSnackbarVisible(true);
   };
-  const lastNumber = data?.[0]?.番号 ?? 0;
-  const nextNumber = lastNumber + 1;
 
+  const handleChange = <K extends keyof Colorform>(
+    key: K,
+    value: Colorform[K]
+  ) => {
+    setForm((prev) => ({
+      ...prev,
+      [key]: value,
+    }));
+  };
+  // 番号の取得（連番）
   useEffect(() => {
-    // 番号の取得（連番）
     const fetchData = async () => {
-      const { data: colorData, error } = await supabase
+      const { data: colorData } = (await supabase
         .from("GreenOcean_Color")
-        .select("*")
-        .order("番号", { ascending: false });
-      if (error) {
-        console.error("データ取得エラー:", error.message);
-      } else {
-        setData(colorData as Color[]);
-      }
-      const { data: setNameData, error: setError } = await supabase
-        .from("GreenOcean_SetColor")
-        .select("セット名");
-      if (setError) {
-        console.error("セット名取得エラー:", setError.message);
-      } else {
-        const names = Array.from(
-          new Set((setNameData ?? []).map((item: any) => item.セット名))
-        );
-        setSetList(names);
+        .select("番号")
+        .order("番号", { ascending: false })
+        .limit(1)) as { data: { 番号: number }[] | null };
+      if (colorData && colorData.length > 0) {
+        setNextNumber(colorData[0].番号 + 1);
       }
     };
+    //セット名取得
+    const fetchSetList = async () => {
+      const { data, error } = await supabase
+        .from("GreenOcean_SetColor")
+        .select("セット名")
+        .returns<{ セット名: string | null }[]>();
+      if (error) {
+        console.error(error);
+        return;
+      }
+      const list = Array.from(
+        new Set(
+          data
+            .map((item) => item.セット名)
+            .filter((name): name is string => !!name)
+        )
+      );
+      setSetList(list);
+    };
     fetchData();
+    fetchSetList();
   }, []);
 
   // 商品名がカタカナだけなら nameKana にコピー
   useEffect(() => {
-    if (/^[\u30A0-\u30FFー\s ]+$/.test(name)) {
-      setFurigana(name);
+    if (/^[\u30A0-\u30FFー\s ]+$/.test(form.商品名)) {
+      setForm((prev) => ({
+        ...prev,
+        フリガナ: prev.商品名,
+      }));
     }
-  }, [name]);
+  }, [form.商品名]);
 
   const handleRegister = async () => {
-    const codeNumber = Number(code);
-    const priceNumber = Number(price);
+    const errorMessage = validateColorForm(form);
+    if (errorMessage) {
+      showSnackbar(errorMessage, "error");
 
-    console.log("handleRegister called");
-
-    if (isNaN(codeNumber)) {
-      showSnackbar("コードは数値で入力してください", "error");
-      return;
-    }
-    if (isNaN(priceNumber)) {
-      showSnackbar("値段は数値で入力してください", "error");
-      return;
-    }
-    if (!selectedSetName) {
-      showSnackbar("セット名を選択してください", "error");
-      return;
-    }
-    if (!name) {
-      showSnackbar("商品名を入力してください", "error");
       return;
     }
 
@@ -99,23 +105,22 @@ const ColorForm = () => {
     const { data: existing } = await supabase
 
       .from("GreenOcean_Color")
-      .select("*")
-      .eq("コード", codeNumber);
+      .select("コード")
+      .eq("コード", Number(form.コード));
     if (existing && existing.length > 0) {
       showSnackbar("このコードはすでに使用されています", "error");
       return;
     }
-    console.log("コード:", code);
+    console.log("コード:", form.コード);
     console.log("Supabaseに問い合わせます");
     const { error } = await supabase.from("GreenOcean_Color").insert([
       {
-        番号: nextNumber,
-        コード: Number(code),
-        商品名: name,
-        フリガナ: furigana,
-        値段: Number(price),
-        セット名: selectedSetName,
-        購入済み: isPurchased,
+        コード: Number(form.コード),
+        商品名: form.商品名,
+        フリガナ: form.フリガナ,
+        値段: form.値段,
+        セット名: form.セット名,
+        購入済み: form.購入済み,
       },
     ]);
     if (error) {
@@ -125,12 +130,14 @@ const ColorForm = () => {
       console.log("登録成功");
       showSnackbar("商品を追加しました", "success");
       // フォームクリアなど
-      setCode("");
-      setName("");
-      setFurigana("");
-      setPrice("");
-      setSelectedSetName("");
-      setIsPurchased(false);
+      setForm({
+        コード: "",
+        商品名: "",
+        フリガナ: "",
+        値段: null,
+        セット名: "",
+        購入済み: false,
+      });
     }
   };
 
@@ -149,59 +156,13 @@ const ColorForm = () => {
             </TouchableOpacity>
             <Text style={formStyles.title}>新規商品登録</Text>
           </View>
-          <Text style={styles.label}>番号: {nextNumber}</Text>
-          <Text>コード</Text>
-          <TextInput
-            value={code}
-            onChangeText={setCode}
-            keyboardType="numeric"
-            placeholder="コードを入力"
-            style={formStyles.input}
+          <ColorFormView
+            form={form}
+            onChange={handleChange}
+            setList={setList}
+            mode="create"
+            readonlyNumber={nextNumber}
           />
-
-          <Text>商品名</Text>
-          <TextInput
-            value={name}
-            onChangeText={setName}
-            style={formStyles.input}
-          />
-          <Text style={styles.label}>フリガナ</Text>
-          <TextInput
-            value={furigana}
-            onChangeText={setFurigana}
-            style={formStyles.input}
-          />
-          <Text style={styles.label}>値段</Text>
-          <TextInput
-            value={price}
-            onChangeText={setPrice}
-            keyboardType="numeric"
-            style={formStyles.input}
-          />
-
-          <Text style={styles.label}>セット名</Text>
-          <Picker
-            selectedValue={selectedSetName}
-            onValueChange={(itemValue: string) => setSelectedSetName(itemValue)}
-            style={formStyles.picker}
-          >
-            <Picker.Item label="選択してください" value="" />
-            {setList.map((name) => (
-              <Picker.Item key={name} label={name} value={name} />
-            ))}
-          </Picker>
-          <View style={{ marginTop: 8 }}>
-            <Text>
-              登録したいセット名がない場合は{" "}
-              <Link href="/register/add-set-name" asChild>
-                <Text style={{ color: "blue" }}>コチラ</Text>
-              </Link>
-            </Text>
-          </View>
-          <View style={styles.switchContainer}>
-            <Text style={styles.label}>購入済み</Text>
-            <Switch value={isPurchased} onValueChange={setIsPurchased} />
-          </View>
           <View style={formStyles.buttonRow}>
             <TouchableOpacity
               onPress={handleRegister}

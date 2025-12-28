@@ -1,3 +1,5 @@
+import { DeleteConfirmDialog } from "@/components/common/DeleteConfirmDialog";
+import { deleteNotice } from "@/features/itemActions/itemActions";
 import { supabase } from "@/lib/supabaseClient";
 import { formStyles } from "@/theme/formStyles";
 import { flattenStyle } from "@/theme/layout";
@@ -6,6 +8,7 @@ import { Notice } from "@/types/types";
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import { useEffect, useState } from "react";
+
 import {
   FlatList,
   ScrollView,
@@ -25,6 +28,7 @@ export default function NoticeForm() {
   const [snackbarVisible, setSnackbarVisible] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
   const [snackbarType, setSnackbarType] = useState<SnackbarType>("success");
+  const [deleteTarget, setDeleteTarget] = useState<Notice | null>(null);
 
   const showSnackbar = (msg: string, type: SnackbarType = "success") => {
     setSnackbarMessage(msg);
@@ -130,6 +134,28 @@ export default function NoticeForm() {
                   style={formStyles.NoticeDeleteButton}
                 >
                   <Text style={formStyles.buttonText}>削除</Text>
+                  <DeleteConfirmDialog
+                    visible={!!deleteTarget}
+                    onCancel={() => setDeleteTarget(null)}
+                    onConfirm={async () => {
+                      if (!deleteTarget) return;
+                      try {
+                        await deleteNotice(deleteTarget.id);
+                        setNotices((prev) =>
+                          prev.filter((item) => item.id !== deleteTarget.id)
+                        );
+                        setSnackbarMessage("お知らせを削除しました。");
+                        setSnackbarVisible(true);
+                      } catch (e) {
+                        console.error(e);
+
+                        setSnackbarMessage("削除に失敗しました。");
+                        setSnackbarVisible(true);
+                      } finally {
+                        setDeleteTarget(null);
+                      }
+                    }}
+                  />
                 </TouchableOpacity>
               </View>
             )}

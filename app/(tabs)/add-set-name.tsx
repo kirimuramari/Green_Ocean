@@ -56,8 +56,7 @@ const AddSetName = () => {
       showSnackbar("セット名とフリガナは必須項目です", "error");
       return;
     }
-    const newItem: Omit<SetColorItem, "コード"> = {
-      番号: lastNumber + 1,
+    const newItem: Omit<SetColorItem, "番号" | "コード"> = {
       セット名: setName,
       フリガナ: furigana,
       値段: price.trim() ? Number(price) : 0,

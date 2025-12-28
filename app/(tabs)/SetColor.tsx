@@ -1,25 +1,20 @@
 import { AppSnackbar } from "@/components/common/AppSnackbar";
 import { DeleteConfirmDialog } from "@/components/common/DeleteConfirmDialog";
 import { SortSelector } from "@/components/common/SortSelector";
+import { ListStatus } from "@/components/ListStatus";
 import { deleteSetColor } from "@/features/itemActions/itemActions";
 import { sortItems } from "@/features/sort/sortItems";
 import { SortKey } from "@/features/sort/sortTypes";
 import { supabase } from "@/lib/supabaseClient";
 import { formStyles } from "@/theme/formStyles";
+import { SnackbarType } from "@/theme/snackbarStyles";
 import { tables } from "@/theme/tables";
 import { SetColorItem } from "@/types/types";
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import { useEffect, useState } from "react";
-import {
-  ActivityIndicator,
-  ScrollView,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { ScrollView, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-
 export default function SetColor() {
   const [data, setData] = useState<SetColorItem[]>([]);
   const [loading, setLoading] = useState(true);
@@ -36,7 +31,13 @@ export default function SetColor() {
   const [deleteTarget, setDeleteTarget] = useState<SetColorItem | null>(null);
   const [snackbarVisible, setSnackbarVisible] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
+  const [snackbarType, setSnackbarType] = useState<SnackbarType>("success");
 
+  const showSnackbar = (msg: string, type: SnackbarType = "success") => {
+    setSnackbarMessage(msg);
+    setSnackbarType(type);
+    setSnackbarVisible(true);
+  };
   useEffect(() => {
     (async () => {
       const { data, error } = await supabase
@@ -53,23 +54,13 @@ export default function SetColor() {
 
   const sortedColors = sortItems(data, sortKey);
 
-  if (loading) {
-    return (
-      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-        <ActivityIndicator size="large" />
-        <Text>読み込み中...</Text>
-      </View>
-    );
-  }
-  if (data.length === 0) {
-    return (
-      <View style={{ padding: 20 }}>
-        <Text>データが存在しません。</Text>
-      </View>
-    );
-  }
   return (
     <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+      <ListStatus
+        loading={loading}
+        hasData={setData.length > 0}
+        emptyMessage="セット品が登録されていません。"
+      />
       <SafeAreaView style={formStyles.container}>
         <View style={formStyles.header}>
           <TouchableOpacity
@@ -120,10 +111,10 @@ export default function SetColor() {
             setData((prev) =>
               prev.filter((item) => item.番号 !== deleteTarget.番号)
             );
-            setSnackbarMessage("セット品を削除しました。");
+            showSnackbar("セット品を削除しました。", "success");
             setSnackbarVisible(true);
           } catch {
-            setSnackbarMessage("削除に失敗しました。");
+            showSnackbar("削除に失敗しました。", "error");
             setSnackbarVisible(true);
           } finally {
             setDeleteTarget(null);

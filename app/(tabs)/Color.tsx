@@ -1,8 +1,8 @@
 import { AppSnackbar } from "@/components/common/AppSnackbar";
-
 import { DeleteConfirmDialog } from "@/components/common/DeleteConfirmDialog";
 import { QuickActions } from "@/components/common/QuickAction";
 import { SortSelector } from "@/components/common/SortSelector";
+import { ListStatus } from "@/components/ListStatus";
 import {
   deleteColor,
   togglePurchased,
@@ -20,7 +20,6 @@ import { Picker } from "@react-native-picker/picker";
 import { router } from "expo-router";
 import { useCallback, useEffect, useState } from "react";
 import {
-  ActivityIndicator,
   Button,
   ScrollView,
   StyleSheet,
@@ -147,26 +146,14 @@ export default function ColorScreen() {
 
   // ロード中の表示
 
-  if (loading) {
-    return (
-      <View style={formStyles.container}>
-        <ActivityIndicator size="large" />
-        <Text>読み込み中...</Text>
-      </View>
-    );
-  }
-  if (error) {
-    return (
-      <View style={formStyles.container}>
-        <Text style={{ color: "red" }}>エラー:{error}</Text>
-      </View>
-    );
-  }
-  if (!colors || colors.length === 0) {
-    return <Text>データが存在しません</Text>;
-  }
   return (
     <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+      <ListStatus
+        loading={loading}
+        error={error}
+        hasData={!!colors && colors.length > 0}
+        emptyMessage="該当する商品がありません"
+      />
       <View
         style={[
           { width: "100%", backgroundColor: "#fff" },

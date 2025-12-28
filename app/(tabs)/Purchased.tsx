@@ -5,7 +5,6 @@ import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import { useEffect, useState } from "react";
 import {
-  ActivityIndicator,
   FlatList,
   ScrollView,
   Text,
@@ -13,6 +12,8 @@ import {
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+
+import { ListStatus } from "@/components/ListStatus";
 
 export default function Purchased() {
   interface Item {
@@ -26,6 +27,7 @@ export default function Purchased() {
 
   const [data, setData] = useState<Item[]>([]);
   const [loading, setLoading] = useState(true);
+
   useEffect(() => {
     (async () => {
       // 該当商品データを取得
@@ -43,24 +45,13 @@ export default function Purchased() {
     })();
   }, []);
 
-  if (loading) {
-    return (
-      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-        <ActivityIndicator size="large" />
-        <Text>読み込み中...</Text>
-      </View>
-    );
-  }
-
-  if (data.length === 0) {
-    return (
-      <View style={{ padding: 20 }}>
-        <Text>購入済みの商品はありません。</Text>
-      </View>
-    );
-  }
   return (
     <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+      <ListStatus
+        loading={loading}
+        hasData={setData.length > 0}
+        emptyMessage="購入品がありません。"
+      />
       <SafeAreaView style={formStyles.container}>
         <View style={formStyles.header}>
           <TouchableOpacity

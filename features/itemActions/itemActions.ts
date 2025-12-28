@@ -18,3 +18,11 @@ export async function deleteSetColor(id: number) {
     keyValue: id,
   });
 }
+
+export async function deleteNotice(id: number) {
+  await deleteItem({
+    table: "notices",
+    keyName: "id",
+    keyValue: id,
+  });
+}

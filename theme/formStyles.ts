@@ -105,6 +105,16 @@ export const formStyles = StyleSheet.create({
     marginTop: 5,
     marginRight: 4,
   },
+  label: {
+    color: "#434656",
+
+    fontSize: 16,
+  },
+  switchContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+  },
 });
 
 //デスクトップスタイル

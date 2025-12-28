@@ -1,52 +1,77 @@
+import { validateColorForm } from "@/features/form/validateColorForm";
 import { supabase } from "@/lib/supabaseClient";
 import { formStyles } from "@/theme/formStyles";
 import { SnackbarType, getSnackbarStyle } from "@/theme/snackbarStyles";
-import { Color } from "@/types/types";
+import { Color, Colorform } from "@/types/types";
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Snackbar } from "react-native-paper";
 
+import { ColorFormView } from "@/components/common/ColorFormView";
 import {
   ActivityIndicator,
-  Alert,
   FlatList,
   KeyboardAvoidingView,
   Platform,
   StyleSheet,
-  Switch,
   Text,
   TextInput,
   TouchableOpacity,
   View,
 } from "react-native";
 
-const initialForm: Omit<Color, "番号"> = {
-  コード: 0,
-  商品名: "",
-  フリガナ: "",
-  値段: 0,
-  セット名: "",
-  購入済み: false,
-};
 export default function Edit() {
   const [query, setQuery] = useState("");
   const [searchResults, setSearchResults] = useState<Color[]>([]);
   const [selectedColor, setSelectedColor] = useState<Color | null>(null);
-  const [form, setForm] = useState<Omit<Color, "番号">>(initialForm);
   const [loading, setLoading] = useState(false);
   const [updating, setUpdating] = useState(false);
+  const [setList, setSetList] = useState<string[]>([]);
 
   const [snackbarVisible, setSnackbarVisible] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
   const [snackbarType, setSnackbarType] = useState<SnackbarType>("success");
+
+  const initaialForm: Colorform = {
+    コード: "",
+    商品名: "",
+    フリガナ: "",
+    値段: null,
+    セット名: "",
+    購入済み: false,
+  };
+  const [form, setForm] = useState<Colorform>(initaialForm);
 
   const showSnackbar = (msg: string, type: SnackbarType = "success") => {
     setSnackbarMessage(msg);
     setSnackbarType(type);
     setSnackbarVisible(true);
   };
+  //セット名取得
+  useEffect(() => {
+    const fetchSetList = async () => {
+      const { data, error } = await supabase
+        .from("GreenOcean_SetColor")
+        .select("セット名")
+        .returns<{ セット名: string | null }[]>();
+      if (error) {
+        console.error(error);
+        return;
+      }
+      const list = Array.from(
+        new Set(
+          data
+            .map((item) => item.セット名)
+            .filter((name): name is string => !!name)
+        )
+      );
+      setSetList(list);
+    };
 
+    fetchSetList();
+  }, []);
+  //検索
   const handleSearch = async () => {
     if (!query.trim()) {
       showSnackbar("検索ワードを入力してください。", "error");
@@ -55,108 +80,34 @@ export default function Edit() {
       return;
     }
     setLoading(true);
-    showSnackbar("");
+
     try {
       const q = query.trim();
       const isNumeric = /^\d+$/.test(q); // ← 数値判定
-      const ilikePattern = `%${q}%`;
-
-      let data: Color[] | null = null;
-      let error: any = null;
 
       // まずコード完全一致を検索
-      if (isNumeric) {
-        const res = await supabase
-          .from("GreenOcean_Color")
-          .select("*")
-          .eq("コード", Number(q))
-          .order("番号", { ascending: true });
-
-        data = res.data;
-        error = res.error;
-        // コードでヒットしなかったら商品名検索に切り替え
-        if ((!data || data.length === 0) && !error) {
-          const res2 = await supabase
+      const { data, error } = isNumeric
+        ? await supabase
             .from("GreenOcean_Color")
             .select("*")
-            .ilike("商品名", ilikePattern)
-            .order("番号", { ascending: true });
-          data = res2.data;
-          error = res2.error;
-        }
-      } else {
-        // 商品名のみ検索
-        const res = await supabase
-          .from("GreenOcean_Color")
-          .select("*")
-          .ilike("商品名", ilikePattern)
-          .order("番号", { ascending: true });
-        data = res.data;
-        error = res.error;
-      }
+            .eq("コード", Number(q))
+        : // コードでヒットしなかったら商品名検索に切り替え
+          await supabase
+            .from("GreenOcean_Color")
+            .select("*")
+            .ilike("商品名", `%${q}%`);
 
-      if (error) {
-        showSnackbar("検索中にエラーが発生しました。", "error");
-        setSearchResults([]);
-        setSelectedColor(null);
-        return;
-      }
-      // 配列であることを厳密にチェックしてから長さを判定
-      if (!data || data.length === 0) {
-        showSnackbar("データが存在しません。", "error");
+      if (error || !data || data.length === 0) {
+        showSnackbar("データが見つかりません", "error");
         setSearchResults([]);
         setSelectedColor(null);
         return;
       }
       // 結果あり
       setSearchResults(data);
-      showSnackbar("");
-    } catch (e) {
-      console.error("Unexpected error:", e);
-      showSnackbar("検索中にエラーが発生しました。", "error");
-      setSearchResults([]);
-      setSelectedColor(null);
     } finally {
       setLoading(false);
     }
-  };
-
-  const handleCancelEdit = () => {
-    setSelectedColor(null);
-    setForm(initialForm);
-    showSnackbar("");
-  };
-
-  const handleDelete = () => {
-    if (!selectedColor) return;
-    Alert.alert(
-      "確認",
-      `本当にこのデータ（#${selectedColor.番号})を削除しますか？`,
-      [
-        { text: "キャンセル", style: "cancel" },
-        {
-          text: "削除する",
-          style: "destructive",
-          onPress: async () => {
-            const { error } = await supabase
-              .from("GreenOcean_Color")
-              .delete()
-              .eq("番号", selectedColor.番号);
-
-            if (error) {
-              showSnackbar("削除に失敗しました", "error");
-            } else {
-              showSnackbar("削除が完了しました", "success");
-              setSelectedColor(null);
-              setForm(initialForm);
-              setSearchResults((prev) =>
-                prev.filter((item) => item.番号 !== selectedColor.番号)
-              );
-            }
-          },
-        },
-      ]
-    );
   };
 
   const handleSelectItem = (item: Color) => {
@@ -170,22 +121,24 @@ export default function Edit() {
       購入済み: item.購入済み,
     });
   };
-  const handleChange = (key: keyof typeof form, value: any) => {
-    setForm((prev) => ({ ...prev, [key]: value }));
+  const handleChange = <K extends keyof Colorform>(
+    key: K,
+    value: Colorform[K]
+  ) => {
+    setForm((prev) => {
+      if (!prev) return prev;
+      return {
+        ...prev,
+        [key]: value,
+      };
+    });
   };
   const handleUpdate = async () => {
     if (!selectedColor) return;
-    if (!form.商品名.trim()) {
-      showSnackbar("商品名を入力してください", "error");
-      return;
-    }
-    if (form.値段 !== null && isNaN(Number(form.値段))) {
-      showSnackbar("値段は数値で入力してください", "error");
 
-      return;
-    }
-    if (!form.セット名.trim()) {
-      showSnackbar("セット名を選択してください", "error");
+    const errorMessage = validateColorForm(form);
+    if (errorMessage) {
+      showSnackbar(errorMessage, "error");
 
       return;
     }
@@ -204,6 +157,9 @@ export default function Edit() {
       showSnackbar("更新が完了しました", "success");
     }
   };
+  const handleCancelEdit = () => {
+    setSelectedColor(null);
+  };
 
   return (
     <KeyboardAvoidingView
@@ -214,7 +170,7 @@ export default function Edit() {
         data={searchResults}
         keyExtractor={(item) => item.番号.toString()}
         ListHeaderComponent={
-          <View style={styles.container}>
+          <View style={formStyles.container}>
             <View style={formStyles.header}>
               <TouchableOpacity
                 onPress={() => router.replace("/")}
@@ -224,7 +180,7 @@ export default function Edit() {
               </TouchableOpacity>
               <Text style={formStyles.title}>登録済み商品の編集</Text>
             </View>
-            <Text style={styles.label}>コード または 商品名で検索</Text>
+            <Text style={formStyles.label}>コード または 商品名で検索</Text>
             <TextInput
               value={query}
               onChangeText={setQuery}
@@ -234,55 +190,17 @@ export default function Edit() {
             <TouchableOpacity onPress={handleSearch} style={formStyles.button}>
               <Text style={formStyles.buttonText}>検索</Text>
             </TouchableOpacity>
-            {loading && (
-              <ActivityIndicator size="large" style={{ marginTop: 16 }} />
-            )}
-            {selectedColor && (
-              <View style={[styles.formSection, formStyles.container]}>
-                <Text style={styles.label}>番号: {selectedColor.番号}</Text>
-                <Text style={styles.label}>コード</Text>
-                <TextInput
-                  value={String(form.コード)}
-                  onChangeText={(text) => handleChange("コード", Number(text))}
-                  keyboardType="numeric"
-                  style={formStyles.input}
+            {loading && <ActivityIndicator style={{ marginTop: 16 }} />}
+            {selectedColor && setList.length > 0 && (
+              <>
+                <ColorFormView
+                  form={form}
+                  onChange={handleChange}
+                  setList={setList}
+                  mode="edit"
+                  readonlyNumber={selectedColor.番号}
                 />
-                <Text style={styles.label}>商品名</Text>
-                <View style={styles.row}>
-                  <TextInput
-                    value={form.商品名}
-                    onChangeText={(text) => handleChange("商品名", text)}
-                    style={formStyles.input}
-                  />
-                </View>
-                <Text style={styles.label}>フリガナ</Text>
-                <TextInput
-                  value={form.フリガナ}
-                  onChangeText={(text) => handleChange("フリガナ", text)}
-                  style={formStyles.input}
-                />
-                <Text style={styles.label}>値段</Text>
-                <TextInput
-                  value={form.値段 !== null ? String(form.値段) : ""}
-                  onChangeText={(text) =>
-                    handleChange("値段", text === "" ? null : Number(text))
-                  }
-                  keyboardType="numeric"
-                  style={formStyles.input}
-                />
-                <Text style={styles.label}>セット名</Text>
-                <TextInput
-                  value={form.セット名}
-                  onChangeText={(text) => handleChange("セット名", text)}
-                  style={formStyles.input}
-                />
-                <View style={styles.switchContainer}>
-                  <Text style={styles.label}>購入済み</Text>
-                  <Switch
-                    value={form.購入済み}
-                    onValueChange={(value) => handleChange("購入済み", value)}
-                  />
-                </View>
+
                 <View style={formStyles.buttonRow}>
                   <TouchableOpacity
                     onPress={handleUpdate}
@@ -299,15 +217,8 @@ export default function Edit() {
                   >
                     <Text style={formStyles.cancelButtonText}>キャンセル</Text>
                   </TouchableOpacity>
-
-                  <TouchableOpacity
-                    onPress={handleDelete}
-                    style={formStyles.deleteButton}
-                  >
-                    <Text style={formStyles.buttonText}>削除</Text>
-                  </TouchableOpacity>
                 </View>
-              </View>
+              </>
             )}
 
             {searchResults.length > 0 && (

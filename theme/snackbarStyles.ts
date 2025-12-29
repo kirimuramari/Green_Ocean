@@ -1,3 +1,5 @@
+import { StyleSheet } from "react-native";
+
 export type SnackbarType = "success" | "error";
 
 export const snackbarColors: Record<SnackbarType, string> = {
@@ -10,3 +12,18 @@ export const getSnackbarStyle = (type: SnackbarType) => {
     backgroundColor: snackbarColors[type],
   };
 };
+
+export const snackbarStyles = StyleSheet.create({
+  base: {
+    margin: 8,
+  },
+  mobile: {
+    alignSelf: "center",
+  },
+  desktop: {
+    position: "absolute",
+    right: 24,
+    bottom: 24,
+    maxWidth: 400,
+  },
+});

@@ -1,3 +1,5 @@
+import { snackbarStyles } from "@/theme/snackbarStyles";
+import { useIsDesktop } from "@/theme/useIsDesktop";
 import { Snackbar } from "react-native-paper";
 
 type Props = {
@@ -12,12 +14,16 @@ export function AppSnackbar({
   onDismiss,
   type = "success",
 }: Props) {
+  const isDesktop = useIsDesktop();
   return (
     <Snackbar
       visible={visible}
       onDismiss={onDismiss}
       duration={3000}
       style={{
+        ...snackbarStyles.base,
+        ...(isDesktop ? snackbarStyles.desktop : snackbarStyles.mobile),
+
         backgroundColor: type === "error" ? "#D32F2F" : "#2E7D32",
       }}
     >

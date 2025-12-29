@@ -94,6 +94,11 @@ const AddSetName = () => {
           value={setName}
           onChangeText={setSetName}
           placeholder="セット名を入力"
+          autoCorrect={false}
+          autoCapitalize="none"
+          inputMode="text"
+          returnKeyType="done"
+          onEndEditing={handleRegister}
         />
         <Text style={styles.label}>フリガナ</Text>
         <TextInput
@@ -101,6 +106,11 @@ const AddSetName = () => {
           value={furigana}
           onChangeText={setFurigana}
           placeholder="フリガナを入力"
+          autoCorrect={false}
+          autoCapitalize="none"
+          inputMode="text"
+          returnKeyType="done"
+          onEndEditing={handleRegister}
         />
         <Text style={styles.label}>値段（任意）</Text>
         <TextInput
@@ -108,6 +118,7 @@ const AddSetName = () => {
           value={price ?? ""}
           onChangeText={setPrice}
           placeholder="値段を入力（空白でもOK）"
+          onEndEditing={handleRegister}
         />
         <View style={formStyles.buttonRow}>
           <TouchableOpacity onPress={handleRegister} style={formStyles.button}>

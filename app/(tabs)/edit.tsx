@@ -199,6 +199,7 @@ export default function Edit() {
                   setList={setList}
                   mode="edit"
                   readonlyNumber={selectedColor.番号}
+                  onSubmitEditing={handleUpdate}
                 />
 
                 <View style={formStyles.buttonRow}>

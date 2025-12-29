@@ -9,6 +9,7 @@ type Props = {
   setList: string[];
   mode: "create" | "edit";
   readonlyNumber?: number;
+  onSubmitEditing?: () => void;
 };
 export function ColorFormView({
   form,
@@ -16,6 +17,7 @@ export function ColorFormView({
   setList,
   mode,
   readonlyNumber,
+  onSubmitEditing,
 }: Props) {
   return (
     <View style={formStyles.container}>
@@ -36,12 +38,20 @@ export function ColorFormView({
       <TextInput
         value={form.商品名}
         onChangeText={(text) => onChange("商品名", text)}
+        autoCorrect={false}
+        autoCapitalize="none"
+        inputMode="text"
+        returnKeyType="done"
         style={formStyles.input}
       />
       <Text style={formStyles.label}>フリガナ</Text>
       <TextInput
         value={form.フリガナ}
         onChangeText={(text) => onChange("フリガナ", text)}
+        autoCorrect={false}
+        autoCapitalize="none"
+        inputMode="text"
+        returnKeyType="done"
         style={formStyles.input}
       />
       <Text style={formStyles.label}>値段</Text>

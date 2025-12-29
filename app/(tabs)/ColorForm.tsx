@@ -162,6 +162,7 @@ const ColorForm = () => {
             setList={setList}
             mode="create"
             readonlyNumber={nextNumber}
+            onSubmitEditing={handleRegister}
           />
           <View style={formStyles.buttonRow}>
             <TouchableOpacity

@@ -1,32 +1,33 @@
+import { ListStatus } from "@/components/ListStatus";
+import { TableView } from "@/components/TableView";
 import { supabase } from "@/lib/supabaseClient";
 import { formStyles } from "@/theme/formStyles";
-import { tables } from "@/theme/tables";
+import { isDesktop } from "@/theme/isDesktop";
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import { useEffect, useState } from "react";
-import {
-  FlatList,
-  ScrollView,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { ScrollView, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-
-import { ListStatus } from "@/components/ListStatus";
 
 export default function Purchased() {
   interface Item {
     番号: number;
+
     コード: number;
     商品名: string;
     フリガナ: string;
     セット名: string;
-    購入済み: boolean;
   }
 
   const [data, setData] = useState<Item[]>([]);
   const [loading, setLoading] = useState(true);
+
+  const purchasedColums = [
+    { key: "コード", header: "コード", width: isDesktop ? "10%" : "15%" },
+    { key: "商品名", header: "商品名", width: isDesktop ? "22%" : "25%" },
+    { key: "フリガナ", header: "フリガナ", width: isDesktop ? "22%" : "25%" },
+    { key: "セット名", header: "セット名", width: isDesktop ? "22%" : "25%" },
+  ];
 
   useEffect(() => {
     (async () => {
@@ -62,29 +63,11 @@ export default function Purchased() {
           </TouchableOpacity>
           <Text style={formStyles.title}>購入品</Text>
         </View>
-        <View style={tables.headerRow}>
-          <Text style={tables.headerCell}>コード</Text>
-          <Text style={tables.headerCell}>商品名</Text>
-          <Text style={tables.headerCell}>フリガナ</Text>
-          <Text style={tables.headerCell}>セット名</Text>
-        </View>
-        <FlatList
+        <TableView
           data={data}
-          keyExtractor={(item) => item.番号.toString()}
-          renderItem={({ item, index }) => (
-            <View
-              style={[
-                tables.dataRow,
-                { backgroundColor: index % 2 === 0 ? "#fff" : "#eee" },
-              ]}
-            >
-              <Text style={tables.dataCell}>{item.コード}</Text>
-              <Text style={tables.dataCell}>{item.商品名}</Text>
-              <Text style={tables.dataCell}>{item.フリガナ}</Text>
-              <Text style={tables.dataCell}>{item.セット名}</Text>
-            </View>
-          )}
-          contentContainerStyle={{ paddingBottom: 80 }}
+          columns={purchasedColums}
+          isDesktop={isDesktop}
+          rowKey={(item) => item.番号}
         />
       </SafeAreaView>
     </ScrollView>

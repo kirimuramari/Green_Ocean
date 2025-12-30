@@ -3,6 +3,7 @@ import { DeleteConfirmDialog } from "@/components/common/DeleteConfirmDialog";
 import { QuickActions } from "@/components/common/QuickAction";
 import { SortSelector } from "@/components/common/SortSelector";
 import { ListStatus } from "@/components/ListStatus";
+import { TableView } from "@/components/TableView";
 import {
   deleteColor,
   togglePurchased,
@@ -12,7 +13,6 @@ import { SortKey } from "@/features/sort/sortTypes";
 import { supabase } from "@/lib/supabaseClient";
 import { desktopFormStyles, formStyles } from "@/theme/formStyles";
 import { SnackbarType } from "@/theme/snackbarStyles";
-import { desktopTables, tables } from "@/theme/tables";
 import { useIsDesktop } from "@/theme/useIsDesktop";
 import { Color } from "@/types/types";
 import { Ionicons } from "@expo/vector-icons";
@@ -56,6 +56,99 @@ export default function ColorScreen() {
   };
   //ＰＣかスマホ判定
   const isDesktop = useIsDesktop();
+  //サイズ調整
+  const actionColumn = isDesktop
+    ? {
+        key: "actions",
+        header: "操作",
+        width: "10%",
+        render: (item: Color) => (
+          <View
+            style={{
+              flexDirection: "row",
+              justifyContent: "center",
+              alignItems: "center",
+              gap: 8,
+            }}
+          >
+            <QuickActions
+              purchased={item.購入済み}
+              onTogglePurchased={async () => {
+                await togglePurchased(item.コード, !item.購入済み);
+                setColors((prev) =>
+                  prev.map((c) =>
+                    c.コード === item.コード
+                      ? { ...c, 購入済み: !c.購入済み }
+                      : c
+                  )
+                );
+              }}
+              onDelete={() => setDeleteTarget(item)}
+            />
+          </View>
+        ),
+      }
+    : {
+        key: "actions",
+        header: "操作",
+        width: "18%",
+        render: (item: Color) => (
+          <View
+            style={{
+              flexDirection: "column",
+              alignItems: "center",
+              gap: 6,
+            }}
+          >
+            <QuickActions
+              purchased={item.購入済み}
+              onTogglePurchased={async () => {
+                await togglePurchased(item.コード, !item.購入済み);
+                setColors((prev) =>
+                  prev.map((c) =>
+                    c.コード === item.コード
+                      ? { ...c, 購入済み: !c.購入済み }
+                      : c
+                  )
+                );
+              }}
+              onDelete={() => setDeleteTarget(item)}
+            />
+          </View>
+        ),
+      };
+
+  const columns = [
+    {
+      key: "番号",
+      header: "番号",
+      width: isDesktop ? "6%" : "10%",
+      render: (item: Color) => (
+        <Text style={{ textAlign: "left" }}>{item.番号}</Text>
+      ),
+    },
+    { key: "商品名", header: "商品名", width: isDesktop ? "14%" : "18%" },
+    { key: "フリガナ", header: "フリガナ", width: isDesktop ? "14%" : "0%" },
+    {
+      key: "コード",
+      header: "コード",
+      width: isDesktop ? "8%" : "10%",
+      render: (item: Color) => (
+        <Text style={{ textAlign: "left" }}>{item.コード}</Text>
+      ),
+    },
+    {
+      key: "値段",
+      header: "値段",
+      width: isDesktop ? "8%" : "10%",
+      render: (item: Color) => (
+        <Text style={{ textAlign: "left" }}>¥{item.値段}</Text>
+      ),
+    },
+    { key: "セット名", header: "セット名", width: isDesktop ? "30%" : "34%" },
+    actionColumn,
+  ];
+
   //スマホ向けアコーディオン切り替えロジック
   const toggleSearch = () => {
     if (!isDesktop) {
@@ -144,10 +237,9 @@ export default function ColorScreen() {
 
   const sortedColors = sortItems(colors, sortKey);
 
-  // ロード中の表示
-
   return (
     <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+      {/* ロード中の表示 */}
       <ListStatus
         loading={loading}
         error={error}
@@ -228,162 +320,44 @@ export default function ColorScreen() {
 
         {/* テーブル */}
         <View style={{ flex: 2 }}>
-          <View style={[desktopTables.tableContainerStyle]}>
-            <View
-              style={[tables.headerRow, isDesktop && desktopTables.headerRow]}
-            >
-              <Text
-                style={[
-                  { width: "10%" },
-                  tables.headerCell,
-                  isDesktop && desktopTables.headerCell,
-                ]}
-              >
-                番号
-              </Text>
-              <Text
-                style={[
-                  { width: "25%" },
-                  tables.headerCell,
-                  isDesktop && desktopTables.headerCell,
-                ]}
-              >
-                商品名
-              </Text>
-              <Text
-                style={[
-                  { width: "20%" },
-                  tables.headerCell,
-                  isDesktop && desktopTables.headerCell,
-                ]}
-              >
-                フリガナ
-              </Text>
-              <Text
-                style={[
-                  { width: "10%" },
-                  tables.headerCell,
-                  isDesktop && desktopTables.headerCell,
-                ]}
-              >
-                コード
-              </Text>
-              <Text
-                style={[
-                  { width: "15%" },
-                  tables.headerCell,
-                  isDesktop && desktopTables.headerCell,
-                ]}
-              >
-                値段
-              </Text>
-              <Text
-                style={[
-                  { width: "30%" },
-                  tables.headerCell,
-                  isDesktop && desktopTables.headerCell,
-                ]}
-              >
-                セット名
-              </Text>
-              <Text
-                style={[
-                  { width: "10%" },
-                  tables.headerCell,
-                  isDesktop && desktopTables.headerCell,
-                ]}
-              >
-                操作
-              </Text>
-            </View>
-            {sortedColors.map((item, index) => (
-              <View
-                key={item.コード ?? index}
-                style={[
-                  tables.dataRow,
-                  { backgroundColor: index % 2 === 0 ? "#fff" : "#eee" },
-                ]}
-              >
-                <Text
-                  style={[tables.dataCell, isDesktop && desktopTables.dataCell]}
-                >
-                  {item.番号}
-                </Text>
-                <Text
-                  style={[tables.dataCell, isDesktop && desktopTables.dataCell]}
-                >
-                  {item.商品名}
-                </Text>
-                <Text
-                  style={[tables.dataCell, isDesktop && desktopTables.dataCell]}
-                >
-                  {item.フリガナ}
-                </Text>
-                <Text
-                  style={[tables.dataCell, isDesktop && desktopTables.dataCell]}
-                >
-                  {item.コード}
-                </Text>
-                <Text
-                  style={[tables.dataCell, isDesktop && desktopTables.dataCell]}
-                >
-                  ¥{item.値段}
-                </Text>
-                <Text
-                  style={[tables.dataCell, isDesktop && desktopTables.dataCell]}
-                >
-                  {item.セット名}
-                </Text>
-                <View style={{ width: "10%", flexDirection: "row" }}>
-                  <QuickActions
-                    purchased={item.購入済み}
-                    onTogglePurchased={async () => {
-                      await togglePurchased(item.コード, !item.購入済み);
-                      setColors((prev) =>
-                        prev.map((c) =>
-                          c.コード === item.コード
-                            ? { ...c, 購入済み: !c.購入済み }
-                            : c
-                        )
-                      );
-                    }}
-                    onDelete={() => setDeleteTarget(item)}
-                  />
-                  <DeleteConfirmDialog
-                    visible={!!deleteTarget}
-                    onCancel={() => setDeleteTarget(null)}
-                    onConfirm={async () => {
-                      if (!deleteTarget) return;
-                      try {
-                        await deleteColor(deleteTarget.コード);
-                        setColors((prev) =>
-                          prev.filter(
-                            (item) => item.コード !== deleteTarget.コード
-                          )
-                        );
-                        setSnackbarMessage("データを削除しました。");
-                        setSnackbarVisible(true);
-                      } catch (e) {
-                        console.error(e);
+          <View>
+            <TableView
+              data={sortedColors}
+              columns={columns}
+              isDesktop={isDesktop}
+              rowKey={(item) => item.コード}
+            />
+            <DeleteConfirmDialog
+              visible={!!deleteTarget}
+              onCancel={() => setDeleteTarget(null)}
+              onConfirm={async () => {
+                if (!deleteTarget) return;
+                try {
+                  await deleteColor(deleteTarget.コード);
+                  setColors((prev) =>
+                    prev.filter((item) => item.コード !== deleteTarget.コード)
+                  );
+                  setSnackbarMessage("データを削除しました。");
+                  setSnackbarVisible(true);
+                } catch (e) {
+                  console.error(e);
 
-                        setSnackbarMessage("削除に失敗しました。");
-                        setSnackbarVisible(true);
-                      } finally {
-                        setDeleteTarget(null);
-                      }
-                    }}
-                  />
-                </View>
-              </View>
-            ))}
-            <View style={styles.pagination}>
-              <Button title="前へ" onPress={handlePrev} disabled={page === 0} />
-              <Text>ページ {page + 1}</Text>
-              <Button title="次へ" onPress={handleNext} disabled={!hasMore} />
-            </View>
+                  setSnackbarMessage("削除に失敗しました。");
+                  setSnackbarVisible(true);
+                } finally {
+                  setDeleteTarget(null);
+                }
+              }}
+            />
+          </View>
+          <View style={styles.pagination}>
+            <Button title="前へ" onPress={handlePrev} disabled={page === 0} />
+            <Text>ページ {page + 1}</Text>
+            <Button title="次へ" onPress={handleNext} disabled={!hasMore} />
           </View>
         </View>
       </View>
+
       <AppSnackbar
         visible={snackbarVisible}
         message={snackbarMessage}

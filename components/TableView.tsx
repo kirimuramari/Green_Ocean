@@ -1,3 +1,4 @@
+//テーブル表示
 import { desktopTables, tables } from "@/theme/tables";
 import React from "react";
 import { Text, View } from "react-native";

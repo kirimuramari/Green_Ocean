@@ -1,3 +1,4 @@
+//削除ダイアログ
 import { Button, Dialog, Portal, Text } from "react-native-paper";
 type Props = {
   visible: boolean;

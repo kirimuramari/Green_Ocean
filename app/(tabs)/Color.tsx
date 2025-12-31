@@ -1,3 +1,4 @@
+import { BackButton } from "@/components/BackButton";
 import { AppSnackbar } from "@/components/common/AppSnackbar";
 import { DeleteConfirmDialog } from "@/components/common/DeleteConfirmDialog";
 import { QuickActions } from "@/components/common/QuickAction";
@@ -15,9 +16,7 @@ import { desktopFormStyles, formStyles } from "@/theme/formStyles";
 import { SnackbarType } from "@/theme/snackbarStyles";
 import { useIsDesktop } from "@/theme/useIsDesktop";
 import { Color } from "@/types/types";
-import { Ionicons } from "@expo/vector-icons";
 import { Picker } from "@react-native-picker/picker";
-import { router } from "expo-router";
 import { useCallback, useEffect, useState } from "react";
 import {
   Button,
@@ -44,7 +43,6 @@ export default function ColorScreen() {
   const [searchOpen, setSearchOpen] = useState(false);
   const [sortKey, setSortKey] = useState<SortKey>("numberAsc");
   const [deleteTarget, setDeleteTarget] = useState<Color | null>(null);
-
   const [snackbarVisible, setSnackbarVisible] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
   const [snackbarType, setSnackbarType] = useState<SnackbarType>("success");
@@ -259,12 +257,7 @@ export default function ColorScreen() {
           ]}
         >
           <View style={formStyles.header}>
-            <TouchableOpacity
-              onPress={() => router.replace("/")}
-              style={formStyles.arrowButton}
-            >
-              <Ionicons name="arrow-back" size={24} />
-            </TouchableOpacity>
+            <BackButton />
             <Text style={[formStyles.title]}>商品一覧表示</Text>
           </View>
           {/* スマホ：タップして開閉 */}

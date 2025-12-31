@@ -1,3 +1,4 @@
+//フォーム
 import { formStyles } from "@/theme/formStyles";
 import { Colorform } from "@/types/types";
 import { Picker } from "@react-native-picker/picker";

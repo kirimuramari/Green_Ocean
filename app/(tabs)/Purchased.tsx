@@ -1,5 +1,8 @@
+import { SortSelector } from "@/components/common/SortSelector";
 import { ListStatus } from "@/components/ListStatus";
 import { TableView } from "@/components/TableView";
+import { sortItems } from "@/features/sort/sortItems";
+import { SortKey } from "@/features/sort/sortTypes";
 import { supabase } from "@/lib/supabaseClient";
 import { formStyles } from "@/theme/formStyles";
 import { isDesktop } from "@/theme/isDesktop";
@@ -21,6 +24,16 @@ export default function Purchased() {
 
   const [data, setData] = useState<Item[]>([]);
   const [loading, setLoading] = useState(true);
+  const [sortKey, setSortKey] = useState<SortKey>("codeAsc");
+
+  const sortOption: SortKey[] = [
+    "codeAsc",
+    "codeDsc",
+    "nameAsc",
+    "nameDsc",
+    "setNameAsc",
+    "setNameDsc",
+  ];
 
   const purchasedColums = [
     { key: "コード", header: "コード", width: isDesktop ? "10%" : "15%" },
@@ -45,7 +58,7 @@ export default function Purchased() {
       setLoading(false);
     })();
   }, []);
-
+  const sortedColors = sortItems(data, sortKey);
   return (
     <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
       <ListStatus
@@ -62,9 +75,14 @@ export default function Purchased() {
             <Ionicons name="arrow-back" size={24} />
           </TouchableOpacity>
           <Text style={formStyles.title}>購入品</Text>
+          <SortSelector
+            value={sortKey}
+            onChange={setSortKey}
+            option={sortOption}
+          />
         </View>
         <TableView
-          data={data}
+          data={sortedColors}
           columns={purchasedColums}
           isDesktop={isDesktop}
           rowKey={(item) => item.番号}

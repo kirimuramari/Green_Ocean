@@ -1,3 +1,4 @@
+import { BackButton } from "@/components/BackButton";
 import { DeleteConfirmDialog } from "@/components/common/DeleteConfirmDialog";
 import { deleteNotice } from "@/features/itemActions/itemActions";
 import { supabase } from "@/lib/supabaseClient";
@@ -5,8 +6,6 @@ import { formStyles } from "@/theme/formStyles";
 import { flattenStyle } from "@/theme/layout";
 import { SnackbarType, getSnackbarStyle } from "@/theme/snackbarStyles";
 import { Notice } from "@/types/types";
-import { Ionicons } from "@expo/vector-icons";
-import { router } from "expo-router";
 import { useEffect, useState } from "react";
 
 import {
@@ -92,12 +91,8 @@ export default function NoticeForm() {
     <ScrollView contentContainerStyle={formStyles.container}>
       <View style={formStyles.subContainer}>
         <View style={formStyles.header}>
-          <TouchableOpacity
-            onPress={() => router.replace("/")}
-            style={formStyles.arrowButton}
-          >
-            <Ionicons name="arrow-back" size={24} />
-          </TouchableOpacity>
+          <BackButton />
+
           <Text style={formStyles.title}>お知らせ設定</Text>
         </View>
         <Text style={styles.label}>お知らせ追加</Text>

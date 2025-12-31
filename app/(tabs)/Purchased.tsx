@@ -1,3 +1,4 @@
+import { BackButton } from "@/components/BackButton";
 import { SortSelector } from "@/components/common/SortSelector";
 import { ListStatus } from "@/components/ListStatus";
 import { TableView } from "@/components/TableView";
@@ -6,10 +7,8 @@ import { SortKey } from "@/features/sort/sortTypes";
 import { supabase } from "@/lib/supabaseClient";
 import { formStyles } from "@/theme/formStyles";
 import { isDesktop } from "@/theme/isDesktop";
-import { Ionicons } from "@expo/vector-icons";
-import { router } from "expo-router";
 import { useEffect, useState } from "react";
-import { ScrollView, Text, TouchableOpacity, View } from "react-native";
+import { ScrollView, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function Purchased() {
@@ -68,12 +67,8 @@ export default function Purchased() {
       />
       <SafeAreaView style={formStyles.container}>
         <View style={formStyles.header}>
-          <TouchableOpacity
-            onPress={() => router.replace("/")}
-            style={formStyles.arrowButton}
-          >
-            <Ionicons name="arrow-back" size={24} />
-          </TouchableOpacity>
+          <BackButton />
+
           <Text style={formStyles.title}>購入品</Text>
           <SortSelector
             value={sortKey}

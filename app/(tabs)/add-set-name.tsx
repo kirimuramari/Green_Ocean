@@ -1,7 +1,7 @@
 import { supabase } from "@/lib/supabaseClient";
-import { Ionicons } from "@expo/vector-icons";
 import { Snackbar } from "react-native-paper";
 
+import { BackButton } from "@/components/BackButton";
 import { SnackbarType, getSnackbarStyle } from "@/theme/snackbarStyles";
 
 import { formStyles } from "@/theme/formStyles";
@@ -80,12 +80,7 @@ const AddSetName = () => {
     <View style={(styles.container, formStyles.container)}>
       <View style={formStyles.subContainer}>
         <View style={formStyles.header}>
-          <TouchableOpacity
-            onPress={() => router.replace("/")}
-            style={formStyles.arrowButton}
-          >
-            <Ionicons name="arrow-back" size={24} />
-          </TouchableOpacity>
+          <BackButton />
           <Text style={formStyles.title}>セット名の追加</Text>
         </View>
         <Text style={styles.label}>セット名</Text>

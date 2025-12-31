@@ -1,3 +1,4 @@
+//スナックバー
 import { snackbarStyles } from "@/theme/snackbarStyles";
 import { useIsDesktop } from "@/theme/useIsDesktop";
 import { Snackbar } from "react-native-paper";

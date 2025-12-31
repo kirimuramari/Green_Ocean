@@ -1,3 +1,4 @@
+import { BackButton } from "@/components/BackButton";
 import { AppSnackbar } from "@/components/common/AppSnackbar";
 import { DeleteConfirmDialog } from "@/components/common/DeleteConfirmDialog";
 import { SortSelector } from "@/components/common/SortSelector";
@@ -12,10 +13,10 @@ import { isDesktop } from "@/theme/isDesktop";
 import { SnackbarType } from "@/theme/snackbarStyles";
 import { SetColorItem } from "@/types/types";
 import { Ionicons } from "@expo/vector-icons";
-import { router } from "expo-router";
 import { useEffect, useState } from "react";
 import { ScrollView, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+
 export default function SetColor() {
   const [data, setData] = useState<SetColorItem[]>([]);
   const [loading, setLoading] = useState(true);
@@ -111,12 +112,7 @@ export default function SetColor() {
       />
       <SafeAreaView style={formStyles.container}>
         <View style={formStyles.header}>
-          <TouchableOpacity
-            onPress={() => router.replace("/")}
-            style={formStyles.arrowButton}
-          >
-            <Ionicons name="arrow-back" size={24} />
-          </TouchableOpacity>
+          <BackButton />
           <Text style={formStyles.title}>セット品一覧</Text>
           <SortSelector
             value={sortKey}

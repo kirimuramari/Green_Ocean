@@ -1,10 +1,9 @@
+import { BackButton } from "@/components/BackButton";
 import { validateColorForm } from "@/features/form/validateColorForm";
 import { supabase } from "@/lib/supabaseClient";
 import { formStyles } from "@/theme/formStyles";
 import { SnackbarType, getSnackbarStyle } from "@/theme/snackbarStyles";
 import { Color, Colorform } from "@/types/types";
-import { Ionicons } from "@expo/vector-icons";
-import { router } from "expo-router";
 import { useEffect, useState } from "react";
 import { Snackbar } from "react-native-paper";
 
@@ -172,12 +171,7 @@ export default function Edit() {
         ListHeaderComponent={
           <View style={formStyles.container}>
             <View style={formStyles.header}>
-              <TouchableOpacity
-                onPress={() => router.replace("/")}
-                style={formStyles.arrowButton}
-              >
-                <Ionicons name="arrow-back" size={24} />
-              </TouchableOpacity>
+              <BackButton />
               <Text style={formStyles.title}>登録済み商品の編集</Text>
             </View>
             <Text style={formStyles.label}>コード または 商品名で検索</Text>

@@ -32,8 +32,9 @@ yarn-error.*
 
 # local env files
 .env*.local
-
+/.env
 # typescript
 *.tsbuildinfo
-
+/eas.json
+app.config.js
 app-example

@@ -4,7 +4,7 @@
     "slug": "greenocean",
     "version": "1.0.0",
     "android": {
-      "package": "com.yourname.greenocean"
+      "package": "com.makkiy.greenocean"
     },
     "extra": {
       "eas": {

@@ -1,7 +1,7 @@
-import { supabase } from "@/lib/supabaseClient";
-import { Ionicons } from "@expo/vector-icons";
-import { Link } from "expo-router";
-import { useEffect, useState } from "react";
+import { supabase } from '@/lib/supabaseClient';
+import { Ionicons } from '@expo/vector-icons';
+import { Link } from 'expo-router';
+import { useEffect, useState } from 'react';
 import {
   StyleSheet as RNStyleSheet,
   ScrollView,
@@ -10,7 +10,7 @@ import {
   TouchableOpacity,
   View,
   useWindowDimensions,
-} from "react-native";
+} from 'react-native';
 
 export default function Home() {
   const { width } = useWindowDimensions();
@@ -22,11 +22,15 @@ export default function Home() {
   useEffect(() => {
     const fetchNotices = async () => {
       const { data, error } = await supabase
-        .from("notices")
-        .select("*")
-        .order("created_at", { ascending: false })
+        .from('notices')
+        .select('*')
+        .order('created_at', { ascending: false })
         .limit(3);
-      if (!error) setNotices(data);
+      if (error) {
+        console.error(error);
+        return;
+      }
+      setNotices(data ?? []);
     };
     fetchNotices();
   }, []);
@@ -37,7 +41,7 @@ export default function Home() {
         {notices.map((n) => (
           <View key={n.id}>
             <Text style={styles.noticesText}>
-              {n.created_at.split("T")[0]}
+              {n.created_at.split('T')[0]}
               {n.title}
             </Text>
           </View>
@@ -50,7 +54,7 @@ export default function Home() {
           <TouchableOpacity
             style={flattenStyle(
               styles.button,
-              isDesktop && styles.buttonDesktop
+              isDesktop && styles.buttonDesktop,
             )}
           >
             <Ionicons
@@ -66,7 +70,7 @@ export default function Home() {
           <TouchableOpacity
             style={flattenStyle(
               styles.button,
-              isDesktop && styles.buttonDesktop
+              isDesktop && styles.buttonDesktop,
             )}
           >
             <Ionicons
@@ -82,7 +86,7 @@ export default function Home() {
           <TouchableOpacity
             style={flattenStyle(
               styles.button,
-              isDesktop && styles.buttonDesktop
+              isDesktop && styles.buttonDesktop,
             )}
           >
             <Ionicons
@@ -101,7 +105,7 @@ export default function Home() {
           <TouchableOpacity
             style={flattenStyle(
               styles.button,
-              isDesktop && styles.buttonDesktop
+              isDesktop && styles.buttonDesktop,
             )}
           >
             <Ionicons
@@ -117,7 +121,7 @@ export default function Home() {
           <TouchableOpacity
             style={flattenStyle(
               styles.button,
-              isDesktop && styles.buttonDesktop
+              isDesktop && styles.buttonDesktop,
             )}
           >
             <Ionicons
@@ -133,7 +137,7 @@ export default function Home() {
           <TouchableOpacity
             style={flattenStyle(
               styles.button,
-              isDesktop && styles.buttonDesktop
+              isDesktop && styles.buttonDesktop,
             )}
           >
             <Ionicons
@@ -152,7 +156,7 @@ export default function Home() {
           <TouchableOpacity
             style={flattenStyle(
               styles.button,
-              isDesktop && styles.buttonDesktop
+              isDesktop && styles.buttonDesktop,
             )}
           >
             <Ionicons
@@ -172,61 +176,61 @@ export default function Home() {
 const styles = StyleSheet.create({
   container: {
     paddingVertical: 20,
-    alignItems: "center",
+    alignItems: 'center',
 
-    backgroundColor: "white",
+    backgroundColor: 'white',
   },
   noticeContainer: {
     marginBottom: 16,
     padding: 8,
     borderWidth: 1,
-    borderStyle: "dotted",
-    borderColor: "#747575",
+    borderStyle: 'dotted',
+    borderColor: '#747575',
     borderRadius: 12,
-    boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
+    // boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
   },
   noticesText: {
     fontSize: 15,
-    textDecorationLine: "underline",
-    color: "#434656",
+    textDecorationLine: 'underline',
+    color: '#434656',
     marginTop: 10,
   },
   title: {
     fontSize: 20,
-    color: "#747575",
-    fontWeight: "bold",
+    color: '#747575',
+    fontWeight: 'bold',
     marginTop: 20,
     marginBottom: 10,
   },
   grid: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    justifyContent: "center",
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'center',
   },
   gridDesktop: {
-    justifyContent: "flex-start",
+    justifyContent: 'flex-start',
     gap: 20,
     maxWidth: 900,
   },
   button: {
-    backgroundColor: "#a2d2ff",
+    backgroundColor: '#a2d2ff',
     width: 102,
     height: 102,
     borderRadius: 12,
     margin: 3.3,
-    justifyContent: "center",
-    alignItems: "center",
-    boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
-    cursor: "pointer",
+    justifyContent: 'center',
+    alignItems: 'center',
+    // boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
+    // cursor: "pointer",
   },
   buttonDesktop: {
     width: 150,
     height: 150,
   },
   buttonText: {
-    color: "#434656",
+    color: '#434656',
     fontSize: 14,
     marginTop: 6,
-    textAlign: "center",
+    textAlign: 'center',
   },
 });

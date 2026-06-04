@@ -1,4 +1,4 @@
-import { supabase } from '@/lib/supabaseClient';
+// import { supabase } from '@/lib/supabaseClient';
 import { Ionicons } from '@expo/vector-icons';
 import { Link } from 'expo-router';
 import { useEffect, useState } from 'react';
@@ -20,19 +20,19 @@ export default function Home() {
   const flattenStyle = (baseStyle: any, extraStyle?: any) =>
     RNStyleSheet.flatten([baseStyle, extraStyle]);
   useEffect(() => {
-    const fetchNotices = async () => {
-      const { data, error } = await supabase
-        .from('notices')
-        .select('*')
-        .order('created_at', { ascending: false })
-        .limit(3);
-      if (error) {
-        console.error(error);
-        return;
-      }
-      setNotices(data ?? []);
-    };
-    fetchNotices();
+    // const fetchNotices = async () => {
+    //   const { data, error } = await supabase
+    //     .from('notices')
+    //     .select('*')
+    //     .order('created_at', { ascending: false })
+    //     .limit(3);
+    //   if (error) {
+    //     console.error(error);
+    //     return;
+    //   }
+    // setNotices(data ?? []);
+    // };
+    // fetchNotices();
   }, []);
 
   return (

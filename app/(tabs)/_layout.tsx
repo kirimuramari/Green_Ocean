@@ -1,23 +1,23 @@
-import { Colors } from "@/theme/colors";
-import { Ionicons } from "@expo/vector-icons";
-import { Stack, Tabs } from "expo-router";
-import { useEffect, useState } from "react";
-import { Dimensions, Platform, useColorScheme } from "react-native";
+import { Colors } from '@/theme/colors';
+import { Ionicons } from '@expo/vector-icons';
+import { Stack, Tabs } from 'expo-router';
+import { useEffect, useState } from 'react';
+import { Dimensions, Platform, useColorScheme } from 'react-native';
 
 export default function Layout() {
   const scheme = useColorScheme();
-  const theme = scheme === "dark" ? Colors.dark : Colors.light;
+  const theme = scheme === 'dark' ? Colors.dark : Colors.light;
 
   //初期判定
   const [isDesktop, setIsDesktop] = useState(
-    Platform.OS === "web" && Dimensions.get("window").width >= 1024
+    Platform.OS === 'web' && Dimensions.get('window').width >= 1024,
   );
   //画面サイズが変わったら再計算
   useEffect(() => {
     const onChange = ({ window }: { window: any }) => {
-      setIsDesktop(Platform.OS === "web" && window.width >= 1024);
+      setIsDesktop(Platform.OS === 'web' && window.width >= 1024);
     };
-    const subscription = Dimensions.addEventListener("change", onChange);
+    const subscription = Dimensions.addEventListener('change', onChange);
     return () => subscription?.remove();
   }, []);
   // PC の場合は Tabs を返さず Stack を返す
@@ -52,7 +52,7 @@ export default function Layout() {
       <Tabs.Screen
         name="index"
         options={{
-          title: "ホーム",
+          title: 'ホーム',
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="home-outline" color={color} size={size} />
           ),
@@ -61,7 +61,7 @@ export default function Layout() {
       <Tabs.Screen
         name="Color"
         options={{
-          title: "一覧",
+          title: '一覧',
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="list" color={color} size={size} />
           ),
@@ -70,7 +70,7 @@ export default function Layout() {
       <Tabs.Screen
         name="SetColor"
         options={{
-          title: "セット品表示",
+          title: 'セット品表示',
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="albums" color={color} size={size} />
           ),
@@ -79,7 +79,7 @@ export default function Layout() {
       <Tabs.Screen
         name="Purchased"
         options={{
-          title: "購入済み表示",
+          title: '購入済み表示',
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="checkmark-done" color={color} size={size} />
           ),
@@ -88,7 +88,7 @@ export default function Layout() {
       <Tabs.Screen
         name="edit"
         options={{
-          title: "データ編集",
+          title: 'データ編集',
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="create-outline" color={color} size={size} />
           ),
@@ -97,7 +97,7 @@ export default function Layout() {
       <Tabs.Screen
         name="ColorForm"
         options={{
-          title: "商品登録",
+          title: '商品登録',
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="add-circle-outline" color={color} size={size} />
           ),
@@ -106,7 +106,7 @@ export default function Layout() {
       <Tabs.Screen
         name="add-set-name"
         options={{
-          title: "セット登録",
+          title: 'セット登録',
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="duplicate-outline" color={color} size={size} />
           ),
@@ -115,7 +115,7 @@ export default function Layout() {
       <Tabs.Screen
         name="NoticeForm"
         options={{
-          title: "設定",
+          title: '設定',
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="settings" color={color} size={size} />
           ),

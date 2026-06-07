@@ -1,23 +1,24 @@
-import { BackButton } from "@/components/BackButton";
-import { AppSnackbar } from "@/components/common/AppSnackbar";
-import { DeleteConfirmDialog } from "@/components/common/DeleteConfirmDialog";
-import { QuickActions } from "@/components/common/QuickAction";
-import { SortSelector } from "@/components/common/SortSelector";
-import { ListStatus } from "@/components/ListStatus";
-import { TableView } from "@/components/TableView";
+import { BackButton } from '@/components/BackButton';
+import { AppSnackbar } from '@/components/common/AppSnackbar';
+import { DeleteConfirmDialog } from '@/components/common/DeleteConfirmDialog';
+import { QuickActions } from '@/components/common/QuickAction';
+import { SortSelector } from '@/components/common/SortSelector';
+import { ListStatus } from '@/components/ListStatus';
+import { TableView } from '@/components/TableView';
 import {
   deleteColor,
   togglePurchased,
-} from "@/features/itemActions/itemActions";
-import { sortItems } from "@/features/sort/sortItems";
-import { SortKey } from "@/features/sort/sortTypes";
-import { supabase } from "@/lib/supabaseClient";
-import { desktopFormStyles, formStyles } from "@/theme/formStyles";
-import { SnackbarType } from "@/theme/snackbarStyles";
-import { useIsDesktop } from "@/theme/useIsDesktop";
-import { Color } from "@/types/types";
-import { Picker } from "@react-native-picker/picker";
-import { useCallback, useEffect, useState } from "react";
+} from '@/features/itemActions/itemActions';
+import { sortItems } from '@/features/sort/sortItems';
+import { SortKey } from '@/features/sort/sortTypes';
+import { supabase } from '@/lib/supabaseClient';
+import { desktopFormStyles, formStyles } from '@/theme/formStyles';
+import { SnackbarType } from '@/theme/snackbarStyles';
+import { useIsDesktop } from '@/theme/useIsDesktop';
+import { Color } from '@/types/types';
+import { Picker } from '@react-native-picker/picker';
+import { Link } from 'expo-router';
+import { useCallback, useEffect, useState } from 'react';
 import {
   Button,
   ScrollView,
@@ -26,28 +27,28 @@ import {
   TextInput,
   TouchableOpacity,
   View,
-} from "react-native";
+} from 'react-native';
 
 export default function ColorScreen() {
   const PAGE_SIZE = 30;
   const [colors, setColors] = useState<Color[]>([]);
   const [loading, setLoading] = useState(true);
-  const [searchKeyword, setSearchKeyword] = useState("");
-  const [searchKeywordInput, setSearchKeywordInput] = useState("");
+  const [searchKeyword, setSearchKeyword] = useState('');
+  const [searchKeywordInput, setSearchKeywordInput] = useState('');
   const [page, setPage] = useState(0);
   const [hasMore, setHasMore] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [setNameList, setSetNameList] = useState<string[]>([]);
-  const [selectedSetName, setSelectedSetName] = useState("");
-  const [searchSetName, setSearchSetName] = useState("");
+  const [selectedSetName, setSelectedSetName] = useState('');
+  const [searchSetName, setSearchSetName] = useState('');
   const [searchOpen, setSearchOpen] = useState(false);
-  const [sortKey, setSortKey] = useState<SortKey>("numberAsc");
+  const [sortKey, setSortKey] = useState<SortKey>('numberAsc');
   const [deleteTarget, setDeleteTarget] = useState<Color | null>(null);
   const [snackbarVisible, setSnackbarVisible] = useState(false);
-  const [snackbarMessage, setSnackbarMessage] = useState("");
-  const [snackbarType, setSnackbarType] = useState<SnackbarType>("success");
+  const [snackbarMessage, setSnackbarMessage] = useState('');
+  const [snackbarType, setSnackbarType] = useState<SnackbarType>('success');
 
-  const showSnackbar = (msg: string, type: SnackbarType = "success") => {
+  const showSnackbar = (msg: string, type: SnackbarType = 'success') => {
     setSnackbarMessage(msg);
     setSnackbarType(type);
     setSnackbarVisible(true);
@@ -57,15 +58,15 @@ export default function ColorScreen() {
   //サイズ調整
   const actionColumn = isDesktop
     ? {
-        key: "actions",
-        header: "操作",
-        width: "10%",
+        key: 'actions',
+        header: '操作',
+        width: '10%',
         render: (item: Color) => (
           <View
             style={{
-              flexDirection: "row",
-              justifyContent: "center",
-              alignItems: "center",
+              flexDirection: 'row',
+              justifyContent: 'center',
+              alignItems: 'center',
               gap: 8,
             }}
           >
@@ -77,8 +78,8 @@ export default function ColorScreen() {
                   prev.map((c) =>
                     c.コード === item.コード
                       ? { ...c, 購入済み: !c.購入済み }
-                      : c
-                  )
+                      : c,
+                  ),
                 );
               }}
               onDelete={() => setDeleteTarget(item)}
@@ -87,14 +88,14 @@ export default function ColorScreen() {
         ),
       }
     : {
-        key: "actions",
-        header: "操作",
-        width: "18%",
+        key: 'actions',
+        header: '操作',
+        width: '18%',
         render: (item: Color) => (
           <View
             style={{
-              flexDirection: "column",
-              alignItems: "center",
+              flexDirection: 'column',
+              alignItems: 'center',
               gap: 6,
             }}
           >
@@ -106,8 +107,8 @@ export default function ColorScreen() {
                   prev.map((c) =>
                     c.コード === item.コード
                       ? { ...c, 購入済み: !c.購入済み }
-                      : c
-                  )
+                      : c,
+                  ),
                 );
               }}
               onDelete={() => setDeleteTarget(item)}
@@ -118,32 +119,32 @@ export default function ColorScreen() {
 
   const columns = [
     {
-      key: "番号",
-      header: "番号",
-      width: isDesktop ? "6%" : "10%",
+      key: '番号',
+      header: '番号',
+      width: isDesktop ? '6%' : '10%',
       render: (item: Color) => (
-        <Text style={{ textAlign: "left" }}>{item.番号}</Text>
+        <Text style={{ textAlign: 'left' }}>{item.番号}</Text>
       ),
     },
-    { key: "商品名", header: "商品名", width: isDesktop ? "14%" : "18%" },
-    { key: "フリガナ", header: "フリガナ", width: isDesktop ? "14%" : "0%" },
+    { key: '商品名', header: '商品名', width: isDesktop ? '14%' : '18%' },
+    { key: 'フリガナ', header: 'フリガナ', width: isDesktop ? '14%' : '0%' },
     {
-      key: "コード",
-      header: "コード",
-      width: isDesktop ? "8%" : "10%",
+      key: 'コード',
+      header: 'コード',
+      width: isDesktop ? '8%' : '10%',
       render: (item: Color) => (
-        <Text style={{ textAlign: "left" }}>{item.コード}</Text>
+        <Text style={{ textAlign: 'left' }}>{item.コード}</Text>
       ),
     },
     {
-      key: "値段",
-      header: "値段",
-      width: isDesktop ? "8%" : "10%",
+      key: '値段',
+      header: '値段',
+      width: isDesktop ? '8%' : '10%',
       render: (item: Color) => (
-        <Text style={{ textAlign: "left" }}>¥{item.値段}</Text>
+        <Text style={{ textAlign: 'left' }}>¥{item.値段}</Text>
       ),
     },
-    { key: "セット名", header: "セット名", width: isDesktop ? "30%" : "34%" },
+    { key: 'セット名', header: 'セット名', width: isDesktop ? '30%' : '34%' },
     actionColumn,
   ];
 
@@ -157,12 +158,12 @@ export default function ColorScreen() {
   useEffect(() => {
     const fetchSetNames = async () => {
       const { data, error } = await supabase
-        .from("GreenOcean_SetColor")
-        .select("セット名");
+        .from('GreenOcean_SetColor')
+        .select('セット名');
 
       if (!error && data) {
         const uniqueNames = Array.from(
-          new Set(data.map((item: any) => item["セット名"]).filter((v) => v))
+          new Set(data.map((item: any) => item['セット名']).filter((v) => v)),
         );
         setSetNameList(uniqueNames);
       }
@@ -176,27 +177,27 @@ export default function ColorScreen() {
     const from = page * PAGE_SIZE;
     const to = from + PAGE_SIZE - 1;
     let query = supabase
-      .from("GreenOcean_Color")
-      .select("*", { count: "exact" });
+      .from('GreenOcean_Color')
+      .select('*', { count: 'exact' });
 
     if (searchKeyword) {
-      query = query.ilike("商品名", `%${searchKeyword}%`);
+      query = query.ilike('商品名', `%${searchKeyword}%`);
     }
     if (searchSetName) {
-      query = query.eq("セット名", searchSetName);
+      query = query.eq('セット名', searchSetName);
     }
     switch (sortKey) {
-      case "numberAsc":
-        query = query.order("番号", { ascending: true });
+      case 'numberAsc':
+        query = query.order('番号', { ascending: true });
         break;
-      case "numberDsc":
-        query = query.order("番号", { ascending: false });
+      case 'numberDsc':
+        query = query.order('番号', { ascending: false });
         break;
-      case "codeAsc":
-        query = query.order("コード", { ascending: true });
+      case 'codeAsc':
+        query = query.order('コード', { ascending: true });
         break;
-      case "codeDsc":
-        query = query.order("コード", { ascending: false });
+      case 'codeDsc':
+        query = query.order('コード', { ascending: false });
         break;
     }
     query = query.range(from, to);
@@ -204,7 +205,7 @@ export default function ColorScreen() {
     const { data, error, count } = await query;
 
     if (error) {
-      console.error("エラー:", error);
+      console.error('エラー:', error);
       setColors([]);
       setHasMore(false);
     } else {
@@ -246,13 +247,16 @@ export default function ColorScreen() {
       />
       <View
         style={[
-          { width: "100%", backgroundColor: "#fff" },
-          isDesktop && { flexDirection: "row", gap: 20 },
+          { width: '100%', backgroundColor: '#fff' },
+          isDesktop && { flexDirection: 'row', gap: 20 },
         ]}
       >
+        <Link href="/test">
+          <Text>test</Text>
+        </Link>
         <View
           style={[
-            { marginLeft: 20, backgroundColor: "#fff" },
+            { marginLeft: 20, backgroundColor: '#fff' },
             !isDesktop && { marginBottom: 10 },
           ]}
         >
@@ -264,7 +268,7 @@ export default function ColorScreen() {
           <TouchableOpacity disabled={isDesktop} onPress={toggleSearch}>
             <Text style={styles.title}>
               データ検索
-              {!isDesktop && (!searchOpen ? " ▼" : " ▲")}
+              {!isDesktop && (!searchOpen ? ' ▼' : ' ▲')}
             </Text>
           </TouchableOpacity>
 
@@ -328,14 +332,14 @@ export default function ColorScreen() {
                 try {
                   await deleteColor(deleteTarget.コード);
                   setColors((prev) =>
-                    prev.filter((item) => item.コード !== deleteTarget.コード)
+                    prev.filter((item) => item.コード !== deleteTarget.コード),
                   );
-                  setSnackbarMessage("データを削除しました。");
+                  setSnackbarMessage('データを削除しました。');
                   setSnackbarVisible(true);
                 } catch (e) {
                   console.error(e);
 
-                  setSnackbarMessage("削除に失敗しました。");
+                  setSnackbarMessage('削除に失敗しました。');
                   setSnackbarVisible(true);
                 } finally {
                   setDeleteTarget(null);
@@ -372,9 +376,9 @@ const styles = StyleSheet.create({
   label: { marginBottom: 10 },
 
   pagination: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
     marginTop: 10,
   },
   // PC で左右の余白を整える場合

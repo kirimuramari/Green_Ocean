@@ -108,7 +108,7 @@ export default function SetColor() {
       <ListStatus
         loading={loading}
         hasData={setData.length > 0}
-        emptyMessage="セット品が登録されていません。"
+        emptyMessage="セット品が登録されていません"
       />
       <SafeAreaView style={formStyles.container}>
         <View style={formStyles.header}>

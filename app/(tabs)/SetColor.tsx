@@ -135,7 +135,7 @@ export default function SetColor() {
           try {
             await deleteSetColor(deleteTarget.番号);
             setData((prev) =>
-              prev.filter((item) => item.番号 !== deleteTarget.番号)
+              prev.filter((item) => item.番号 !== deleteTarget.番号),
             );
             showSnackbar("セット品を削除しました。", "success");
             setSnackbarVisible(true);

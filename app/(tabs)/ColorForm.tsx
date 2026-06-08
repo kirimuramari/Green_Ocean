@@ -41,7 +41,7 @@ const ColorForm = () => {
 
   const handleChange = <K extends keyof Colorform>(
     key: K,
-    value: Colorform[K]
+    value: Colorform[K],
   ) => {
     setForm((prev) => ({
       ...prev,
@@ -63,7 +63,7 @@ const ColorForm = () => {
     //セット名取得
     const fetchSetList = async () => {
       const { data, error } = await supabase
-        .from("GreenOcean_SetColor")
+        .from("GreenOcean_Color")
         .select("セット名")
         .returns<{ セット名: string | null }[]>();
       if (error) {
@@ -74,8 +74,8 @@ const ColorForm = () => {
         new Set(
           data
             .map((item) => item.セット名)
-            .filter((name): name is string => !!name)
-        )
+            .filter((name): name is string => !!name),
+        ),
       );
       setSetList(list);
     };

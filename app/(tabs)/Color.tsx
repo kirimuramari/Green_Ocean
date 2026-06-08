@@ -77,8 +77,8 @@ export default function ColorScreen() {
                   prev.map((c) =>
                     c.コード === item.コード
                       ? { ...c, 購入済み: !c.購入済み }
-                      : c
-                  )
+                      : c,
+                  ),
                 );
               }}
               onDelete={() => setDeleteTarget(item)}
@@ -106,8 +106,8 @@ export default function ColorScreen() {
                   prev.map((c) =>
                     c.コード === item.コード
                       ? { ...c, 購入済み: !c.購入済み }
-                      : c
-                  )
+                      : c,
+                  ),
                 );
               }}
               onDelete={() => setDeleteTarget(item)}
@@ -162,7 +162,7 @@ export default function ColorScreen() {
 
       if (!error && data) {
         const uniqueNames = Array.from(
-          new Set(data.map((item: any) => item["セット名"]).filter((v) => v))
+          new Set(data.map((item: any) => item["セット名"]).filter((v) => v)),
         );
         setSetNameList(uniqueNames);
       }
@@ -328,7 +328,7 @@ export default function ColorScreen() {
                 try {
                   await deleteColor(deleteTarget.コード);
                   setColors((prev) =>
-                    prev.filter((item) => item.コード !== deleteTarget.コード)
+                    prev.filter((item) => item.コード !== deleteTarget.コード),
                   );
                   setSnackbarMessage("データを削除しました。");
                   setSnackbarVisible(true);

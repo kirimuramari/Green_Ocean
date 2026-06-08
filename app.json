@@ -3,6 +3,7 @@
     "name": "GreenOcean",
     "slug": "greenocean",
     "version": "1.0.0",
+    "plugins": ["expo-router"],
     "android": {
       "package": "com.makkiy.greenocean"
     },

@@ -63,7 +63,7 @@ const ColorForm = () => {
     //セット名取得
     const fetchSetList = async () => {
       const { data, error } = await supabase
-        .from("GreenOcean_Color")
+        .from("GreenOcean_SetColor")
         .select("セット名")
         .returns<{ セット名: string | null }[]>();
       if (error) {

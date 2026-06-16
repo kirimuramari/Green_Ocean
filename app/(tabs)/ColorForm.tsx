@@ -5,9 +5,11 @@ import { supabase } from "@/lib/supabaseClient";
 import { formStyles } from "@/theme/formStyles";
 import { SnackbarType, getSnackbarStyle } from "@/theme/snackbarStyles";
 import { Colorform } from "@/types/types";
-
+import { useColorForm } from "@/hooks/useColorForm";
+import {useSetList} from "@/hooks/useSetList";
 import { router } from "expo-router";
 import { useEffect, useState } from "react";
+import {useSnackbar} from "@/hooks/useSnackbar";
 import {
   ScrollView,
   StyleSheet,
@@ -18,36 +20,22 @@ import {
 import { Snackbar } from "react-native-paper";
 
 const ColorForm = () => {
-  const [setList, setSetList] = useState<string[]>([]);
-  const [snackbarVisible, setSnackbarVisible] = useState(false);
-  const [snackbarMessage, setSnackbarMessage] = useState("");
-  const [snackbarType, setSnackbarType] = useState<SnackbarType>("success");
+  const {setList} = useSetList();
+
   const [nextNumber, setNextNumber] = useState<number>(1);
+const {
+  visible:snackbarVisible,
+  message:snackbarMessage,
+  type:snackbarType,
+  showSnackbar,
+  hideSnackbar,
+} = useSnackbar();
+const {
+  form,
+  handleChange,
+  resetForm,
+} = useColorForm();
 
-  const [form, setForm] = useState<Colorform>({
-    コード: "",
-    商品名: "",
-    フリガナ: "",
-    値段: null,
-    セット名: "",
-    購入済み: false,
-  });
-
-  const showSnackbar = (msg: string, type: SnackbarType = "success") => {
-    setSnackbarMessage(msg);
-    setSnackbarType(type);
-    setSnackbarVisible(true);
-  };
-
-  const handleChange = <K extends keyof Colorform>(
-    key: K,
-    value: Colorform[K],
-  ) => {
-    setForm((prev) => ({
-      ...prev,
-      [key]: value,
-    }));
-  };
   // 番号の取得（連番）
   useEffect(() => {
     const fetchData = async () => {
@@ -60,38 +48,14 @@ const ColorForm = () => {
         setNextNumber(colorData[0].番号 + 1);
       }
     };
-    //セット名取得
-    const fetchSetList = async () => {
-      const { data, error } = await supabase
-        .from("GreenOcean_SetColor")
-        .select("セット名")
-        .returns<{ セット名: string | null }[]>();
-      if (error) {
-        console.error(error);
-        return;
-      }
-      const list = Array.from(
-        new Set(
-          data
-            .map((item) => item.セット名)
-            .filter((name): name is string => !!name),
-        ),
-      );
-      setSetList(list);
-    };
     fetchData();
-    fetchSetList();
-  }, []);
+  },[]);
+    //セット名取得
+    
+
 
   // 商品名がカタカナだけなら nameKana にコピー
-  useEffect(() => {
-    if (/^[\u30A0-\u30FFー\s ]+$/.test(form.商品名)) {
-      setForm((prev) => ({
-        ...prev,
-        フリガナ: prev.商品名,
-      }));
-    }
-  }, [form.商品名]);
+ 
 
   const handleRegister = async () => {
     const errorMessage = validateColorForm(form);
@@ -111,33 +75,24 @@ const ColorForm = () => {
       showSnackbar("このコードはすでに使用されています", "error");
       return;
     }
-    console.log("コード:", form.コード);
-    console.log("Supabaseに問い合わせます");
-    const { error } = await supabase.from("GreenOcean_Color").insert([
-      {
-        コード: Number(form.コード),
-        商品名: form.商品名,
-        フリガナ: form.フリガナ,
-        値段: form.値段,
-        セット名: form.セット名,
-        購入済み: form.購入済み,
-      },
-    ]);
+   const payload ={
+     コード: Number(form.コード),
+     商品名: form.商品名,
+     フリガナ: form.フリガナ,
+     値段: form.値段,
+     セット名: form.セット名,
+     購入済み: form.購入済み,
+
+   };
+    const { error } = await supabase
+    .from("GreenOcean_Color")
+    .insert([payload]);
     if (error) {
-      console.log("登録エラー:", error.message, error.details);
       showSnackbar("登録失敗しました", "error");
     } else {
-      console.log("登録成功");
       showSnackbar("商品を追加しました", "success");
       // フォームクリアなど
-      setForm({
-        コード: "",
-        商品名: "",
-        フリガナ: "",
-        値段: null,
-        セット名: "",
-        購入済み: false,
-      });
+      resetForm();
     }
   };
 
@@ -177,7 +132,7 @@ const ColorForm = () => {
       </ScrollView>
       <Snackbar
         visible={snackbarVisible}
-        onDismiss={() => setSnackbarVisible(false)}
+        onDismiss={hideSnackbar}
         duration={3000}
         style={getSnackbarStyle(snackbarType)}
       >

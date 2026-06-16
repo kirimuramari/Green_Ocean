@@ -3,10 +3,15 @@ import { formStyles } from "@/theme/formStyles";
 import { Colorform } from "@/types/types";
 import { Picker } from "@react-native-picker/picker";
 import { Switch, Text, TextInput, View } from "react-native";
+import { FormField } from "../edit/FormField";
+
 
 type Props = {
   form: Colorform;
-  onChange: <K extends keyof Colorform>(key: K, value: Colorform[K]) => void;
+  onChange: <K extends keyof Colorform>(
+    key: K, 
+    value: Colorform[K]
+  ) => void;
   setList: string[];
   mode: "create" | "edit";
   readonlyNumber?: number;
@@ -20,6 +25,11 @@ export function ColorFormView({
   readonlyNumber,
   onSubmitEditing,
 }: Props) {
+  const isEdit = mode === "edit";
+  console.log(
+  "exists:",
+  setList.includes(form.セット名 ?? "")
+);
   return (
     <View style={formStyles.container}>
       {readonlyNumber && (
@@ -31,11 +41,12 @@ export function ColorFormView({
         onChangeText={(text) =>
           onChange("コード", text === "" ? "" : Number(text))
         }
+        editable={!isEdit}
         keyboardType="numeric"
         style={formStyles.input}
       />
 
-      <Text style={formStyles.label}>商品名</Text>
+      <FormField label="商品名">
       <TextInput
         value={form.商品名}
         onChangeText={(text) => onChange("商品名", text)}
@@ -44,8 +55,9 @@ export function ColorFormView({
         inputMode="text"
         returnKeyType="done"
         style={formStyles.input}
-      />
-      <Text style={formStyles.label}>フリガナ</Text>
+      />     
+      </FormField>
+      <FormField label="フリガナ">
       <TextInput
         value={form.フリガナ}
         onChangeText={(text) => onChange("フリガナ", text)}
@@ -55,7 +67,8 @@ export function ColorFormView({
         returnKeyType="done"
         style={formStyles.input}
       />
-      <Text style={formStyles.label}>値段</Text>
+      </FormField>
+      <FormField label="値段">
       <TextInput
         value={form.値段 !== null ? String(form.値段) : ""}
         onChangeText={(text) =>
@@ -64,18 +77,26 @@ export function ColorFormView({
         keyboardType="numeric"
         style={formStyles.input}
       />
-      <Text style={formStyles.label}>セット名</Text>
+      </FormField>
+      <FormField label="セット名">
+      <View style={formStyles.pickerContainer}>
+
       <Picker
         selectedValue={form.セット名 || ""}
         onValueChange={(value) => onChange("セット名", value)}
         style={formStyles.picker}
       >
         <Picker.Item label="選択してください" value="" />
+
         {setList.map((name) => (
           <Picker.Item key={name} label={name} value={name} />
         ))}
       </Picker>
 
+      </View>
+
+      </FormField>
+      <FormField label="購入済み">
       <View style={formStyles.switchContainer}>
         <Text style={formStyles.label}>
           {form.購入済み ? "購入済み" : "未購入"}
@@ -85,6 +106,8 @@ export function ColorFormView({
           onValueChange={(value) => onChange("購入済み", value)}
         />
       </View>
+
+      </FormField>
     </View>
   );
 }

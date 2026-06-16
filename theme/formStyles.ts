@@ -30,12 +30,18 @@ export const formStyles = StyleSheet.create({
     alignSelf: "flex-start",
   },
   picker: {
-    marginBottom: 10,
-    backgroundColor: "#fff",
-    height: 44,
-    fontSize: 16,
-    width: "auto",
-    alignSelf: "flex-start",
+    marginBottom: 16,
+    // backgroundColor: "#fff",
+    // height: 44,
+    // fontSize: 16,
+    width: "100%",
+    // alignSelf: "flex-start",
+  },
+  pickerContainer:{
+    borderWidth:1,
+    borderColor:"#d1d5db",
+    borderRadius:8, 
+    marginBottom:16
   },
   buttonRow: {
     flexDirection: "row",

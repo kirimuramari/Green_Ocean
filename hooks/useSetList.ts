@@ -20,7 +20,7 @@ export const useSetList = () => {
             const list = Array.from(
                 new Set(
                     data
-                    .map((item) => item.セット名)
+                    .map((item) => item.セット名?.trim())
                     .filter((name): name is string => !!name)
                 )
             );

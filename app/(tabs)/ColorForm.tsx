@@ -75,23 +75,21 @@ const {
       showSnackbar("このコードはすでに使用されています", "error");
       return;
     }
-    console.log("コード:", form.コード);
-    console.log("Supabaseに問い合わせます");
-    const { error } = await supabase.from("GreenOcean_Color").insert([
-      {
-        コード: Number(form.コード),
-        商品名: form.商品名,
-        フリガナ: form.フリガナ,
-        値段: form.値段,
-        セット名: form.セット名,
-        購入済み: form.購入済み,
-      },
-    ]);
+   const payload ={
+     コード: Number(form.コード),
+     商品名: form.商品名,
+     フリガナ: form.フリガナ,
+     値段: form.値段,
+     セット名: form.セット名,
+     購入済み: form.購入済み,
+
+   };
+    const { error } = await supabase
+    .from("GreenOcean_Color")
+    .insert([payload]);
     if (error) {
-      console.log("登録エラー:", error.message, error.details);
       showSnackbar("登録失敗しました", "error");
     } else {
-      console.log("登録成功");
       showSnackbar("商品を追加しました", "success");
       // フォームクリアなど
       resetForm();

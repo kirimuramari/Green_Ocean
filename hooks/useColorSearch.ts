@@ -32,6 +32,7 @@ export const useColorSearch = () => {
             return {
                 success: true,
                 count:data?.length ?? 0,
+                
             };
         } finally {
             setLoading(false);

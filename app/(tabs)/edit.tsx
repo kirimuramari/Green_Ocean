@@ -78,6 +78,7 @@ const handleCancelEdit = () => {
 
 
   const handleSelectItem = (item: Color) => {
+   
     setSelectedColor(item);
     loadColor(item);
   };

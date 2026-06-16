@@ -26,6 +26,10 @@ export function ColorFormView({
   onSubmitEditing,
 }: Props) {
   const isEdit = mode === "edit";
+  console.log(
+  "exists:",
+  setList.includes(form.セット名 ?? "")
+);
   return (
     <View style={formStyles.container}>
       {readonlyNumber && (
@@ -76,12 +80,14 @@ export function ColorFormView({
       </FormField>
       <FormField label="セット名">
       <View style={formStyles.pickerContainer}>
+
       <Picker
         selectedValue={form.セット名 || ""}
         onValueChange={(value) => onChange("セット名", value)}
         style={formStyles.picker}
       >
         <Picker.Item label="選択してください" value="" />
+
         {setList.map((name) => (
           <Picker.Item key={name} label={name} value={name} />
         ))}

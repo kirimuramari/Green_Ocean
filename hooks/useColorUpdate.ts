@@ -11,6 +11,12 @@ export const useColorUpdate = () => {
         number: number,
         form: Colorform
     ) => {
+        const updateData = {
+            ...form,
+            商品名: form.商品名.trim(),
+            フリガナ: form.商品名.trim(),
+            セット名: form.セット名.trim(),
+        }
         const errorMessage = validateColorForm(form);
 
         if (errorMessage){
@@ -23,7 +29,7 @@ export const useColorUpdate = () => {
         try {
         const { error } = await supabase
         .from("GreenOcean_Color")
-        .update(form)
+        .update(updateData)
         .eq("番号", number);
 
         if (error) {

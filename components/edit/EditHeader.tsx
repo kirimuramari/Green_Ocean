@@ -36,8 +36,9 @@ export function EditHeader({
             <TextInput
               value={query}
               onChangeText={setQuery}
-              placeholder="例: 1 または ミルク"
+              onSubmitEditing={handleSearch}
               returnKeyType="search"
+              placeholder="例: 1 または ミルク"
               style={formStyles.input}
             />
             <TouchableOpacity onPress={handleSearch} style={formStyles.button}>

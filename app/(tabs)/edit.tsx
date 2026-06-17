@@ -107,6 +107,7 @@ const handleCancelEdit = () => {
     >
      <FlatList
      data={searchResults}
+     style={{backgroundColor:"#FFF"}}
      keyExtractor={(item) => item.番号.toString()}
      ListHeaderComponent={
        <>
@@ -130,7 +131,7 @@ const handleCancelEdit = () => {
          )}
          
         {searchResults.length > 0 && (
-            <Text style={ { marginTop: 24 }}>
+            <Text style={ { marginTop: 24,marginLeft:24, }}>
             検索結果一覧（タップして編集）
                                        </Text>
                                      )}

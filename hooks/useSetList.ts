@@ -13,7 +13,6 @@ export const useSetList = () => {
             .returns<{セット名:string | null} []>();
 
             if (error) {
-                console.error(error);
                 setLoading(false);
                 return;
             }

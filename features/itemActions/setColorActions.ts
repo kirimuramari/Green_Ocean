@@ -7,7 +7,6 @@ export async function deleteSetColorItem(number: number) {
     .eq("番号", number);
 
   if (error) {
-    console.error("削除エラー", error);
     throw error;
   }
 }

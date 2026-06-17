@@ -204,7 +204,6 @@ export default function ColorScreen() {
     const { data, error, count } = await query;
 
     if (error) {
-      console.error("エラー:", error);
       setColors([]);
       setHasMore(false);
     } else {
@@ -333,7 +332,6 @@ export default function ColorScreen() {
                   setSnackbarMessage("データを削除しました。");
                   setSnackbarVisible(true);
                 } catch (e) {
-                  console.error(e);
 
                   setSnackbarMessage("削除に失敗しました。");
                   setSnackbarVisible(true);

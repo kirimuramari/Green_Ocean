@@ -61,7 +61,6 @@ export default function NoticeForm() {
     const { error } = await supabase.from("notices").delete().eq("id", id);
 
     if (error) {
-      console.error(error);
       showSnackbar("削除に失敗しました", "error");
     } else {
       setNotices((prev) => prev.filter((n) => n.id !== id));
@@ -78,7 +77,6 @@ export default function NoticeForm() {
         .order("id", { ascending: true });
 
       if (error) {
-        console.error(error);
         showSnackbar("お知らせ一覧を取得できませんでした", "error");
       } else {
         setNotices(data as Notice[]);
@@ -142,7 +140,6 @@ export default function NoticeForm() {
                         setSnackbarMessage("お知らせを削除しました。");
                         setSnackbarVisible(true);
                       } catch (e) {
-                        console.error(e);
 
                         setSnackbarMessage("削除に失敗しました。");
                         setSnackbarVisible(true);

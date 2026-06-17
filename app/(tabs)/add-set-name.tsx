@@ -1,9 +1,7 @@
 import { supabase } from "@/lib/supabaseClient";
 import { Snackbar } from "react-native-paper";
-
 import { BackButton } from "@/components/BackButton";
 import { SnackbarType, getSnackbarStyle } from "@/theme/snackbarStyles";
-
 import { formStyles } from "@/theme/formStyles";
 import { SetColorItem } from "@/types/types";
 import { router } from "expo-router";
@@ -41,7 +39,6 @@ const AddSetName = () => {
         .limit(1);
 
       if (error) {
-        console.error("番号取得エラー:", error.message);
         return;
       }
       const last: number =
@@ -114,6 +111,8 @@ const AddSetName = () => {
           onChangeText={setPrice}
           placeholder="値段を入力（空白でもOK）"
           onEndEditing={handleRegister}
+          onSubmitEditing={handleRegister}
+          returnKeyType="default"
         />
         <View style={formStyles.buttonRow}>
           <TouchableOpacity onPress={handleRegister} style={formStyles.button}>

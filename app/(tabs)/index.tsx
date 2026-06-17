@@ -27,7 +27,6 @@ export default function Home() {
         .order('created_at', { ascending: false })
         .limit(3);
       if (error) {
-        console.error(error);
         return;
       }
       setNotices(data ?? []);

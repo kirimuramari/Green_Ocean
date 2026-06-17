@@ -1,5 +1,5 @@
 import { formStyles } from "@/theme/formStyles";
-import { TouchableOpacity, View,Text } from "react-native";
+import { TouchableOpacity, View,Text, } from "react-native";
 
 type Props = {
     updating:boolean;
@@ -14,11 +14,13 @@ export function EditButtonRow({
 
 }:Props) {
     return (
+    <View style={{marginLeft:25}}>
+
         <View style={formStyles.buttonRow}>
             <TouchableOpacity
                 onPress={onUpdate}
                 disabled={updating}
-                style={[formStyles.button, formStyles.halfButton]}
+                style={formStyles.button}
               >
               <Text style={formStyles.buttonText}>
                 {updating ? "更新中..." : "再登録"}
@@ -31,5 +33,6 @@ export function EditButtonRow({
                             <Text style={formStyles.cancelButtonText}>キャンセル</Text>
                           </TouchableOpacity>
                         </View>
+    </View>
     );
 }

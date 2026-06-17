@@ -3,8 +3,7 @@ import { ColorFormView } from "@/components/common/ColorFormView";
 import { validateColorForm } from "@/features/form/validateColorForm";
 import { supabase } from "@/lib/supabaseClient";
 import { formStyles } from "@/theme/formStyles";
-import { SnackbarType, getSnackbarStyle } from "@/theme/snackbarStyles";
-import { Colorform } from "@/types/types";
+import {  getSnackbarStyle } from "@/theme/snackbarStyles";
 import { useColorForm } from "@/hooks/useColorForm";
 import {useSetList} from "@/hooks/useSetList";
 import { router } from "expo-router";
@@ -50,11 +49,6 @@ const {
     };
     fetchData();
   },[]);
-    //セット名取得
-    
-
-
-  // 商品名がカタカナだけなら nameKana にコピー
  
 
   const handleRegister = async () => {
@@ -97,9 +91,9 @@ const {
   };
 
   return (
-    <View>
-      <ScrollView
-        contentContainerStyle={(styles.container, formStyles.container)}
+    <ScrollView>
+      <View
+        style={(styles.container, formStyles.container)}
       >
         <View style={formStyles.subContainer}>
           <View style={formStyles.header}>
@@ -129,7 +123,7 @@ const {
             </TouchableOpacity>
           </View>
         </View>
-      </ScrollView>
+      </View>
       <Snackbar
         visible={snackbarVisible}
         onDismiss={hideSnackbar}
@@ -138,7 +132,7 @@ const {
       >
         {snackbarMessage}
       </Snackbar>
-    </View>
+    </ScrollView>
   );
 };
 const styles = StyleSheet.create({

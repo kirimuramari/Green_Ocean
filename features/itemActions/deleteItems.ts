@@ -13,7 +13,6 @@ export async function deleteItem({ table, keyName, keyValue }: DeleteParams) {
     .select();
 
   if (error) {
-    console.error("削除エラー", error);
     throw error;
   }
   return { data, count };

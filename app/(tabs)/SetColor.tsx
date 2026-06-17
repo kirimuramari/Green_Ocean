@@ -33,11 +33,10 @@ export default function SetColor() {
   const [deleteTarget, setDeleteTarget] = useState<SetColorItem | null>(null);
   const [snackbarVisible, setSnackbarVisible] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
-  const [snackbarType, setSnackbarType] = useState<SnackbarType>("success");
+  const [ setSnackbarType] = useState<SnackbarType>("success");
 
   const showSnackbar = (msg: string, type: SnackbarType = "success") => {
     setSnackbarMessage(msg);
-    setSnackbarType(type);
     setSnackbarVisible(true);
   };
 
@@ -93,7 +92,6 @@ export default function SetColor() {
         .from("GreenOcean_SetColor")
         .select("*");
       if (error) {
-        console.error("Supabaseエラー:", error);
       } else {
         setData(data || []);
       }

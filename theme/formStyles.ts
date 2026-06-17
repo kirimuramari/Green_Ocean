@@ -31,22 +31,22 @@ export const formStyles = StyleSheet.create({
   },
   picker: {
     marginBottom: 16,
-    // backgroundColor: "#fff",
-    // height: 44,
-    // fontSize: 16,
-    width: "100%",
-    // alignSelf: "flex-start",
+    backgroundColor: "#fff",
+    height: 44,
+    fontSize: 16,
+    width: "auto",
+    alignSelf: "flex-start",
   },
   pickerContainer:{
-    borderWidth:1,
-    borderColor:"#d1d5db",
-    borderRadius:8, 
+
     marginBottom:16
   },
   buttonRow: {
     flexDirection: "row",
+    backgroundColor:"#fff",
     gap: 12,
     marginTop: 8,
+    alignSelf:"flex-start",
   },
   button: {
     backgroundColor: "#3b82f6",

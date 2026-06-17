@@ -50,7 +50,6 @@ export default function Purchased() {
         .eq("購入済み", true);
 
       if (error) {
-        console.error("Supabaseエラー:", error);
       } else {
         setData((data as Item[]) || []);
       }

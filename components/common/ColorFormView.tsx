@@ -4,6 +4,7 @@ import { Colorform } from "@/types/types";
 import { Picker } from "@react-native-picker/picker";
 import { Switch, Text, TextInput, View } from "react-native";
 import { FormField } from "../edit/FormField";
+import { useRef } from "react";
 
 
 type Props = {
@@ -26,7 +27,10 @@ export function ColorFormView({
   onSubmitEditing,
 }: Props) {
   const isEdit = mode === "edit";
-
+  const codeRef = useRef<TextInput>(null);
+const nameRef = useRef<TextInput>(null);
+const kanaRef = useRef<TextInput>(null);
+const priceRef = useRef<TextInput>(null);
 
   return (
     <View style={formStyles.container}>
@@ -42,6 +46,8 @@ export function ColorFormView({
         editable={!isEdit}
         keyboardType="numeric"
         style={formStyles.input}
+        returnKeyType="next"
+        onSubmitEditing={() => codeRef.current?.focus()}
       />
 
       <FormField label="商品名">
@@ -51,7 +57,9 @@ export function ColorFormView({
         autoCorrect={false}
         autoCapitalize="none"
         inputMode="text"
-        returnKeyType="done"
+        returnKeyType="next"
+        onSubmitEditing={() => nameRef.current?.focus()}
+
         style={formStyles.input}
       />     
       </FormField>
@@ -62,7 +70,10 @@ export function ColorFormView({
         autoCorrect={false}
         autoCapitalize="none"
         inputMode="text"
-        returnKeyType="done"
+        
+        returnKeyType="next"
+        onSubmitEditing={() => kanaRef.current?.focus()}
+
         style={formStyles.input}
       />
       </FormField>
@@ -73,6 +84,10 @@ export function ColorFormView({
           onChange("値段", text === "" ? null : Number(text))
         }
         keyboardType="numeric"
+        
+        returnKeyType="done"
+        onSubmitEditing={() => priceRef.current?.focus()}
+
         style={formStyles.input}
       />
       </FormField>
@@ -83,6 +98,7 @@ export function ColorFormView({
         selectedValue={form.セット名 || ""}
         onValueChange={(value) => onChange("セット名", value)}
         style={formStyles.picker}
+     
       >
         <Picker.Item label="選択してください" 
         value="" 
@@ -90,7 +106,11 @@ export function ColorFormView({
         />
 
         {setList.map((name) => (
-          <Picker.Item key={name} label={name} value={name} />
+          <Picker.Item 
+          key={name}
+           label={name}
+            value={name}
+            />
         ))}
       </Picker>
 

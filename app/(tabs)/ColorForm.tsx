@@ -1,14 +1,14 @@
 import { BackButton } from "@/components/BackButton";
 import { ColorFormView } from "@/components/common/ColorFormView";
 import { validateColorForm } from "@/features/form/validateColorForm";
-import { supabase } from "@/lib/supabaseClient";
 import { formStyles } from "@/theme/formStyles";
 import {  getSnackbarStyle } from "@/theme/snackbarStyles";
 import { useColorForm } from "@/hooks/useColorForm";
 import {useSetList} from "@/hooks/useSetList";
 import { router } from "expo-router";
-import { useEffect, useState } from "react";
+import { useNextNumber } from "@/hooks/useNextNumber";
 import {useSnackbar} from "@/hooks/useSnackbar";
+import { useRegisterColor } from "@/hooks/useRegisterColor";
 import {
   ScrollView,
   StyleSheet,
@@ -21,7 +21,6 @@ import { Snackbar } from "react-native-paper";
 const ColorForm = () => {
   const {setList} = useSetList();
 
-  const [nextNumber, setNextNumber] = useState<number>(1);
 const {
   visible:snackbarVisible,
   message:snackbarMessage,
@@ -35,21 +34,8 @@ const {
   resetForm,
 } = useColorForm();
 
-  // 番号の取得（連番）
-  useEffect(() => {
-    const fetchData = async () => {
-      const { data: colorData } = (await supabase
-        .from("GreenOcean_Color")
-        .select("番号")
-        .order("番号", { ascending: false })
-        .limit(1)) as { data: { 番号: number }[] | null };
-      if (colorData && colorData.length > 0) {
-        setNextNumber(colorData[0].番号 + 1);
-      }
-    };
-    fetchData();
-  },[]);
- 
+const {nextNumber} = useNextNumber();
+const {registerColor} = useRegisterColor();
 
   const handleRegister = async () => {
     const errorMessage = validateColorForm(form);
@@ -59,37 +45,16 @@ const {
       return;
     }
 
-    // コードの重複チェック
-    const { data: existing } = await supabase
+    const result = await registerColor(form);
 
-      .from("GreenOcean_Color")
-      .select("コード")
-      .eq("コード", Number(form.コード));
-    if (existing && existing.length > 0) {
-      showSnackbar("このコードはすでに使用されています", "error");
-      return;
-    }
-   const payload ={
-     コード: Number(form.コード),
-     商品名: form.商品名,
-     フリガナ: form.フリガナ,
-     値段: form.値段,
-     セット名: form.セット名,
-     購入済み: form.購入済み,
-
-   };
-    const { error } = await supabase
-    .from("GreenOcean_Color")
-    .insert([payload]);
-    if (error) {
-      showSnackbar("登録失敗しました", "error");
-    } else {
-      showSnackbar("商品を追加しました", "success");
-      // フォームクリアなど
+    showSnackbar(
+      result.message,
+      result.success ? "success" : "error"
+    );
+    if (result.success) {
       resetForm();
     }
   };
-
   return (
     <ScrollView>
       <View

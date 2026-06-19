@@ -21,6 +21,7 @@ export interface Notice {
 }
 //DB未完成型のデータ
 export interface Colorform {
+  番号: number | null,
   コード: number | "";
   商品名: string;
   フリガナ: string;

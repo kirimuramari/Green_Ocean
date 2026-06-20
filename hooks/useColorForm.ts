@@ -3,6 +3,7 @@ import {Colorform,Color} from "@/types/types";
 
 
 const initialForm:Colorform = {
+    番号:null,
     コード:"",
     商品名:"",
     フリガナ:"",
@@ -41,6 +42,7 @@ export const useColorForm = (
 },[form.商品名]);
 const loadColor = (color: Color) => {
     setForm({
+        番号:color.番号,
         コード: color.コード,
         商品名: color.商品名,
         フリガナ: color.フリガナ,

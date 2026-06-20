@@ -1,3 +1,4 @@
+import { ColorSearchPanel } from "@/components/color/ColorSearchPanel";
 import { BackButton } from "@/components/BackButton";
 import { AppSnackbar } from "@/components/common/AppSnackbar";
 import { DeleteConfirmDialog } from "@/components/common/DeleteConfirmDialog";
@@ -255,60 +256,23 @@ export default function ColorScreen() {
             !isDesktop && { marginBottom: 10 },
           ]}
         >
-          <View style={formStyles.header}>
-            <BackButton />
-            <Text style={[formStyles.title]}>商品一覧表示</Text>
-          </View>
-          {/* スマホ：タップして開閉 */}
-          <TouchableOpacity disabled={isDesktop} onPress={toggleSearch}>
-            <Text style={styles.title}>
-              データ検索
-              {!isDesktop && (!searchOpen ? " ▼" : " ▲")}
-            </Text>
-          </TouchableOpacity>
-
-          {(isDesktop || searchOpen) && (
-            <View>
-              <TextInput
-                style={[formStyles.input, isDesktop && desktopFormStyles.input]}
-                placeholder="商品名で検索"
-                value={searchKeywordInput}
-                onChangeText={setSearchKeywordInput}
-              />
-              <Text style={styles.label}>セット名でフィルター:</Text>
-              <Picker
-                selectedValue={selectedSetName}
-                onValueChange={(itemValue) => setSelectedSetName(itemValue)}
-                style={[
-                  formStyles.picker,
-                  isDesktop && desktopFormStyles.picker,
-                ]}
-              >
-                <Picker.Item label="すべて" value="" />
-                {setNameList.map((name) => (
-                  <Picker.Item key={name} label={name} value={name} />
-                ))}
-              </Picker>
-              <TouchableOpacity
-                onPress={handleSearch}
-                style={[
-                  formStyles.button,
-                  isDesktop && desktopFormStyles.button,
-                ]}
-              >
-                <Text
-                  style={[
-                    formStyles.buttonText,
-                    isDesktop && desktopFormStyles.buttonText,
-                  ]}
-                >
-                  検索
-                </Text>
-              </TouchableOpacity>
-              <SortSelector value={sortKey} onChange={setSortKey} />
-            </View>
-          )}
-        </View>
+          
+<View style={formStyles.header}>
+       <BackButton />
+       <Text style={[formStyles.title]}>商品一覧表示</Text>
+     </View>
+     <ColorSearchPanel
+     isDesktop={isDesktop}
+     searchOpen={searchOpen}
+     searchKeywordInput={searchKeywordInput}
+     onSearchKeywordChange={setSearchKeywordInput}
+     setNameList={selectedSetName}
+     onSelectedSetNameChange={setSelectedSetName}
+     sortKey={sortKey}
+     onSortChange={setSortKey}
+     onSearch={handleSearch}
+     onToggleSearch={toggleSearch}
+     />
 
         {/* テーブル */}
         <View style={{ flex: 2 }}>

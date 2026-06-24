@@ -1,11 +1,9 @@
-import { ColorSearchPanel } from "@/components/color/ColorSearchPanel";
+import ColorSearchPanel from "@/components/color/ColorSearchPanel";
 import { BackButton } from "@/components/BackButton";
 import { AppSnackbar } from "@/components/common/AppSnackbar";
 import { DeleteConfirmDialog } from "@/components/common/DeleteConfirmDialog";
-import { QuickActions } from "@/components/common/QuickAction";
-import { SortSelector } from "@/components/common/SortSelector";
 import { ListStatus } from "@/components/ListStatus";
-import { TableView } from "@/components/TableView";
+import { TableView,Column } from "@/components/TableView";
 import {
   deleteColor,
   togglePurchased,
@@ -17,15 +15,13 @@ import { desktopFormStyles, formStyles } from "@/theme/formStyles";
 import { SnackbarType } from "@/theme/snackbarStyles";
 import { useIsDesktop } from "@/theme/useIsDesktop";
 import { Color } from "@/types/types";
-import { Picker } from "@react-native-picker/picker";
+import  {createColorColumns}  from "@/components/color/ColorColumns";
 import { useCallback, useEffect, useState } from "react";
 import {
   Button,
   ScrollView,
   StyleSheet,
   Text,
-  TextInput,
-  TouchableOpacity,
   View,
 } from "react-native";
 
@@ -55,98 +51,42 @@ export default function ColorScreen() {
   };
   //ＰＣかスマホ判定
   const isDesktop = useIsDesktop();
-  //サイズ調整
-  const actionColumn = isDesktop
-    ? {
-        key: "actions",
-        header: "操作",
-        width: "10%",
-        render: (item: Color) => (
-          <View
-            style={{
-              flexDirection: "row",
-              justifyContent: "center",
-              alignItems: "center",
-              gap: 8,
-            }}
-          >
-            <QuickActions
-              purchased={item.購入済み}
-              onTogglePurchased={async () => {
-                await togglePurchased(item.コード, !item.購入済み);
-                setColors((prev) =>
-                  prev.map((c) =>
-                    c.コード === item.コード
-                      ? { ...c, 購入済み: !c.購入済み }
-                      : c,
-                  ),
-                );
-              }}
-              onDelete={() => setDeleteTarget(item)}
-            />
-          </View>
-        ),
-      }
-    : {
-        key: "actions",
-        header: "操作",
-        width: "18%",
-        render: (item: Color) => (
-          <View
-            style={{
-              flexDirection: "column",
-              alignItems: "center",
-              gap: 6,
-            }}
-          >
-            <QuickActions
-              purchased={item.購入済み}
-              onTogglePurchased={async () => {
-                await togglePurchased(item.コード, !item.購入済み);
-                setColors((prev) =>
-                  prev.map((c) =>
-                    c.コード === item.コード
-                      ? { ...c, 購入済み: !c.購入済み }
-                      : c,
-                  ),
-                );
-              }}
-              onDelete={() => setDeleteTarget(item)}
-            />
-          </View>
-        ),
-      };
 
-  const columns = [
-    {
-      key: "番号",
-      header: "番号",
-      width: isDesktop ? "6%" : "10%",
-      render: (item: Color) => (
-        <Text style={{ textAlign: "left" }}>{item.番号}</Text>
-      ),
-    },
-    { key: "商品名", header: "商品名", width: isDesktop ? "14%" : "18%" },
-    { key: "フリガナ", header: "フリガナ", width: isDesktop ? "14%" : "0%" },
-    {
-      key: "コード",
-      header: "コード",
-      width: isDesktop ? "8%" : "10%",
-      render: (item: Color) => (
-        <Text style={{ textAlign: "left" }}>{item.コード}</Text>
-      ),
-    },
-    {
-      key: "値段",
-      header: "値段",
-      width: isDesktop ? "8%" : "10%",
-      render: (item: Color) => (
-        <Text style={{ textAlign: "left" }}>¥{item.値段}</Text>
-      ),
-    },
-    { key: "セット名", header: "セット名", width: isDesktop ? "30%" : "34%" },
-    actionColumn,
-  ];
+  const handleTogglePurchased = async (item:Color) => {
+    await togglePurchased(item.コード, !item.購入済み);
+
+    setColors((prev) => 
+    prev.map((c) =>
+      c.コード === item.コード
+    ? { ...c, 購入済み: !c.購入済み }
+    :c
+    )
+  );
+  };
+
+const handleDeleteConfirm = async () => {
+    if (!deleteTarget) return;
+                try {
+                  await deleteColor(deleteTarget.コード);
+
+    setColors((prev) =>
+    prev.filter((item) => item.コード !== deleteTarget?.コード)
+  );
+   setSnackbarMessage("データを削除しました。");
+                } catch (e) {
+                  setSnackbarMessage("削除に失敗しました。");
+                } finally {
+                  setSnackbarVisible(true);
+                  setDeleteTarget(null);
+                }
+              };
+
+  const columns = createColorColumns({
+    isDesktop,
+    onTogglePurchased:handleTogglePurchased,
+    onDelete:handleDeleteConfirm,
+  })
+   
 
   //スマホ向けアコーディオン切り替えロジック
   const toggleSearch = () => {
@@ -220,6 +160,14 @@ export default function ColorScreen() {
     fetchData();
   }, [fetchData]);
 
+const handleKeywordChange = (value:string) => {
+  setSearchKeyword(value);
+};
+
+const handleSetNameChange = (value: string) => {
+  setSelectedSetName(value);
+}
+
   const handleSearch = () => {
     setPage(0);
     setSearchKeyword(searchKeywordInput.trim());
@@ -234,6 +182,12 @@ export default function ColorScreen() {
   };
 
   const sortedColors = sortItems(colors, sortKey);
+
+  const handleDeleteCancel = () => {
+    setDeleteTarget(null);
+  };
+
+  
 
   return (
     <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
@@ -262,16 +216,23 @@ export default function ColorScreen() {
        <Text style={[formStyles.title]}>商品一覧表示</Text>
      </View>
      <ColorSearchPanel
-     isDesktop={isDesktop}
-     searchOpen={searchOpen}
-     searchKeywordInput={searchKeywordInput}
-     onSearchKeywordChange={setSearchKeywordInput}
-     setNameList={selectedSetName}
-     onSelectedSetNameChange={setSelectedSetName}
-     sortKey={sortKey}
-     onSortChange={setSortKey}
-     onSearch={handleSearch}
-     onToggleSearch={toggleSearch}
+        isDesktop={isDesktop}
+        searchOpen={searchOpen}
+        onToggleSearch={toggleSearch}
+        search={{
+          keyword: searchKeywordInput,
+          selectedSetName,
+          setNameList,
+        }}
+        actions={{
+          onKeywordChange: handleKeywordChange,
+          onSetNameChange: handleSetNameChange,
+          onSearch: handleSearch,
+        }}
+        sort={{
+          value: sortKey,
+          onChange: setSortKey,
+     }}
      />
 
         {/* テーブル */}
@@ -285,24 +246,8 @@ export default function ColorScreen() {
             />
             <DeleteConfirmDialog
               visible={!!deleteTarget}
-              onCancel={() => setDeleteTarget(null)}
-              onConfirm={async () => {
-                if (!deleteTarget) return;
-                try {
-                  await deleteColor(deleteTarget.コード);
-                  setColors((prev) =>
-                    prev.filter((item) => item.コード !== deleteTarget.コード),
-                  );
-                  setSnackbarMessage("データを削除しました。");
-                  setSnackbarVisible(true);
-                } catch (e) {
-
-                  setSnackbarMessage("削除に失敗しました。");
-                  setSnackbarVisible(true);
-                } finally {
-                  setDeleteTarget(null);
-                }
-              }}
+              onCancel={handleDeleteCancel}
+              onConfirm={handleDeleteConfirm}
             />
           </View>
           <View style={styles.pagination}>
@@ -318,6 +263,7 @@ export default function ColorScreen() {
         message={snackbarMessage}
         onDismiss={() => setSnackbarVisible(false)}
       />
+      </View>
     </ScrollView>
   );
 }

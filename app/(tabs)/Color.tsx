@@ -1,22 +1,18 @@
 import ColorSearchPanel from "@/components/color/ColorSearchPanel";
+import { useColorList } from "@/hooks/color/useColorList";
+import { useColorSearch } from "@/hooks/color/useColorSearch";
+import { useColorActions } from "@/hooks/color/useColorActions";
 import { BackButton } from "@/components/BackButton";
 import { AppSnackbar } from "@/components/common/AppSnackbar";
 import { DeleteConfirmDialog } from "@/components/common/DeleteConfirmDialog";
 import { ListStatus } from "@/components/ListStatus";
-import { TableView,Column } from "@/components/TableView";
-import {
-  deleteColor,
-  togglePurchased,
-} from "@/features/itemActions/itemActions";
+import { TableView, } from "@/components/TableView";
 import { sortItems } from "@/features/sort/sortItems";
 import { SortKey } from "@/features/sort/sortTypes";
-import { supabase } from "@/lib/supabaseClient";
-import { desktopFormStyles, formStyles } from "@/theme/formStyles";
-import { SnackbarType } from "@/theme/snackbarStyles";
+import {  formStyles } from "@/theme/formStyles";
 import { useIsDesktop } from "@/theme/useIsDesktop";
-import { Color } from "@/types/types";
 import  {createColorColumns}  from "@/components/color/ColorColumns";
-import { useCallback, useEffect, useState } from "react";
+import {  useState } from "react";
 import {
   Button,
   ScrollView,
@@ -26,168 +22,61 @@ import {
 } from "react-native";
 
 export default function ColorScreen() {
-  const PAGE_SIZE = 30;
-  const [colors, setColors] = useState<Color[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [searchKeyword, setSearchKeyword] = useState("");
-  const [searchKeywordInput, setSearchKeywordInput] = useState("");
-  const [page, setPage] = useState(0);
-  const [hasMore, setHasMore] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [setNameList, setSetNameList] = useState<string[]>([]);
-  const [selectedSetName, setSelectedSetName] = useState("");
-  const [searchSetName, setSearchSetName] = useState("");
-  const [searchOpen, setSearchOpen] = useState(false);
   const [sortKey, setSortKey] = useState<SortKey>("numberAsc");
-  const [deleteTarget, setDeleteTarget] = useState<Color | null>(null);
-  const [snackbarVisible, setSnackbarVisible] = useState(false);
-  const [snackbarMessage, setSnackbarMessage] = useState("");
-  const [snackbarType, setSnackbarType] = useState<SnackbarType>("success");
 
-  const showSnackbar = (msg: string, type: SnackbarType = "success") => {
-    setSnackbarMessage(msg);
-    setSnackbarType(type);
-    setSnackbarVisible(true);
-  };
+  
+  const {
+          searchKeywordInput,
+          selectedSetName,
+          searchOpen,
+          searchKeyword,
+          searchSetName,
+          handleKeywordChange,
+          handleSetNameChange,
+          applySearch,
+          toggleSearch,
+    } = useColorSearch();
+  const {
+          colors,
+        loading,
+        error,
+        page,
+        hasMore,
+        setNameList,
+        nextPage,
+        prevPage,
+
+        updateItem,
+  removeItem,
+  } = useColorList({
+    searchKeyword,
+    searchSetName,
+    sortKey,
+  });
+
+const actions = useColorActions({
+  updateItem,
+  removeItem,
+});
+
+
   //ＰＣかスマホ判定
   const isDesktop = useIsDesktop();
 
-  const handleTogglePurchased = async (item:Color) => {
-    await togglePurchased(item.コード, !item.購入済み);
-
-    setColors((prev) => 
-    prev.map((c) =>
-      c.コード === item.コード
-    ? { ...c, 購入済み: !c.購入済み }
-    :c
-    )
-  );
+  const handleSearch = () => {
+    applySearch();    
   };
 
-const handleDeleteConfirm = async () => {
-    if (!deleteTarget) return;
-                try {
-                  await deleteColor(deleteTarget.コード);
-
-    setColors((prev) =>
-    prev.filter((item) => item.コード !== deleteTarget?.コード)
-  );
-   setSnackbarMessage("データを削除しました。");
-                } catch (e) {
-                  setSnackbarMessage("削除に失敗しました。");
-                } finally {
-                  setSnackbarVisible(true);
-                  setDeleteTarget(null);
-                }
-              };
 
   const columns = createColorColumns({
     isDesktop,
-    onTogglePurchased:handleTogglePurchased,
-    onDelete:handleDeleteConfirm,
+    onTogglePurchased:
+    actions.handleTogglePurchased,
+    onDelete:
+      actions.handleDelete,
   })
-   
 
-  //スマホ向けアコーディオン切り替えロジック
-  const toggleSearch = () => {
-    if (!isDesktop) {
-      setSearchOpen((prev) => !prev);
-    }
-  };
-  // セット名一覧の取得（初回のみ）
-  useEffect(() => {
-    const fetchSetNames = async () => {
-      const { data, error } = await supabase
-        .from("GreenOcean_SetColor")
-        .select("セット名");
 
-      if (!error && data) {
-        const uniqueNames = Array.from(
-          new Set(data.map((item: any) => item["セット名"]).filter((v) => v)),
-        );
-        setSetNameList(uniqueNames);
-      }
-    };
-    fetchSetNames();
-  }, []);
-  // データ取得（検索キーワード・セット名・ページが変わったとき）
-
-  const fetchData = useCallback(async () => {
-    setLoading(true);
-    const from = page * PAGE_SIZE;
-    const to = from + PAGE_SIZE - 1;
-    let query = supabase
-      .from("GreenOcean_Color")
-      .select("*", { count: "exact" });
-
-    if (searchKeyword) {
-      query = query.ilike("商品名", `%${searchKeyword}%`);
-    }
-    if (searchSetName) {
-      query = query.eq("セット名", searchSetName);
-    }
-    switch (sortKey) {
-      case "numberAsc":
-        query = query.order("番号", { ascending: true });
-        break;
-      case "numberDsc":
-        query = query.order("番号", { ascending: false });
-        break;
-      case "codeAsc":
-        query = query.order("コード", { ascending: true });
-        break;
-      case "codeDsc":
-        query = query.order("コード", { ascending: false });
-        break;
-    }
-    query = query.range(from, to);
-
-    const { data, error, count } = await query;
-
-    if (error) {
-      setColors([]);
-      setHasMore(false);
-    } else {
-      setColors(data ?? []);
-      setHasMore((count ?? 0) > to + 1); //次ページが存在するか
-      setError(null);
-    }
-
-    setLoading(false);
-  }, [page, searchKeyword, searchSetName, sortKey]);
-
-  useEffect(() => {
-    fetchData();
-  }, [fetchData]);
-
-const handleKeywordChange = (value:string) => {
-  setSearchKeyword(value);
-};
-
-const handleSetNameChange = (value: string) => {
-  setSelectedSetName(value);
-}
-
-  const handleSearch = () => {
-    setPage(0);
-    setSearchKeyword(searchKeywordInput.trim());
-    setSearchSetName(selectedSetName);
-  };
-  const handleNext = () => {
-    if (hasMore) setPage((prev) => prev + 1);
-  };
-
-  const handlePrev = () => {
-    if (page > 0) setPage((prev) => prev - 1);
-  };
-
-  const sortedColors = sortItems(colors, sortKey);
-
-  const handleDeleteCancel = () => {
-    setDeleteTarget(null);
-  };
-
-  
 
   return (
     <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
@@ -195,7 +84,7 @@ const handleSetNameChange = (value: string) => {
       <ListStatus
         loading={loading}
         error={error}
-        hasData={!!colors && colors.length > 0}
+        hasData={colors.length > 0}
         emptyMessage="該当する商品がありません"
       />
       <View
@@ -234,36 +123,34 @@ const handleSetNameChange = (value: string) => {
           onChange: setSortKey,
      }}
      />
+     </View>
 
         {/* テーブル */}
         <View style={{ flex: 2 }}>
-          <View>
             <TableView
-              data={sortedColors}
+              data={colors}
               columns={columns}
               isDesktop={isDesktop}
               rowKey={(item) => item.コード}
             />
             <DeleteConfirmDialog
-              visible={!!deleteTarget}
-              onCancel={handleDeleteCancel}
-              onConfirm={handleDeleteConfirm}
+              visible={!!actions.deleteTarget}
+              onCancel={actions.handleDeleteCancel}
+              onConfirm={actions.handleDeleteConfirm}
             />
-          </View>
           <View style={styles.pagination}>
-            <Button title="前へ" onPress={handlePrev} disabled={page === 0} />
+            <Button title="前へ" onPress={prevPage} disabled={page === 0} />
             <Text>ページ {page + 1}</Text>
-            <Button title="次へ" onPress={handleNext} disabled={!hasMore} />
+            <Button title="次へ" onPress={nextPage} disabled={!hasMore} />
           </View>
         </View>
       </View>
 
       <AppSnackbar
-        visible={snackbarVisible}
-        message={snackbarMessage}
-        onDismiss={() => setSnackbarVisible(false)}
+        visible={actions.snackbarVisible}
+        message={actions.snackbarMessage}
+        onDismiss={actions.hideSnackbar}
       />
-      </View>
     </ScrollView>
   );
 }

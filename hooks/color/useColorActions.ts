@@ -6,10 +6,6 @@ import { SnackbarType } from "@/theme/snackbarStyles";
 type Props = {
     updateItem:(item:Color)=>void;
     removeItem:(code:number)=>void;
-    // showSnackbar:(
-    //     message:string,
-    //     type?:SnackbarType,
-    // )=>void;
 };
 export function useColorActions({
     updateItem,

@@ -7,11 +7,9 @@ import { AppSnackbar } from "@/components/common/AppSnackbar";
 import { DeleteConfirmDialog } from "@/components/common/DeleteConfirmDialog";
 import { ListStatus } from "@/components/ListStatus";
 import { TableView, } from "@/components/TableView";
-import { sortItems } from "@/features/sort/sortItems";
 import { SortKey } from "@/features/sort/sortTypes";
 import {  formStyles } from "@/theme/formStyles";
 import { useIsDesktop } from "@/theme/useIsDesktop";
-import  {createColorColumns}  from "@/components/color/ColorColumns";
 import {  useState } from "react";
 import {
   Button,
@@ -20,6 +18,7 @@ import {
   Text,
   View,
 } from "react-native";
+import { createColorColumns } from "@/components/color/ColorColumns";
 
 export default function ColorScreen() {
   const [sortKey, setSortKey] = useState<SortKey>("numberAsc");
@@ -70,10 +69,7 @@ const actions = useColorActions({
 
   const columns = createColorColumns({
     isDesktop,
-    onTogglePurchased:
-    actions.handleTogglePurchased,
-    onDelete:
-      actions.handleDelete,
+
   })
 
 

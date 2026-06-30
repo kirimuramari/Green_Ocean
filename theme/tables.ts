@@ -28,6 +28,13 @@ export const tables = StyleSheet.create({
     fontSize: 13,
     color: "#747575",
   },
+  row: {
+      flexDirection: "row",
+    marginBottom: 10,
+    borderBottomWidth: 1,
+    borderColor: "#ddd",
+    paddingBottom: 5,
+  },
 });
 
 //デスクトップスタイル
@@ -60,5 +67,12 @@ export const desktopTables = StyleSheet.create({
     padding: 10,
     paddingVertical: 8,
     textAlign: "left",
+  },
+  row: {
+      flexDirection: "row",
+    marginBottom: 10,
+    borderBottomWidth: 1,
+    borderColor: "#ddd",
+    paddingBottom: 5,
   },
 });

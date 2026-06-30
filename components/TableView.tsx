@@ -1,29 +1,33 @@
 //テーブル表示
 import { desktopTables, tables } from "@/theme/tables";
 import React from "react";
-import { Text, View } from "react-native";
+import { Text, View, DimensionValue } from "react-native";
 
-type Column<T> = {
-  key: string;
+
+export type Column<T extends object> = {
+  id:string;
+  key?:Extract<keyof T, string | number>;
   header: string;
-  width: string;
+  width: DimensionValue;
   render?: (item: T) => React.ReactNode;
 };
 
-type Props<T> = {
+type Props<T extends object> = {
   data: T[];
   columns: Column<T>[];
   isDesktop: boolean;
   rowKey: (item: T, index: number) => string | number;
 };
 
-export function TableView<T>({ data, columns, isDesktop, rowKey }: Props<T>) {
+
+export function TableView<T extends object>
+({ data, columns, isDesktop, rowKey }: Props<T>) {
   return (
     <View style={[desktopTables.tableContainerStyle]}>
       <View style={[tables.headerRow, isDesktop && desktopTables.headerRow]}>
         {columns.map((col) => (
           <Text
-            key={col.key}
+            key={col.id}
             style={[
               {
                 width: col.width,
@@ -47,7 +51,7 @@ export function TableView<T>({ data, columns, isDesktop, rowKey }: Props<T>) {
         >
           {columns.map((col) => (
             <View
-              key={col.key}
+              key={col.id}
               style={[
                 { width: col.width },
                 tables.dataCell,
@@ -56,9 +60,9 @@ export function TableView<T>({ data, columns, isDesktop, rowKey }: Props<T>) {
             >
               {col.render ? (
                 col.render(item)
-              ) : (
-                <Text>{String((item as any)[col.key] ?? "")}</Text>
-              )}
+              ) : col.key ? (
+                <Text>{String(item[col.key as keyof T] ?? "")}</Text>
+              ): null}
             </View>
           ))}
         </View>
